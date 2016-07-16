@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimary"
+    android:gravity="bottom"
+    android:orientation="vertical"
+    android:padding="@dimen/DrawerHeader_paddin"
+    android:id="@+id/profile"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/profile_image"
+        android:layout_width="@dimen/DrawerHeader_CircleImageView_width"
+        android:layout_height="@dimen/DrawerHeader_CircleImageView_height"
+        android:layout_marginTop="@dimen/DrawerHeader_CircleImageView_marginTop"
+        android:src="@drawable/ic_launcher"
+        app:civ_border_color="#ffffff"
+        app:civ_border_width="@dimen/DrawerHeader_CircleImageView_border_width" />
+
+    <TextView
+        android:id="@+id/user_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profile_image"
+        android:text="MyAccounts Online"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textStyle="bold" />
+
+
+</RelativeLayout>

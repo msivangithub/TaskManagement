@@ -1,0 +1,69 @@
+package com.task.mytaskmanager.util;
+
+/**
+ * Created by MANJU on 16-06-2016.
+ */
+
+public class ProjectVariables {
+
+
+    public static final String LOGIN_STATUS = "loginstatus";
+    public static final String LOGGED_IN = "loggedin";
+    public static final String LOGGED_OUT = "loggedout";
+    public static final String STATUS = "Status";
+    public static final String PREFERENCES_NAME = "sampleprefs";
+    public static final String USERNAME = "userName";
+    public static final String PLEASE_CHECK_YOUR_NETWORK_CONNECTION = "please check your network connection";
+    public static final String URL = "http://makeindiakart.com/Master.svc/";
+
+
+
+    public static final String LOGIN = "login";
+    public static final String REGISTER = "MasterInsert";
+    public static final int APK_CONNECTION_TIMEOUT = 15000;
+    public static final int APK_WAIT_DATA_TIMEOUT = 30000;
+    public static String DAILY_SALES_SUMMARY = "DailySalesSummary";
+    public static String PARTYWISE_SALES = "PartywiseSales";
+
+
+
+    public static String ADDRESS1 = "Address1";
+    public static String ADDRESS2 = "Address2";
+    public static String ADDRESS3 = "Address3";
+    public static String ANDROIDNO = "AndroidNo";
+    public static String ANDROIDNO1 = "AndroidNo";
+    public static String BRANCHNAME = "BranchName";
+    public static String CITYID = "CityId";
+    public static String CLIENTNAME = "ClientName";
+   // public static String COMPNAME = "CompName";
+    public static String COMPANYID = "CompId";
+    public static String EMAILID = "EmailId";
+    public static final String PHONENUBER = "PhoneNo";
+    public static String PHONENO1 = "PhoneNo1";
+    public static String REMARKS = "Remarks";
+    public static String RESULT = "Result";
+    public static String PASSWORD = "Password";
+    public static String JPASSWORD = "Password";
+    public static String JEMAILID = "EmailId";
+
+
+    public static final String BASE_URL = URL;
+    public static final String USER_PROFILE = "Task_UserMaster";
+    public static String JRESULT = "Result";
+    public static String FIRSTNAME = "FirstName";
+    public static String LASTNAME = "LastName";
+    public static String COMPNAME = "Compname";
+    public static String IMAGE = "Image";
+    public static String PHONENO = "PhoneNo";
+    public static String IMEID = "IMEID";
+    public static String MAILID = "MailID";
+    public static String MACID = "Macid";
+    public static String ANDROID = "android";
+    public static String APPNAME = "AppName";
+
+
+
+
+
+
+}

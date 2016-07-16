@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">MyTaskManager</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string-array name="spinner_company">
+        <item>All</item>
+        <item>MyAccounts online Software pvt.Ltd</item>
+        <item>MyAccounts online Software pvt.Ltd</item>
+        <item>MyAccounts online Software pvt.Ltd</item>
+    </string-array>
+
+    <string-array name="spinner_item">
+        <item> --Select Company-- </item>
+        <item>Myaccounts</item>
+        <item>Visakhapatnam</item>
+        <item>Bangalore</item>
+        <item>Chennai</item>
+        <item>Mumbai</item>
+        <item>Delhi</item>
+        <item>Ahmedabad</item>
+        <item>Kolkata</item>
+        <item>Pune</item>
+        <item>Guntur</item>
+
+    </string-array>
+
+    <string-array name="spinner">
+        <item>No</item>
+        <item>yes</item>
+
+    </string-array>
+</resources>
