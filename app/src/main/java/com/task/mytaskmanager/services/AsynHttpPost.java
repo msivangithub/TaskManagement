@@ -12,6 +12,7 @@ import com.task.mytaskmanager.util.AppUtil;
 import com.task.mytaskmanager.util.ProjectVariables;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -50,12 +51,13 @@ public class AsynHttpPost extends AsyncTask<Void, Void, String> {
     }
 
 
-
     @Override
     protected String doInBackground(Void... params) {
 
         String MainUrl = ProjectVariables.BASE_URL + _apiMethod;
         String result = null;
+        HttpPost post = null;
+        HttpResponse res;
         InputStream inputStream = null;
         if (AppUtil.isNetworkAvailable(_con)) {
             try {
@@ -72,18 +74,27 @@ public class AsynHttpPost extends AsyncTask<Void, Void, String> {
 
                 DefaultHttpClient httpClient = new DefaultHttpClient(
                         httpParameters);
-                HttpPost post = new HttpPost(MainUrl);
+
+
+                post = new HttpPost(MainUrl);
                 String json = "";
-                json = _obj.toString();
-                Log.e("Sending json is", "" + json);
-                StringEntity se = new StringEntity(json, HTTP.UTF_8);
-                post.setEntity(se);
-                post.setHeader("Accept", "application/json");
-                post.setHeader("Content-type", "application/json");
+
+                if (_obj != null) {
+                    json = _obj.toString();
+                    Log.e("Sending json is", "" + json);
+                    StringEntity se = new StringEntity(json, HTTP.UTF_8);
+                    post.setEntity(se);
+
+                    post.setHeader("Accept", "application/json");
+                    post.setHeader("Content-type", "application/json");
+                }
+                    res = httpClient.execute(post);
+
+
                 // for (int attempt = 0; attempt < 3; attempt++) {
-                HttpResponse res = httpClient.execute(post);
+
                 if (res.getStatusLine().getStatusCode() == 200) {
-                    serviceStatus="1";
+                    serviceStatus = "1";
                     inputStream = res.getEntity().getContent();
 
                     if (inputStream != null) {
@@ -102,24 +113,24 @@ public class AsynHttpPost extends AsyncTask<Void, Void, String> {
 
                             }
                         } else {
-                            serviceStatus="0";
+                            serviceStatus = "0";
                             return "NO DATA FOUND";
                         }
                     } else {
                         pd.dismiss();
-                        serviceStatus="0";
+                        serviceStatus = "0";
                         return "NO DATA FOUND";
                     }
                 } else {
                     pd.dismiss();
-                    serviceStatus="0";
+                    serviceStatus = "0";
                     return res.getStatusLine().getStatusCode() + " Error";
                 }
 
 
             } catch (Exception e) {
                 e.printStackTrace();
-                serviceStatus="0";
+                serviceStatus = "0";
                 Log.e("Exception Occured ", e.getMessage().toString());
                 pd.dismiss();
                 return e.getMessage().toString();
@@ -127,7 +138,7 @@ public class AsynHttpPost extends AsyncTask<Void, Void, String> {
 
         } else {
             pd.dismiss();
-            serviceStatus="0";
+            serviceStatus = "0";
             return "Try again later";
 
         }
@@ -138,7 +149,7 @@ public class AsynHttpPost extends AsyncTask<Void, Void, String> {
 
     @Override
     protected void onPostExecute(String s) {
-        _listener.getData(s,serviceStatus );
+        _listener.getData(s, serviceStatus, _requestType);
     }
 
     @Override

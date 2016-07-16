@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.task.mytaskmanager.R;
 import com.task.mytaskmanager.fragmentssss.AddressFragment;
@@ -21,6 +22,7 @@ import com.task.mytaskmanager.fragmentssss.SocialFragment;
 import com.task.mytaskmanager.fragmentssss.TaskFragment1;
 import com.task.mytaskmanager.fragmentssss.TaskFragment2;
 import com.task.mytaskmanager.fragmentssss.TaskFragment3;
+import com.task.mytaskmanager.services.addbutton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +30,10 @@ import java.util.List;
 /**
  * Created by GhanaShyam on 7/15/2016.
  */
-public class TaskcreationFragment extends Fragment {
+public class TaskcreationFragment extends Fragment implements addbutton {
     private TabLayout tabLayout;
     private ViewPager viewPager;
+
 
     public static TaskcreationFragment newInstance() {
 
@@ -49,6 +52,7 @@ public class TaskcreationFragment extends Fragment {
         getActivity().setTitle("Task Creation");
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         setupViewPager(viewPager);
+
 
         tabLayout = (TabLayout) view.findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
@@ -74,36 +78,30 @@ public class TaskcreationFragment extends Fragment {
         tabLayout.getTabAt(0).setIcon(tabIcons[0]);
         tabLayout.getTabAt(1).setIcon(tabIcons[1]);
         tabLayout.getTabAt(2).setIcon(tabIcons[2]);
-        tabLayout.getTabAt(3).setIcon(tabIcons[3]);
-        tabLayout.getTabAt(4).setIcon(tabIcons[4]);
-        tabLayout.getTabAt(5).setIcon(tabIcons[5]);
-        tabLayout.getTabAt(6).setIcon(tabIcons[6]);
-        tabLayout.getTabAt(7).setIcon(tabIcons[7]);
-        tabLayout.getTabAt(8).setIcon(tabIcons[8]);
-        tabLayout.getTabAt(9).setIcon(tabIcons[9]);
+
     }
 
     private void setupViewPager(ViewPager viewPager) {
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
-        adapter.addFrag(new DetailsFragment(), "ONE");
-        adapter.addFrag(new DetailsFragment(), "TWO");
-        adapter.addFrag(new DetailsFragment(), "THREE");
-        adapter.addFrag(new DetailsFragment(), "ONE");
-        adapter.addFrag(new DetailsFragment(), "TWO");
-        adapter.addFrag(new DetailsFragment(), "THREE");
-        adapter.addFrag(new DetailsFragment(), "ONE");
-        adapter.addFrag(new DetailsFragment(), "TWO");
-        adapter.addFrag(new DetailsFragment(), "THREE");
-        adapter.addFrag(new DetailsFragment(), "THREE");
-
+        adapter.addFrag(TaskFragment1.newInstance(TaskcreationFragment.this), "ONE");
+        adapter.addFrag(TaskFragment2.newInstance(TaskcreationFragment.this), "TWO");
+        adapter.addFrag(TaskFragment3.newInstance(TaskcreationFragment.this), "THREE");
         viewPager.setAdapter(adapter);
+    }
+
+    @Override
+    public void addVisible(boolean b) {
+
+
+
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
 
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
+
         public ViewPagerAdapter(FragmentManager manager) {
             super(manager);
         }
@@ -113,15 +111,19 @@ public class TaskcreationFragment extends Fragment {
 
             switch (position) {
                 case 0:
-                    TaskFragment1 notesFragment = new TaskFragment1();
+
+                    TaskFragment1 notesFragment = TaskFragment1.newInstance(TaskcreationFragment.this);
                     return notesFragment;
 
                 case 1:
-                    TaskFragment2 notesF = new TaskFragment2();
+
+                    TaskFragment2 notesF = TaskFragment2.newInstance(TaskcreationFragment.this);
                     return notesF;
                 case 2:
-                    TaskFragment3 notes = new TaskFragment3();
+
+                    TaskFragment3 notes = TaskFragment3.newInstance(TaskcreationFragment.this);
                     return notes;
+
 
                 case 3:
 
@@ -144,6 +146,7 @@ public class TaskcreationFragment extends Fragment {
         public void addFrag(Fragment fragment, String title) {
             mFragmentList.add(fragment);
             mFragmentTitleList.add(title);
+
         }
 
         @Override

@@ -22,8 +22,8 @@
             android:id="@+id/radioGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_centerInParent="true">
+            android:layout_centerInParent="true"
+            android:orientation="horizontal">
 
             <RadioButton
                 android:id="@+id/none"
@@ -49,6 +49,21 @@
                 android:layout_height="wrap_content"
                 android:text="High " />
         </RadioGroup>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:gravity="bottom|center"
+        android:layout_marginBottom="30dp"
+        android:layout_height="match_parent">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:text="AddUser"
+            android:id="@+id/adduser"
+            android:layout_height="wrap_content" />
+
+
     </LinearLayout>
 
 </LinearLayout>

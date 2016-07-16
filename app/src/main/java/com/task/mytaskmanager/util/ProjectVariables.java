@@ -17,14 +17,14 @@ public class ProjectVariables {
     public static final String URL = "http://makeindiakart.com/Master.svc/";
 
 
-
     public static final String LOGIN = "login";
     public static final String REGISTER = "MasterInsert";
+    public static final String USERS = "Users";
+    public static final String BRANCHES = "Branches/C001";
     public static final int APK_CONNECTION_TIMEOUT = 15000;
     public static final int APK_WAIT_DATA_TIMEOUT = 30000;
     public static String DAILY_SALES_SUMMARY = "DailySalesSummary";
     public static String PARTYWISE_SALES = "PartywiseSales";
-
 
 
     public static String ADDRESS1 = "Address1";
@@ -35,7 +35,7 @@ public class ProjectVariables {
     public static String BRANCHNAME = "BranchName";
     public static String CITYID = "CityId";
     public static String CLIENTNAME = "ClientName";
-   // public static String COMPNAME = "CompName";
+    // public static String COMPNAME = "CompName";
     public static String COMPANYID = "CompId";
     public static String EMAILID = "EmailId";
     public static final String PHONENUBER = "PhoneNo";
@@ -62,8 +62,11 @@ public class ProjectVariables {
     public static String APPNAME = "AppName";
 
 
+    public static String FNAME = "FirstName";
+    public static String UID = "Uid";
 
-
+    public static String BRANCHID = "BranchId";
+    public static String BNAME = "BranchName";
 
 
 }

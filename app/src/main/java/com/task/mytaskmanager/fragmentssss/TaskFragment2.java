@@ -6,25 +6,103 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
+import com.task.mytaskmanager.Pojo.TaskBranches;
+import com.task.mytaskmanager.Pojo.TaskUser;
 import com.task.mytaskmanager.R;
+import com.task.mytaskmanager.services.AsynHttpPost;
+import com.task.mytaskmanager.services.RestfulListener;
+import com.task.mytaskmanager.services.addbutton;
+import com.task.mytaskmanager.util.AppUtil;
+import com.task.mytaskmanager.util.ProjectVariables;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  * Created by GhanaShyam on 7/15/2016.
  */
-public class TaskFragment2 extends Fragment {
-
-    public static TaskFragment2 newInstance() {
+public class TaskFragment2 extends Fragment implements RestfulListener{
+    static addbutton _ab;
+    private Spinner branches_spinner;
+    ArrayList<TaskUser> users = new ArrayList<>();
+    public static TaskFragment2 newInstance(addbutton addbutton) {
 
         Bundle args = new Bundle();
-
+        _ab = addbutton;
         TaskFragment2 fragment1 = new TaskFragment2();
         fragment1.setArguments(args);
         return fragment1;
     }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.task_fragment2,container,false);
+        View view = inflater.inflate(R.layout.task_fragment2, container, false);
+        branches_spinner = (Spinner) view.findViewById(R.id.branches);
+
+        AsynHttpPost post = new AsynHttpPost(getActivity(), 0, 0, ProjectVariables.USERS, this, null, "");
+        post.execute();
+
+        branches_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+               // AppUtil.set
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // _ab.addVisible(false);
+    }
+
+    @Override
+    public void getData(String s, String status,int requestType) {
+        users.clear();
+
+        try {
+            JSONArray array = new JSONArray(s);
+
+            for (int i = 0; i < array.length(); i++) {
+
+                JSONObject obj = array.getJSONObject(i);
+
+
+                TaskUser user = new TaskUser();
+
+                user.setFirstName(obj.getString(ProjectVariables.FNAME));
+
+                user.setUid(obj.getString(ProjectVariables.UID));
+
+
+                users.add(user);
+            }
+            String[] us = new String[users.size()];
+            for (int i = 0; i < users.size(); i++) {
+                us[i] = users.get(i).getFirstName();
+            }
+            ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, us); //selected item will look like a spinner set from XML
+            spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            branches_spinner.setAdapter(spinnerArrayAdapter);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+
     }
 }

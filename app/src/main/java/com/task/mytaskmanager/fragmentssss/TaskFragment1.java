@@ -6,56 +6,106 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.task.mytaskmanager.Pojo.TaskUser;
 import com.task.mytaskmanager.R;
+import com.task.mytaskmanager.services.AsynHttpPost;
+import com.task.mytaskmanager.services.RestfulListener;
+import com.task.mytaskmanager.services.addbutton;
+import com.task.mytaskmanager.util.AppUtil;
 import com.task.mytaskmanager.util.DatePickerFragment;
 import com.task.mytaskmanager.util.OnDateSetCompleted;
+import com.task.mytaskmanager.util.ProjectVariables;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 /**
  * Created by GhanaShyam on 7/15/2016.
  */
-public class TaskFragment1 extends Fragment {
+public class TaskFragment1 extends Fragment implements RestfulListener {
     private TextView mTextViewFromDate, mTextViewToDate;
     private ImageView mImageButtonFrom, mImageButtonTo;
     private int month, day, year;
-    private static String fromDate ,toDate ;
+    private static String fromDate, toDate;
+    static addbutton _ab;
+    Spinner users_Spinner;
+    ArrayList<TaskUser> users = new ArrayList<>();
 
-    public static TaskFragment1 newInstance() {
+    public static TaskFragment1 newInstance(addbutton addbutton) {
 
         Bundle args = new Bundle();
-
+        _ab = addbutton;
         TaskFragment1 fragment1 = new TaskFragment1();
         fragment1.setArguments(args);
         return fragment1;
     }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.task_fragment1, container, false);
-
+        users_Spinner = (Spinner) view.findViewById(R.id.TaskUsers);
         mTextViewFromDate = (TextView) view.findViewById(R.id.fromDate);
         mTextViewToDate = (TextView) view.findViewById(R.id.toDate);
         mImageButtonFrom = (ImageView) view.findViewById(R.id.fromDateImage);
         mImageButtonTo = (ImageView) view.findViewById(R.id.toDateImage);
 
+        JSONObject obj = new JSONObject();
+
+        AsynHttpPost post = new AsynHttpPost(getActivity(), 0, 0, ProjectVariables.USERS, this, null, "");
+        post.execute();
         dateFormat();
         setHasOptionsMenu(true);
+
+        users_Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (users.size() != 0)
+                    AppUtil.setTaskFromId(users.get(position).getUid());
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        _ab.addVisible(false);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
     }
 
     private void dateFormat() {
 
         final Calendar c = Calendar.getInstance();
         SimpleDateFormat ss = new SimpleDateFormat("dd-MM-yyyy");
-        Date date = new Date();
+        final Date date = new Date();
         year = c.get(Calendar.YEAR);
         month = c.get(Calendar.MONTH);
         day = c.get(Calendar.DAY_OF_MONTH);
@@ -66,13 +116,14 @@ public class TaskFragment1 extends Fragment {
         mImageButtonFrom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               DatePickerFragment toDatePickerFragment = DatePickerFragment.newInstance(year, month, day, mTextViewFromDate);
+                DatePickerFragment toDatePickerFragment = DatePickerFragment.newInstance(year, month, day, mTextViewFromDate);
                 toDatePickerFragment.setOnDateSetCompleted(new OnDateSetCompleted() {
                     @Override
                     public void onDateCompleted(int year, int month, int day) {
                         TaskFragment1.this.year = year;
                         TaskFragment1.this.month = month;
                         TaskFragment1.this.day = day;
+                        AppUtil.setActStartDate(day + "-" + month + "-" + year);
                     }
                 });
 
@@ -82,19 +133,54 @@ public class TaskFragment1 extends Fragment {
         mImageButtonTo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-           DatePickerFragment toDatePickerFragment = DatePickerFragment.newInstance(year, month, day, mTextViewToDate);
+                DatePickerFragment toDatePickerFragment = DatePickerFragment.newInstance(year, month, day, mTextViewToDate);
                 toDatePickerFragment.setOnDateSetCompleted(new OnDateSetCompleted() {
                     @Override
                     public void onDateCompleted(int year, int month, int day) {
                         TaskFragment1.this.year = year;
                         TaskFragment1.this.month = month;
                         TaskFragment1.this.day = day;
+                        AppUtil.setActStartDate(day + "-" + month + "-" + year);
                     }
                 });
 
                 toDatePickerFragment.show(TaskFragment1.this.getFragmentManager(), "1");
             }
         });
+
+    }
+
+    @Override
+    public void getData(String s, String status,int type) {
+        users.clear();
+
+        try {
+            JSONArray array = new JSONArray(s);
+
+            for (int i = 0; i < array.length(); i++) {
+
+                JSONObject obj = array.getJSONObject(i);
+
+
+                TaskUser user = new TaskUser();
+
+                user.setFirstName(obj.getString(ProjectVariables.FNAME));
+
+                user.setUid(obj.getString(ProjectVariables.UID));
+
+
+                users.add(user);
+            }
+            String[] us = new String[users.size()];
+            for (int i = 0; i < users.size(); i++) {
+                us[i] = users.get(i).getFirstName();
+            }
+            ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, us); //selected item will look like a spinner set from XML
+            spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            users_Spinner.setAdapter(spinnerArrayAdapter);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
     }
 }

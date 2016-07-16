@@ -32,7 +32,6 @@
                     app:civ_border_width="@dimen/DrawerHeader_CircleImageView_border_width" />
 
                 <TextView
-                    android:id="@+id/click"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -129,13 +128,13 @@
                     android:orientation="horizontal">
 
                     <Spinner
-                        android:id="@+id/companyName"
+                        android:id="@+id/txt_exxentinalBranches"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_gravity="center"
                         android:background="@android:color/transparent"
-                        android:entries="@array/spinner_item"
+
                         android:gravity="center"
                         android:padding="10dp" />
 
@@ -153,7 +152,7 @@
 
             </LinearLayout>
 
-            <LinearLayout
+           <!-- <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:orientation="horizontal"
@@ -197,7 +196,7 @@
                         android:src="@drawable/drop_down" />
 
                 </RelativeLayout>
-            </LinearLayout>
+            </LinearLayout>-->
 
             <Button
                 android:id="@+id/submit"
