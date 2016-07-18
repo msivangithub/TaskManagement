@@ -28,10 +28,11 @@ import java.util.ArrayList;
 /**
  * Created by GhanaShyam on 7/15/2016.
  */
-public class TaskFragment2 extends Fragment implements RestfulListener{
+public class TaskFragment2 extends Fragment implements RestfulListener {
     static addbutton _ab;
     private Spinner branches_spinner;
     ArrayList<TaskUser> users = new ArrayList<>();
+
     public static TaskFragment2 newInstance(addbutton addbutton) {
 
         Bundle args = new Bundle();
@@ -45,6 +46,7 @@ public class TaskFragment2 extends Fragment implements RestfulListener{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.task_fragment2, container, false);
+        setHasOptionsMenu(true);
         branches_spinner = (Spinner) view.findViewById(R.id.branches);
 
         AsynHttpPost post = new AsynHttpPost(getActivity(), 0, 0, ProjectVariables.USERS, this, null, "");
@@ -53,7 +55,7 @@ public class TaskFragment2 extends Fragment implements RestfulListener{
         branches_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-               // AppUtil.set
+
             }
 
             @Override
@@ -71,16 +73,15 @@ public class TaskFragment2 extends Fragment implements RestfulListener{
     }
 
     @Override
-    public void getData(String s, String status,int requestType) {
+    public void getData(String s, String status, int requestType) {
         users.clear();
-
+        users = new ArrayList<>();
         try {
             JSONArray array = new JSONArray(s);
 
             for (int i = 0; i < array.length(); i++) {
 
                 JSONObject obj = array.getJSONObject(i);
-
 
                 TaskUser user = new TaskUser();
 
@@ -101,7 +102,6 @@ public class TaskFragment2 extends Fragment implements RestfulListener{
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
 
 
     }

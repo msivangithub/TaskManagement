@@ -99,7 +99,7 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
 
         View v = inflater.inflate(R.layout.essentials_activity, container, false);
         getActivity().setTitle("Add User");
-
+        setHasOptionsMenu(true);
         image = (ImageView) v.findViewById(R.id.display_image);
         emailAndMobile = (TextView) v.findViewById(R.id.emailAndMobile);
         mfirstName = (TextView) v.findViewById(R.id.firstName);

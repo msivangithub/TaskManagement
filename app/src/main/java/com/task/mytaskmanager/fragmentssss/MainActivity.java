@@ -111,6 +111,11 @@ public class MainActivity extends AppCompatActivity
             ft.commit();
 
         } else if (id == R.id.nav_slideshow) {
+            Fragment f = TaskDetails.newInstance();
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.replace(R.id.container,f);
+            ft.commit();
 
         } else if (id == R.id.nav_manage) {
 

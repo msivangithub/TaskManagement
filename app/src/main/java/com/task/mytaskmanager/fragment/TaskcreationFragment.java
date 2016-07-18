@@ -52,11 +52,10 @@ public class TaskcreationFragment extends Fragment implements addbutton {
         getActivity().setTitle("Task Creation");
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         setupViewPager(viewPager);
-
-
         tabLayout = (TabLayout) view.findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
+        setHasOptionsMenu(true);
         return view;
     }
 

@@ -20,7 +20,9 @@ public class ProjectVariables {
     public static final String LOGIN = "login";
     public static final String REGISTER = "MasterInsert";
     public static final String USERS = "Users";
+    public static final String TASK_CREAT="Task_Creation";
     public static final String BRANCHES = "Branches/C001";
+
     public static final int APK_CONNECTION_TIMEOUT = 15000;
     public static final int APK_WAIT_DATA_TIMEOUT = 30000;
     public static String DAILY_SALES_SUMMARY = "DailySalesSummary";
@@ -67,6 +69,16 @@ public class ProjectVariables {
 
     public static String BRANCHID = "BranchId";
     public static String BNAME = "BranchName";
+    public static String TASKFROMID = "TaskFromId";
+    public static String TASKOID = "TaskToId";
+    public static String EXPSTARTDAE = "ExpStartDate";
+    public static String EXPENDDATE = "ExpEndDate";
+    public static String ACTSDATE = "ActStartDate";
+    public static String ACTENDDATE = "ActEndDate";
+    public static String TASKSTAT = "TaskStatus";
+    public static String TASKHEAD = "TaskHeading";
+    public static String TASKDES = "TaskDes";
+    public static String PRIORITY = "priority";
 
 
 }

@@ -59,6 +59,7 @@ public class TaskFragment1 extends Fragment implements RestfulListener {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.task_fragment1, container, false);
+        setHasOptionsMenu(true);
         users_Spinner = (Spinner) view.findViewById(R.id.TaskUsers);
         mTextViewFromDate = (TextView) view.findViewById(R.id.fromDate);
         mTextViewToDate = (TextView) view.findViewById(R.id.toDate);
@@ -76,7 +77,8 @@ public class TaskFragment1 extends Fragment implements RestfulListener {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (users.size() != 0)
-                    AppUtil.setTaskFromId(users.get(position).getUid());
+                    AppUtil.setTaskToId(users.get(position).getUid());
+                AppUtil.setTaskFromId("C001");
 
             }
 
@@ -124,6 +126,7 @@ public class TaskFragment1 extends Fragment implements RestfulListener {
                         TaskFragment1.this.month = month;
                         TaskFragment1.this.day = day;
                         AppUtil.setActStartDate(day + "-" + month + "-" + year);
+                        AppUtil.setExpStartDate(day + "-" + month + "-" + year);
                     }
                 });
 
@@ -140,7 +143,8 @@ public class TaskFragment1 extends Fragment implements RestfulListener {
                         TaskFragment1.this.year = year;
                         TaskFragment1.this.month = month;
                         TaskFragment1.this.day = day;
-                        AppUtil.setActStartDate(day + "-" + month + "-" + year);
+                        AppUtil.setActEndDate(day + "-" + month + "-" + year);
+                        AppUtil.setExpEndDate(day + "-" + month + "-" + year);
                     }
                 });
 
@@ -151,23 +155,21 @@ public class TaskFragment1 extends Fragment implements RestfulListener {
     }
 
     @Override
-    public void getData(String s, String status,int type) {
+    public void getData(String s, String status, int type) {
         users.clear();
-
+        users = new ArrayList<>();
         try {
+
+            users = new ArrayList<>();
             JSONArray array = new JSONArray(s);
 
             for (int i = 0; i < array.length(); i++) {
 
                 JSONObject obj = array.getJSONObject(i);
 
-
                 TaskUser user = new TaskUser();
-
                 user.setFirstName(obj.getString(ProjectVariables.FNAME));
-
                 user.setUid(obj.getString(ProjectVariables.UID));
-
 
                 users.add(user);
             }
