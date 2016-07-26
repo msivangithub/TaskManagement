@@ -30,7 +30,58 @@
 
     <string-array name="spinner">
         <item>No</item>
-        <item>yes</item>
+        <item>Yes</item>
 
     </string-array>
+    <string name="email">Email Id</string>
+    <string name="passowrd">Password</string>
+    <string name="login">LOGIN</string>
+    <string name="show_pwd">Show Password</string>
+    <string name="hide_pwd">Hide Password</string>
+    <string name="forgot">Forgot password?</string>
+    <string name="closebutton">Close Button for Activity</string>
+    <string name="newUser">        Not a Member yet? Sign Up here.</string>
+    <string name="fullName">Full Name</string>
+    <string name="mobileNumber">Mobile Number</string>
+    <string name="location">Location</string>
+    <string name="confirmPassword">Confirm Password</string>
+    <string name="terms_conditions">I agree all Terms and Conditions.</string>
+    <string name="register">REGISTER</string>
+    <string name="already_user">Already have Account? Login here.</string>
+    <string name="registered_emailid">Please enter your Registered Email Id below:</string>
+    <string name="submit">SUBMIT</string>
+    <string name="back">BACK</string>
+
+
+    <string name="RegistrationActivity">Registration</string>
+    <string name="EditProfileNames">EditProfile</string>
+    <string name="LoginActivity">Login</string>
+    <string name="MySettingsActivity">MySettings</string>
+    <string name="ContactUsActivity">Contact Us</string>
+    <string name="Sendotp_for_Verification"><u>Send OTP For Verification</u></string>
+
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_up">Sign Up or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+
+    <string name="company_name">Company Name</string>Branch Name
+    <string name="branchname">Branch Name</string>
+    <string name="address1">Address1</string>
+    <string name="address2">Address2</string>
+    <string name="address3">Address3</string>
+    <string name="city">City</string>
+    <string name="title_activity_dash_board">DashBoard</string>
+
+<string-array name="statusSpinner">
+
+    <item>Pending</item>
+    <item>Progress</item>
+    <item>Compleated</item>
+</string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">DashBoard fragment</string>
+    <string name="company_id">Comapny ID</string>
 </resources>

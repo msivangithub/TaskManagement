@@ -3,11 +3,14 @@ package com.task.mytaskmanager.fragmentssss;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -39,11 +42,13 @@ import java.util.Date;
 public class TaskFragment1 extends Fragment implements RestfulListener {
     private TextView mTextViewFromDate, mTextViewToDate;
     private ImageView mImageButtonFrom, mImageButtonTo;
+    private EditText TaskHeader;
     private int month, day, year;
     private static String fromDate, toDate;
     static addbutton _ab;
     Spinner users_Spinner;
     ArrayList<TaskUser> users = new ArrayList<>();
+    EditText edt_task;
 
     public static TaskFragment1 newInstance(addbutton addbutton) {
 
@@ -60,14 +65,16 @@ public class TaskFragment1 extends Fragment implements RestfulListener {
 
         View view = inflater.inflate(R.layout.task_fragment1, container, false);
         setHasOptionsMenu(true);
+        TaskHeader = (EditText) view.findViewById(R.id.taskHeader);
         users_Spinner = (Spinner) view.findViewById(R.id.TaskUsers);
         mTextViewFromDate = (TextView) view.findViewById(R.id.fromDate);
         mTextViewToDate = (TextView) view.findViewById(R.id.toDate);
         mImageButtonFrom = (ImageView) view.findViewById(R.id.fromDateImage);
         mImageButtonTo = (ImageView) view.findViewById(R.id.toDateImage);
-
+        edt_task = (EditText) view.findViewById(R.id.taskDes);
         JSONObject obj = new JSONObject();
-
+        edt_task.addTextChangedListener(watcher);
+        TaskHeader.addTextChangedListener(watcher1);
         AsynHttpPost post = new AsynHttpPost(getActivity(), 0, 0, ProjectVariables.USERS, this, null, "");
         post.execute();
         dateFormat();
@@ -77,9 +84,8 @@ public class TaskFragment1 extends Fragment implements RestfulListener {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (users.size() != 0)
-                    AppUtil.setTaskToId(users.get(position).getUid());
-                AppUtil.setTaskFromId("C001");
-
+                    AppUtil.setTaskFromId("C001");
+                AppUtil.setTaskToId(users.get(position).getUid());
             }
 
             @Override
@@ -102,6 +108,44 @@ public class TaskFragment1 extends Fragment implements RestfulListener {
         super.onActivityCreated(savedInstanceState);
 
     }
+
+    TextWatcher watcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            AppUtil.setTaskDes(s.toString());
+
+
+        }
+    };
+
+    TextWatcher watcher1 = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            AppUtil.setTaskHeading(s.toString());
+
+
+        }
+    };
 
     private void dateFormat() {
 

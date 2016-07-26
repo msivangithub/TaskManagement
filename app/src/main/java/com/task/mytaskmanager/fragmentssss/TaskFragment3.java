@@ -64,8 +64,8 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
                     Toast.makeText(getActivity(), "Please select priority of task", Toast.LENGTH_LONG).show();
                 } else {
                     AppUtil.setTaskStatus("S");
-                    AppUtil.setTaskHeading("MAKE Task");
-                    AppUtil.setTaskDes("Samle Task");
+                   // AppUtil.setTaskHeading("MAKE Task");
+
                     android_id = Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
                     AppUtil.setImeId(android_id);
 //                    if (!(AppUtil.getTaskFromId().isEmpty() && AppUtil.getTaskFromId().equalsIgnoreCase("")) && !(AppUtil.getTaskToId().isEmpty() && AppUtil.getTaskToId().equalsIgnoreCase(""))

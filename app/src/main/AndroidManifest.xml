@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:allowBackup="true"
@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".fragmentssss.MainActivity"
+            android:name=".LoginSetup.SplashScreen"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,7 +22,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".fragmentssss.MainActivity"></activity>
+        <activity android:name=".activity.AddUserActivity"></activity>
+        <activity android:name=".LoginSetup.ForgotPasswordActivity"></activity>
+        <activity android:name=".LoginSetup.LoginActivity"></activity>
+        <activity android:name=".LoginSetup.OtpConfirmationActivity">
 
+        </activity>
+        <activity android:name=".LoginSetup.RegistrationActivity"></activity>
     </application>
 
 </manifest>

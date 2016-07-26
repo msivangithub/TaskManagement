@@ -4,13 +4,29 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="5sp">
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/taskHeader"
+        android:textSize="14sp"
+        android:hint="Select type of task?"
+        />
 
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/taskDes"
+        android:textSize="14sp"
+        android:hint="What neds to be done?"
+        />
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="WHho Should do this?"
         android:textColor="#000"
+        android:textSize="14sp"
         android:textStyle="bold" />
 
     <RelativeLayout
@@ -53,6 +69,7 @@
             android:text="Start Date(Optional)"
             android:layout_gravity="center"
             android:textColor="#000"
+            android:textSize="14sp"
             android:layout_weight="1"
             android:textStyle="bold" />
 
@@ -99,6 +116,7 @@
             android:text="Due Date(Optional)"
             android:layout_gravity="center"
             android:textColor="#000"
+            android:textSize="14sp"
             android:layout_weight="1"
             android:textStyle="bold" />
         <RelativeLayout

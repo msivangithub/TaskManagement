@@ -1,5 +1,6 @@
 package com.task.mytaskmanager.fragmentssss;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -16,12 +17,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.task.mytaskmanager.LoginSetup.LoginActivity;
+import com.task.mytaskmanager.Pojo.Task;
+import com.task.mytaskmanager.Pojo.TaskUser;
 import com.task.mytaskmanager.R;
 import com.task.mytaskmanager.fragment.AddUserFragment;
 import com.task.mytaskmanager.fragment.TaskcreationFragment;
+import com.task.mytaskmanager.util.AppUtil;
+import com.task.mytaskmanager.util.PreferenceUtil;
+import com.task.mytaskmanager.util.ProjectVariables;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    String UserRole = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,15 +39,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-       /* FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
+        UserRole = PreferenceUtil.getInstance().getString(MainActivity.this, ProjectVariables.USER_ROLE, "4");
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -48,13 +50,33 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-     /*   if(savedInstanceState == null){
-            Fragment f = AddUserFragment.newInstance();
-            FragmentManager fm = getSupportFragmentManager();
-            FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.container,f);
-            ft.commit();
-        }*/
+
+        if (UserRole.equalsIgnoreCase("3")) {
+            Menu m = navigationView.getMenu();
+
+            MenuItem addItem = m.findItem(R.id.nav_camera);
+            addItem.setVisible(false);
+
+            MenuItem creatItem = m.findItem(R.id.nav_gallery);
+            creatItem.setVisible(false);
+
+        }
+        if (savedInstanceState == null) {
+
+            if (UserRole.equalsIgnoreCase("4")) {
+                Fragment f = TaskDetails.newInstance();
+                FragmentManager fm = getSupportFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.replace(R.id.container, f);
+                ft.commit();
+            } else {
+                Fragment f = UserTaskDetails.newInstance();
+                FragmentManager fm = getSupportFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.replace(R.id.container, f);
+                ft.commit();
+            }
+        }
     }
 
     @Override
@@ -71,6 +93,8 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+
+
         return true;
     }
 
@@ -83,6 +107,7 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+
             return true;
         }
 
@@ -100,28 +125,45 @@ public class MainActivity extends AppCompatActivity
             Fragment f = AddUserFragment.newInstance();
             FragmentManager fm = getSupportFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.container,f);
+            ft.replace(R.id.container, f);
             ft.commit();
         } else if (id == R.id.nav_gallery) {
+
+
+
             /*startActivity(new Intent(MainActivity.this, AddUserActivity.class));*/
             Fragment f = TaskcreationFragment.newInstance();
             FragmentManager fm = getSupportFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.container,f);
+            ft.replace(R.id.container, f);
             ft.commit();
 
         } else if (id == R.id.nav_slideshow) {
-            Fragment f = TaskDetails.newInstance();
-            FragmentManager fm = getSupportFragmentManager();
-            FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.container,f);
-            ft.commit();
 
-        } else if (id == R.id.nav_manage) {
+            if(UserRole.equalsIgnoreCase("3")){
+                Fragment f = UserTaskDetails.newInstance();
+                FragmentManager fm = getSupportFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.replace(R.id.container, f);
+                ft.commit();
+            }else {
+                ArrayList<Task> tasks = new ArrayList<>();
+                ArrayList<TaskUser> userTask = new ArrayList<>();
+                AppUtil.setUserArrayList(tasks);
+                AppUtil.setDeletedUserList(tasks);
+                Fragment f = TaskDetails.newInstance();
+                FragmentManager fm = getSupportFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.replace(R.id.container, f);
+                ft.commit();
+            }
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.logout) {
 
-        } else if (id == R.id.nav_send) {
+            PreferenceUtil util = PreferenceUtil.getInstance();
+            util.saveString(MainActivity.this, ProjectVariables.STATUS, ProjectVariables.LOGGED_OUT);
+            finish();
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
 
         }
 

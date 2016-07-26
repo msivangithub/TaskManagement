@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -54,19 +55,20 @@ import java.util.Random;
  * Created by GhanaShyam on 7/9/2016.
  */
 public class EssentialsFragment extends Fragment implements RestfulListener {
-    private ArrayList<TaskBranches> branches=new ArrayList<>();
+    private ArrayList<TaskBranches> branches = new ArrayList<>();
     private static final int PICK_IMAGE = 100;
     private static final int CAMERA_IMAGE = 200;
     ImageView image;
-    String imageURI;
+    String imageURI = "";
     String ImageName = "";
+    int branchpos = 0;
     private String directory;
     String selectedImage;
     TextView click, camera, sdCard;
     private TextView emailAndMobile, mfirstName, mlastName;
     String email, firstname, secondname;
     private Spinner mSpinnerCompanyId, mSpinnerCounter;
-    String companyID;
+    String companyID = "";
     RestfulListener listener;
     JSONObject jsonObject;
     Button mSubmit;
@@ -74,6 +76,8 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
     private String KEY_NAME = "name";
     Button mGallery, mCamera;
     private Spinner essentialBranches;
+    EditText edt_password, edt_mobile;
+
     public static EssentialsFragment newInstance() {
 
         Bundle args = new Bundle();
@@ -100,6 +104,7 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
         View v = inflater.inflate(R.layout.essentials_activity, container, false);
         getActivity().setTitle("Add User");
         setHasOptionsMenu(true);
+        edt_mobile = (EditText) v.findViewById(R.id.Mobile);
         image = (ImageView) v.findViewById(R.id.display_image);
         emailAndMobile = (TextView) v.findViewById(R.id.emailAndMobile);
         mfirstName = (TextView) v.findViewById(R.id.firstName);
@@ -107,17 +112,19 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
         essentialBranches = (Spinner) v.findViewById(R.id.txt_exxentinalBranches);
         mSubmit = (Button) v.findViewById(R.id.submit);
         listener = this;
-
+        edt_password = (EditText) v.findViewById(R.id.add_password);
 
         AsynHttpPost post = new AsynHttpPost(getActivity(), 2, 002, ProjectVariables.BRANCHES, listener, null, "");
         post.execute();
         essentialBranches.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+                branches = AppUtil.getBranchesInfo();
+                branchpos = position;
                 companyID = branches.get(position).getBranchId();
 
-        }
+            }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
@@ -172,26 +179,46 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
                 email = emailAndMobile.getText().toString();
                 firstname = mfirstName.getText().toString();
                 secondname = mlastName.getText().toString();
+                String t1 = emailAndMobile.getText().toString();
+                String t2 = mfirstName.getText().toString();
+                String t3 = mlastName.getText().toString();
+                String t4 = edt_mobile.getText().toString();
+                String t5 = edt_password.getText().toString();
+                String t6 = branches.get(branchpos).getBranchId();
+                String t7 = imageURI;
+                if (!(t1.isEmpty() && t1.toString().equalsIgnoreCase("")) && !(t2.isEmpty() && t2.equalsIgnoreCase("")) &&
+                        !(t3.isEmpty() && t3.equalsIgnoreCase("")) && !(t4.isEmpty() && t4.equalsIgnoreCase(""))
+                        && !(t5.isEmpty() && t5.equalsIgnoreCase("")) && !(t6.isEmpty() && t6.equalsIgnoreCase(""))
+                        && !(t7.isEmpty() && t7.equalsIgnoreCase(""))) {
+                    if (AppUtil.isNetworkAvailable(getActivity())) {
+                        //Here we can call listener for calling webservice
+                        JSONObject obj = new JSONObject();
+                        try {
+                            obj.accumulate("MailID", emailAndMobile.getText().toString());
+                            obj.accumulate("FirstName", mfirstName.getText().toString());
+                            obj.accumulate("LastName", mlastName.getText().toString());
+                            obj.accumulate("Compname", companyID);
+                            obj.accumulate("Image", imageURI);
+                            obj.accumulate("PhoneNo", edt_mobile.getText().toString());
+                            obj.accumulate("Password", edt_password.getText().toString());
+                            obj.accumulate("IMEID", "1254788");
+                            obj.accumulate("Macid", "456789");
+                            obj.accumulate("android", "98445");
+                            obj.accumulate("UserRole", "3");
+                            obj.accumulate("BranchName", "myaccounts");
+                            obj.accumulate("AppName", "TaskManager");
+                        } catch (Exception e) {
 
-                if (AppUtil.isNetworkAvailable(getActivity())) {
-                    //Here we can call listener for calling webservice
-                    JSONObject obj = new JSONObject();
-                    try {
-                        obj.accumulate("MailID", emailAndMobile.getText().toString());
-                        obj.accumulate("FirstName", mfirstName.getText().toString());
-                        obj.accumulate("LastName", mlastName.getText().toString());
-                        obj.accumulate("Compname", companyID);
-                        obj.accumulate("Image", imageURI);
-                        obj.accumulate("IMEID", "1254788");
-                    } catch (Exception e) {
+                        }
+                        AsynHttpPost post = new AsynHttpPost(getActivity(), 2, 001, ProjectVariables.USER_PROFILE, listener, obj, "");
+                        post.execute();
 
+
+                    } else {
+                        Toast.makeText(getActivity(), ProjectVariables.PLEASE_CHECK_YOUR_NETWORK_CONNECTION, Toast.LENGTH_LONG).show();
                     }
-                    AsynHttpPost post = new AsynHttpPost(getActivity(), 2, 001, ProjectVariables.USER_PROFILE, listener, obj, "");
-                    post.execute();
-
-
                 } else {
-                    Toast.makeText(getActivity(), ProjectVariables.PLEASE_CHECK_YOUR_NETWORK_CONNECTION, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "All fields are mandatory", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -235,7 +262,7 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
             } else if (requestCode == CAMERA_IMAGE) {
                 imageURI = ImageName;
 
-                image.setImageURI(Uri.fromFile(new File(Environment.getExternalStorageDirectory(),imageURI)));
+                image.setImageURI(Uri.fromFile(new File(Environment.getExternalStorageDirectory(), imageURI)));
                 User user = new User();
                 user.userName = "user1";
                 user.profilePictureUrl = imageURI;
@@ -304,35 +331,44 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
     }
 
     @Override
-    public void getData(String s, String status,int type) {
+    public void getData(String s, String status, int type) {
 
-        if (type == 001){
+        if (type == 001) {
             if (status.equalsIgnoreCase("1")) {
                 try {
+                    emailAndMobile.setText("");
+                    mfirstName.setText("");
+                    mlastName.setText("");
+                    companyID = "";
+                    imageURI = "";
+                    edt_mobile.setText("");
+                    edt_password.setText("");
+                    image.setImageDrawable(getActivity().getDrawable(R.drawable.imge_placeholder));
                     ProjectVariables.MAILID = emailAndMobile.getText().toString();
                     ProjectVariables.FIRSTNAME = mfirstName.getText().toString();
                     ProjectVariables.LASTNAME = mlastName.getText().toString();
 
                     JSONArray Response = new JSONArray(s);
                     JSONObject loginResponse = Response.getJSONObject(0);
-                    String result = "";
 
+                    String result = loginResponse.getString("Result");
                     if (result.equalsIgnoreCase("inserted successfully")) {
-                        Toast.makeText(getActivity(), s, Toast.LENGTH_LONG).show();
-                        getActivity().finish();
+
+                        Toast.makeText(getActivity(), result, Toast.LENGTH_LONG).show();
+
                     } else {
-                        Toast.makeText(getActivity(), s, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "User not created!", Toast.LENGTH_LONG).show();
                     }
 
 
                 } catch (Exception e) {
-                    Toast.makeText(getContext(), s.toString(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), e.getMessage().toString(), Toast.LENGTH_LONG).show();
                 }
 
             } else {
                 Toast.makeText(getActivity(), " " + s, Toast.LENGTH_LONG).show();
             }
-    }else  if(type == 002){
+        } else if (type == 002) {
             try {
                 JSONArray array = new JSONArray(s);
 
@@ -350,6 +386,8 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
 
                     branches.add(branch);
                 }
+
+                AppUtil.setBranchesInfo(branches);
                 String[] us = new String[branches.size()];
                 for (int i = 0; i < branches.size(); i++) {
                     us[i] = branches.get(i).getBranchName();
@@ -360,7 +398,6 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
 
 
         }

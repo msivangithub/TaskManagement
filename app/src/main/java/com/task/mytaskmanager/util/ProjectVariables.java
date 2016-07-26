@@ -17,12 +17,14 @@ public class ProjectVariables {
     public static final String URL = "http://makeindiakart.com/Master.svc/";
 
 
-    public static final String LOGIN = "login";
+    //    public static final String LOGIN = "login";
+    public static final String LOGIN = "Tasklogin_User";
     public static final String REGISTER = "MasterInsert";
     public static final String USERS = "Users";
-    public static final String TASK_CREAT="Task_Creation";
+    public static final String TASK_CREAT = "Task_Creation";
     public static final String BRANCHES = "Branches/C001";
-
+    public static final String TASK_UPDATE="Task_Update";
+    public static final String getTasksByUserId = "TaskUserTasksById";
     public static final int APK_CONNECTION_TIMEOUT = 15000;
     public static final int APK_WAIT_DATA_TIMEOUT = 30000;
     public static String DAILY_SALES_SUMMARY = "DailySalesSummary";
@@ -55,7 +57,7 @@ public class ProjectVariables {
     public static String FIRSTNAME = "FirstName";
     public static String LASTNAME = "LastName";
     public static String COMPNAME = "Compname";
-    public static String IMAGE = "Image";
+    public static String ImAGE = "Image";
     public static String PHONENO = "PhoneNo";
     public static String IMEID = "IMEID";
     public static String MAILID = "MailID";
@@ -79,6 +81,18 @@ public class ProjectVariables {
     public static String TASKHEAD = "TaskHeading";
     public static String TASKDES = "TaskDes";
     public static String PRIORITY = "priority";
+    public static String LOGIN_PHONE="Phone";
+    public static String USER_ROLE="UserRole";
+    public static String CITY="City";
+    public static String COUNTRY="Country";
+    public static String  CREATEDDATE="CreatedDate";
+    public static String ENDDATE="EndDate";
+    public static String ENDTIME ="EndTime";
+    public static String FLAG="Flag";
+    public static String IMAGE="IMage";
+    public static String ID="Id";
+    public static String TASK_id="Cid";
+    public static String USERLOGINID="uuid";
 
-
+    //  public static String STATUS="Status";
 }

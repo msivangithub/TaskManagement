@@ -4,25 +4,69 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.task.mytaskmanager.Pojo.Task;
+import com.task.mytaskmanager.Pojo.TaskBranches;
+import com.task.mytaskmanager.Pojo.TaskUser;
+import com.task.mytaskmanager.Pojo.User;
+
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
  * Created by GhanaShyam on 7/9/2016.
  */
 public class AppUtil {
+    public static ArrayList<TaskBranches> branchesInfo= new ArrayList<>();
+
+    public static ArrayList<TaskBranches> getBranchesInfo() {
+        return branchesInfo;
+    }
+
+    public static void setBranchesInfo(ArrayList<TaskBranches> branchesInfo) {
+        AppUtil.branchesInfo = branchesInfo;
+    }
+
+    public static ArrayList<Task> userArrayList = new ArrayList<>();
+    public static ArrayList<TaskUser> seekUsers = new ArrayList<>();
+
+    public static ArrayList<TaskUser> getSeekUsers() {
+        return seekUsers;
+    }
+
+    public static void setSeekUsers(ArrayList<TaskUser> seekUsers) {
+        AppUtil.seekUsers = seekUsers;
+    }
+
+    public static ArrayList<Task> deletedUserList = new ArrayList<>();
+
+    public static ArrayList<Task> getDeletedUserList() {
+        return deletedUserList;
+    }
+
+    public static void setDeletedUserList(ArrayList<Task> deletedUserList) {
+        AppUtil.deletedUserList = deletedUserList;
+    }
+
+    public static ArrayList<Task> getUserArrayList() {
+        return userArrayList;
+    }
+
+    public static void setUserArrayList(ArrayList<Task> userArrayList) {
+        AppUtil.userArrayList = userArrayList;
+    }
 
     public static String ImeId = "";
-    public static String TaskFromId="";
-    public static String TaskToId="";
-    public static String ExpStartDate="";
-    public static String ExpEndDate="";
-    public static String ActStartDate="";
-    public static String ActEndDate="";
-    public static String TaskStatus="";
-    public  static String TaskHeading="";
-    public static String TaskDes="";
-    public  static String priority="";
+    public static String TaskFromId = "";
+    public static String TaskToId = "";
+    public static String ExpStartDate = "";
+    public static String ExpEndDate = "";
+    public static String ActStartDate = "";
+    public static String ActEndDate = "";
+    public static String TaskStatus = "";
+    public static String TaskHeading = "";
+    public static String TaskDes = "";
+    public static String priority = "";
 
     public static String getImeId() {
         return ImeId;
@@ -133,5 +177,46 @@ public class AppUtil {
 
         }
         return false;
+    }
+
+    public static ArrayList<Task> removedTasks(ArrayList<Task> tasks, int id) {
+        ArrayList<Task> returnedTasks = new ArrayList<>();
+        for (int task = 0; task < tasks.size(); task++) {
+            if (tasks.get(task).getTaskId() == id) {
+                break;
+            }
+            returnedTasks.add(tasks.get(task));
+        }
+        return returnedTasks;
+    }
+
+    public static ArrayList<Task> removedTasksByTwoLists(ArrayList<Task> tasks, ArrayList<Task> tasks1) {
+
+
+        ArrayList<Task> returnedTasks = new ArrayList<>();
+
+        for (int i = 0; i < tasks1.size(); i++) {
+            for (int task = 0; task < tasks.size(); task++) {
+                if (tasks.get(task).getTaskId() == tasks1.get(i).getTaskId()) {
+                    tasks.remove(task);
+                }
+
+
+            }
+
+        }
+        return tasks;
+    }
+
+    public static ArrayList<TaskUser> removedseekUsers(ArrayList<TaskUser> users, String taskId) {
+        ArrayList<TaskUser> returnedTasks = new ArrayList<>();
+        for (int task = 0; task < users.size(); task++) {
+            if (users.get(task).getUid().equalsIgnoreCase(taskId)) {
+                break;
+            }
+            returnedTasks.add(users.get(task));
+        }
+        return returnedTasks;
+
     }
 }

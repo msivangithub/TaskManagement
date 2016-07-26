@@ -3,6 +3,10 @@ package com.task.mytaskmanager.fragmentssss;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import com.task.mytaskmanager.Adaptes.SeekAdapter;
 import com.task.mytaskmanager.Pojo.TaskBranches;
 import com.task.mytaskmanager.Pojo.TaskUser;
 import com.task.mytaskmanager.R;
@@ -32,6 +37,7 @@ public class TaskFragment2 extends Fragment implements RestfulListener {
     static addbutton _ab;
     private Spinner branches_spinner;
     ArrayList<TaskUser> users = new ArrayList<>();
+    private RecyclerView rc;
 
     public static TaskFragment2 newInstance(addbutton addbutton) {
 
@@ -46,6 +52,7 @@ public class TaskFragment2 extends Fragment implements RestfulListener {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.task_fragment2, container, false);
+        rc = (RecyclerView) view.findViewById(R.id.seekrecyclerview);
         setHasOptionsMenu(true);
         branches_spinner = (Spinner) view.findViewById(R.id.branches);
 
@@ -74,6 +81,7 @@ public class TaskFragment2 extends Fragment implements RestfulListener {
 
     @Override
     public void getData(String s, String status, int requestType) {
+
         users.clear();
         users = new ArrayList<>();
         try {
@@ -96,9 +104,15 @@ public class TaskFragment2 extends Fragment implements RestfulListener {
             for (int i = 0; i < users.size(); i++) {
                 us[i] = users.get(i).getFirstName();
             }
-            ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, us); //selected item will look like a spinner set from XML
-            spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            branches_spinner.setAdapter(spinnerArrayAdapter);
+            SeekAdapter sdadapter1 = new SeekAdapter(getActivity(), R.layout.show_task_detils_row, users);
+            rc.setLayoutManager(new LinearLayoutManager(getActivity()));
+            rc.setItemAnimator(new DefaultItemAnimator());
+            rc.setHasFixedSize(true);
+            rc.setAdapter(sdadapter1);
+
+//            ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, us); //selected item will look like a spinner set from XML
+//            spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//            branches_spinner.setAdapter(spinnerArrayAdapter);
         } catch (JSONException e) {
             e.printStackTrace();
         }

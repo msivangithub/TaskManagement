@@ -27,7 +27,7 @@
                     android:layout_width="@dimen/DrawerHeader_CircleImageView_width"
                     android:layout_height="@dimen/DrawerHeader_CircleImageView_height"
                     android:layout_marginTop="@dimen/DrawerHeader_CircleImageView_marginTop"
-                    android:src="@android:drawable/ic_menu_report_image"
+                    android:src="@drawable/imge_placeholder"
                     app:civ_border_color="#898484"
                     app:civ_border_width="@dimen/DrawerHeader_CircleImageView_border_width" />
 
@@ -52,7 +52,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:gravity="left|center"
-                    android:text="Email/Mobile No "
+                    android:text="Email"
                     android:textColor="#000" />
 
                 <EditText
@@ -65,8 +65,36 @@
                     android:background="@drawable/rounded_edittext" />
 
 
-            </LinearLayout>
 
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:gravity="left|center"
+                    android:text="Mobile No "
+                    android:textColor="#000" />
+
+                <EditText
+                    android:id="@+id/Mobile"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="2"
+                    android:inputType="numberDecimal"
+                    android:singleLine="true"
+                    android:background="@drawable/rounded_edittext" />
+
+
+
+            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
@@ -148,9 +176,26 @@
                         android:src="@drawable/drop_down" />
 
                 </RelativeLayout>
-
+                
+            
 
             </LinearLayout>
+            
+           <EditText
+               android:layout_width="match_parent"
+               android:layout_gravity="center"
+               android:id="@+id/add_password"
+               android:layout_height="wrap_content"
+               android:hint="Enter Password"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                android:layout_height="wrap_content"
+                android:hint="Re Enter Password"/>
+
+
 
            <!-- <LinearLayout
                 android:layout_width="match_parent"

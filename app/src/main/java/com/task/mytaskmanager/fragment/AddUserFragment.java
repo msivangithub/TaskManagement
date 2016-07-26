@@ -61,11 +61,11 @@ public class AddUserFragment extends Fragment {
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
         adapter.addFragment(new EssentialsFragment(), "Essentials");
-        adapter.addFragment(new DetailsFragment(), "Details");
-        adapter.addFragment(new AddressFragment(), "Address");
-        adapter.addFragment(new ProfileFragment(), "Profile");
-        adapter.addFragment(new SocialFragment(), "Social");
-        adapter.addFragment(new PermissionsFragment(), "Permissions");
+//        adapter.addFragment(new DetailsFragment(), "Details");
+//        adapter.addFragment(new AddressFragment(), "Address");
+//        adapter.addFragment(new ProfileFragment(), "Profile");
+//        adapter.addFragment(new SocialFragment(), "Social");
+       // adapter.addFragment(new PermissionsFragment(), "Permissions");
         viewPager.setAdapter(adapter);
     }
     class ViewPagerAdapter extends FragmentPagerAdapter {
@@ -84,25 +84,25 @@ public class AddUserFragment extends Fragment {
                     EssentialsFragment notesFragment = new EssentialsFragment();
                     return notesFragment;
 
-                case 1:
-                    DetailsFragment notesFragment1 = new DetailsFragment();
-                    return notesFragment1;
+//                case 1:
+//                    DetailsFragment notesFragment1 = new DetailsFragment();
+//                    return notesFragment1;
+//
+//                case 2:
+//                    AddressFragment notesFragment2 = new AddressFragment();
+//                    return notesFragment2;
+//
+//                case 3:
+//                    ProfileFragment notesFragment3 = new ProfileFragment();
+//                    return notesFragment3;
+//
+//                case 4:
+//                    SocialFragment notesFragment4 = new SocialFragment();
+//                    return notesFragment4;
 
-                case 2:
-                    AddressFragment notesFragment2 = new AddressFragment();
-                    return notesFragment2;
-
-                case 3:
-                    ProfileFragment notesFragment3 = new ProfileFragment();
-                    return notesFragment3;
-
-                case 4:
-                    SocialFragment notesFragment4 = new SocialFragment();
-                    return notesFragment4;
-
-                case 5:
-                    PermissionsFragment notesFragment5 = new PermissionsFragment();
-                    return notesFragment5;
+//                case 1:
+//                    PermissionsFragment notesFragment5 = new PermissionsFragment();
+//                    return notesFragment5;
 
 
             }
