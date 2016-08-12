@@ -3,7 +3,6 @@ package com.task.mytaskmanager.Adaptes;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,6 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -21,16 +19,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.task.mytaskmanager.Pojo.Task;
-import com.task.mytaskmanager.Pojo.TaskUser;
 import com.task.mytaskmanager.R;
 import com.task.mytaskmanager.activity.Tasks;
-import com.task.mytaskmanager.activity.TasksAdapter;
 import com.task.mytaskmanager.services.AsynHttpPost;
 import com.task.mytaskmanager.services.RestfulListener;
-import com.task.mytaskmanager.util.AppUtil;
-import com.task.mytaskmanager.util.PreferenceUtil;
 import com.task.mytaskmanager.util.ProjectVariables;
 
 import org.json.JSONException;
@@ -42,14 +35,14 @@ import java.util.List;
 /**
  * Created by NEWSYSTEM1 on 6/9/2016.
  */
-public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.MyViewHolder> implements RestfulListener {
+public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetailsAdapter.MyViewHolder> implements RestfulListener {
     List<Task> billToBillArrayList;
     Context _context;
     String _type;
     Activity a;
     RestfulListener listener;
 
-    public TaskDetailsAdapter(Context context, RestfulListener rl, int taskId, List<Task> billToBillArrayList, String type) {
+    public USERTaskDetailsAdapter(Context context, RestfulListener rl, int taskId, List<Task> billToBillArrayList, String type) {
         this.billToBillArrayList = billToBillArrayList;
         _context = context;
         _type = type;
@@ -109,31 +102,11 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
                 lp.height = WindowManager.LayoutParams.MATCH_PARENT;
                 d.show();
                 d.getWindow().setAttributes(lp);
-
-                String UserRole = PreferenceUtil.getInstance().getString(_context, ProjectVariables.USER_ROLE, "4");
-                ImageButton button = (ImageButton) d.findViewById(R.id.show_close);
-                Button remind = (Button) d.findViewById(R.id.id_remind);
-                Button delete = (Button) d.findViewById(R.id.id_delete);
-                Button smsAlert = (Button) d.findViewById(R.id.id_smsalert);
-                Button id_score = (Button) d.findViewById(R.id.id_score);
-
-                if (UserRole.equalsIgnoreCase("3")) {
-                    remind.setVisibility(View.GONE);
-                    delete.setVisibility(View.GONE);
-                    smsAlert.setVisibility(View.GONE);
-                    id_score.setVisibility(View.GONE);
-                }
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        d.dismiss();
-                    }
-                });
 //                final AlertDialog d = new AlertDialog.Builder(_context)
 //                        .setTitle("Enter An Administrative Password")
 //                        .setView(R.layout.show_task_detils_row)
 //                        .create();
-                final TextView task, taskHead, asignBy, start, end, status, Comment;
+                final TextView task, taskHead, asignBy, start, end, status,Comment;
                 task = (TextView) d.findViewById(R.id.txt_show_desc);
                 taskHead = (TextView) d.findViewById(R.id.txt_show_task_head);
                 asignBy = (TextView) d.findViewById(R.id.txt_show_assignBy);
@@ -141,8 +114,8 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
                 end = (TextView) d.findViewById(R.id.txt_show_endDate);
                 status = (TextView) d.findViewById(R.id.TaskStatus);
 
-                Comment = (TextView) d.findViewById(R.id.TaskComment);
 
+                Comment = (TextView) d.findViewById(R.id.TaskComment);
                 Comment.setText(t.getTaskComment());
                 task.setText(t.getTaskDes());
                 taskHead.setText(t.getTaskHeading());
@@ -152,6 +125,15 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
                 status.setText(t.getTaskStatus());
 
 
+                ImageButton button = (ImageButton) d.findViewById(R.id.show_close);
+
+
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        d.dismiss();
+                    }
+                });
                 Button task_edt = (Button) d.findViewById(R.id.id_task_edt);
 
                 task_edt.setOnClickListener(new View.OnClickListener() {
@@ -160,18 +142,16 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
                         d.dismiss();
                         final String[] status = {""};
                         final Dialog updateDialog = new Dialog(_context);
+                        updateDialog.setTitle("Task Replay");
                         updateDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         updateDialog.setContentView(R.layout.task_editor);
-
                         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
                         lp.copyFrom(updateDialog.getWindow().getAttributes());
                         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
                         lp.height = WindowManager.LayoutParams.MATCH_PARENT;
 
                         updateDialog.getWindow().setAttributes(lp);
-
                         updateDialog.show();
-
 
                         ImageButton edt_close = (ImageButton) updateDialog.findViewById(R.id.edt_close);
 
@@ -213,7 +193,7 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
-                                    AsynHttpPost post = new AsynHttpPost(_context, 0, 777, ProjectVariables.TASK_UPDATE, listener, obj, "");
+                                    AsynHttpPost post = new AsynHttpPost(_context, 0, 888, ProjectVariables.TASK_UPDATE, listener, obj, "");
                                     post.execute();
                                     updateDialog.dismiss();
 

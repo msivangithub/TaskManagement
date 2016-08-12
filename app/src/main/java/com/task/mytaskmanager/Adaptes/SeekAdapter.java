@@ -31,7 +31,7 @@ public class SeekAdapter extends RecyclerView.Adapter<SeekAdapter.MyViewHolder> 
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.task_row, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.task_row1, parent, false);
         return new MyViewHolder(itemView);
     }
 

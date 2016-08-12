@@ -51,7 +51,7 @@ public class ShowDetailsAdapter extends RecyclerView.Adapter<ShowDetailsAdapter.
             start = (TextView) convertView.findViewById(R.id.txt_show_start);
             end = (TextView) convertView.findViewById(R.id.txt_show_endDate);
             status = (TextView) convertView.findViewById(R.id.TaskStatus);
-            edit = (Button) convertView.findViewById(R.id.show_edt);
+           // edit = (Button) convertView.findViewById(R.id.show_edt);
 
         }
     }
@@ -72,16 +72,16 @@ public class ShowDetailsAdapter extends RecyclerView.Adapter<ShowDetailsAdapter.
             viewHolder.edit.setVisibility(View.GONE);
         }
 
-        viewHolder.edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Dialog d = new Dialog(context1);
-                d.setContentView(R.layout.edit_task);
-                d.show();
-
-
-            }
-        });
+//        viewHolder.edit.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Dialog d = new Dialog(context1);
+//                d.setContentView(R.layout.edit_task);
+//                d.show();
+//
+//
+//            }
+//        });
 
     }
 
