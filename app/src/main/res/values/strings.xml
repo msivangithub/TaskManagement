@@ -40,18 +40,18 @@
     <string name="hide_pwd">Hide Password</string>
     <string name="forgot">Forgot password?</string>
     <string name="closebutton">Close Button for Activity</string>
-    <string name="newUser">        Not a Member yet? Sign Up here.</string>
+    <string name="newUser">Sign Up</string>
     <string name="fullName">Full Name</string>
     <string name="mobileNumber">Mobile Number</string>
     <string name="location">Location</string>
     <string name="confirmPassword">Confirm Password</string>
     <string name="terms_conditions">I agree all Terms and Conditions.</string>
     <string name="register">REGISTER</string>
-    <string name="already_user">Already have Account? Login here.</string>
+    <string name="already_user">LOGIN</string>
     <string name="registered_emailid">Please enter your Registered Email Id below:</string>
     <string name="submit">SUBMIT</string>
     <string name="back">BACK</string>
-
+    <string name="email1">Email Id</string>
 
     <string name="RegistrationActivity">Registration</string>
     <string name="EditProfileNames">EditProfile</string>

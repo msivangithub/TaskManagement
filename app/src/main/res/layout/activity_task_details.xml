@@ -6,52 +6,85 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:orientation="horizontal">
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:padding="5dp">
 
-        <Spinner
-            android:id="@+id/id_employeenames"
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:text="Select User  >>>"/>
+
+
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"></Spinner>
+            android:layout_marginRight="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_edittext">
 
-        <Spinner
-            android:id="@+id/id_status"
+            <Spinner
+                android:id="@+id/id_employeenames"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                ></Spinner>
+        </LinearLayout>
+
+
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_gravity="right"
-            android:layout_weight="0.9"
-            android:gravity="right"/>
+            android:layout_weight="1"
+            android:background="@drawable/rounded_edittext"
+            android:visibility="gone">
+
+            <Spinner
+                android:id="@+id/id_status"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:layout_weight="0.9"
+                android:gravity="right" />
+        </LinearLayout>
 
 
     </LinearLayout>
-<LinearLayout
-    android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:layout_weight="1"
 
-    android:layout_height="0dp">
-    <android.support.v7.widget.RecyclerView
-        android:background="#47d2d0"
-        android:id="@+id/recyclerview"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="1"
-        android:cacheColorHint="#aca9a9"
-        android:divider="#bab9b9"
-        android:elevation="2dp"
-        android:footerDividersEnabled="true"
-        android:scrollbars="vertical">
+        android:orientation="vertical">
 
-    </android.support.v7.widget.RecyclerView>
-</LinearLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/teal_50"
+            android:cacheColorHint="#aca9a9"
+            android:divider="#bab9b9"
+            android:elevation="2dp"
+            android:footerDividersEnabled="true"
+            android:scrollbars="vertical">
+
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:background="#fff"
         android:orientation="vertical"
-        android:padding="5dp">
+        android:padding="5dp"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"

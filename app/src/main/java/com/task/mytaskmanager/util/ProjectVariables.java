@@ -23,6 +23,7 @@ public class ProjectVariables {
     public static final String USERS = "Users";
     public static final String TASK_CREAT = "Task_Creation";
     public static final String BRANCHES = "Branches/C001";
+    public static final String USER_ROLES = "TaskUserRoles";
     public static final String TASK_UPDATE="Task_Update";
     public static final String getTasksByUserId = "TaskUserTasksById";
     public static final int APK_CONNECTION_TIMEOUT = 15000;
@@ -45,15 +46,17 @@ public class ProjectVariables {
     public static final String PHONENUBER = "PhoneNo";
     public static String PHONENO1 = "PhoneNo1";
     public static String REMARKS = "Remarks";
-    public static String RESULT = "Result";
+
     public static String PASSWORD = "Password";
     public static String JPASSWORD = "Password";
     public static String JEMAILID = "EmailId";
 
+    public static String JREMARKS = "";
+    public static String JRESULT = "";
 
     public static final String BASE_URL = URL;
     public static final String USER_PROFILE = "Task_UserMaster";
-    public static String JRESULT = "Result";
+    public static String RESULT = "Result";
     public static String FIRSTNAME = "FirstName";
     public static String LASTNAME = "LastName";
     public static String COMPNAME = "Compname";
@@ -93,6 +96,8 @@ public class ProjectVariables {
     public static String ID="Id";
     public static String TASK_id="Cid";
     public static String USERLOGINID="uuid";
+    public static String ROLENAME = "RoleName";
+    public static String ROID ="RoId";
 
     //  public static String STATUS="Status";
 }

@@ -1,17 +1,23 @@
 package com.task.mytaskmanager.fragmentssss;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,14 +31,17 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.adeel.library.easyFTP;
 import com.task.mytaskmanager.Databases.PostsDatabaseHelper;
 import com.task.mytaskmanager.Pojo.Post;
 import com.task.mytaskmanager.Pojo.TaskBranches;
 import com.task.mytaskmanager.Pojo.User;
+import com.task.mytaskmanager.Pojo.UserRoles;
 import com.task.mytaskmanager.R;
 import com.task.mytaskmanager.services.AsynHttpPost;
 import com.task.mytaskmanager.services.RestfulListener;
@@ -46,7 +55,9 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -56,12 +67,15 @@ import java.util.Random;
  */
 public class EssentialsFragment extends Fragment implements RestfulListener {
     private ArrayList<TaskBranches> branches = new ArrayList<>();
+    private ArrayList<UserRoles> userRolesArrayList = new ArrayList<>();
     private static final int PICK_IMAGE = 100;
     private static final int CAMERA_IMAGE = 200;
     ImageView image;
     String imageURI = "";
     String ImageName = "";
     int branchpos = 0;
+    int userpos = 0;
+
     private String directory;
     String selectedImage;
     TextView click, camera, sdCard;
@@ -69,19 +83,27 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
     String email, firstname, secondname;
     private Spinner mSpinnerCompanyId, mSpinnerCounter;
     String companyID = "";
+    String userRolesID = "";
     RestfulListener listener;
-    JSONObject jsonObject;
     Button mSubmit;
     private String KEY_IMAGE = "image";
     private String KEY_NAME = "name";
-    Button mGallery, mCamera;
-    private Spinner essentialBranches;
+    LinearLayout mGallery, mCamera;
+    private Spinner essentialBranches, mUserRoles;
     EditText edt_password, edt_mobile;
+    JSONArray jsonArray;
+    JSONObject jsonObject;
+
+    static final String FTP_HOST = "myaccountsretail.com";
+    ProgressDialog pd;
+    /*  FTP USERNAME*/
+    static final String FTP_USER = "myRetail";
+    /*FTP PASSWORD*/
+    static final String FTP_PASS = "vKsj30!9";
+
 
     public static EssentialsFragment newInstance() {
-
         Bundle args = new Bundle();
-
         EssentialsFragment fragment = new EssentialsFragment();
         fragment.setArguments(args);
         return fragment;
@@ -104,6 +126,7 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
         View v = inflater.inflate(R.layout.essentials_activity, container, false);
         getActivity().setTitle("Add User");
         setHasOptionsMenu(true);
+        initPermissions();
         edt_mobile = (EditText) v.findViewById(R.id.Mobile);
         image = (ImageView) v.findViewById(R.id.display_image);
         emailAndMobile = (TextView) v.findViewById(R.id.emailAndMobile);
@@ -111,7 +134,9 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
         mlastName = (TextView) v.findViewById(R.id.lastName);
         essentialBranches = (Spinner) v.findViewById(R.id.txt_exxentinalBranches);
         mSubmit = (Button) v.findViewById(R.id.submit);
+        mUserRoles = (Spinner) v.findViewById(R.id.user_roles);
         listener = this;
+        pd = new ProgressDialog(getActivity());
         edt_password = (EditText) v.findViewById(R.id.add_password);
 
         AsynHttpPost post = new AsynHttpPost(getActivity(), 2, 002, ProjectVariables.BRANCHES, listener, null, "");
@@ -129,6 +154,21 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+        final AsynHttpPost user = new AsynHttpPost(getActivity(), 2, 003, ProjectVariables.USER_ROLES, listener, null, "");
+        user.execute();
+        mUserRoles.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                userRolesArrayList = AppUtil.getUserRolesInfo();
+                userpos = position;
+                userRolesID = userRolesArrayList.get(position).getRoId();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         image.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,15 +176,20 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
 
                 final Dialog d = new Dialog(getActivity());
                 d.setContentView(R.layout.mode_takepic);
-                d.setTitle("Select Image...");
+                d.setTitle("Select Image.....!");
                 d.show();
 
-
-                mGallery = (Button) d.findViewById(R.id.gallery);
-                mCamera = (Button) d.findViewById(R.id.camera);
-
+                mGallery = (LinearLayout) d.findViewById(R.id.gallery);
+                mCamera = (LinearLayout) d.findViewById(R.id.camera);
+                Button CAncel = (Button) d.findViewById(R.id.CAncel);
+                CAncel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        d.dismiss();
+                    }
+                });
+                //            for now dont use magallery ok dont press gallery.
                 mGallery.setOnClickListener(new View.OnClickListener() {
-
                     @Override
                     public void onClick(View v) {
                         d.dismiss();
@@ -165,11 +210,8 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
                         Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, u);
                         startActivityForResult(intent, CAMERA_IMAGE);
-
                     }
                 });
-
-
             }
         });
 
@@ -186,10 +228,13 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
                 String t5 = edt_password.getText().toString();
                 String t6 = branches.get(branchpos).getBranchId();
                 String t7 = imageURI;
+                String t8 = userRolesArrayList.get(userpos).getRoId();
                 if (!(t1.isEmpty() && t1.toString().equalsIgnoreCase("")) && !(t2.isEmpty() && t2.equalsIgnoreCase("")) &&
                         !(t3.isEmpty() && t3.equalsIgnoreCase("")) && !(t4.isEmpty() && t4.equalsIgnoreCase(""))
                         && !(t5.isEmpty() && t5.equalsIgnoreCase("")) && !(t6.isEmpty() && t6.equalsIgnoreCase(""))
-                        && !(t7.isEmpty() && t7.equalsIgnoreCase(""))) {
+                        && !(t7.isEmpty() && t7.equalsIgnoreCase(""))
+                        && !(t8.isEmpty() && t8.equalsIgnoreCase(""))) {
+
                     if (AppUtil.isNetworkAvailable(getActivity())) {
                         //Here we can call listener for calling webservice
                         JSONObject obj = new JSONObject();
@@ -204,7 +249,7 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
                             obj.accumulate("IMEID", "1254788");
                             obj.accumulate("Macid", "456789");
                             obj.accumulate("android", "98445");
-                            obj.accumulate("UserRole", "3");
+                            obj.accumulate("UserRole", userRolesID);
                             obj.accumulate("BranchName", "myaccounts");
                             obj.accumulate("AppName", "TaskManager");
                         } catch (Exception e) {
@@ -227,14 +272,6 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
         return v;
     }
 
-    public String getStringImage(Bitmap bmp) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] imageBytes = baos.toByteArray();
-        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-        return encodedImage;
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -248,12 +285,13 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
                 Post post1 = new Post();
                 post1.user = user;
                 post1.text = requestCode + "";
-
                 PostsDatabaseHelper databaseHelper = PostsDatabaseHelper.getInstance(getActivity());
                 databaseHelper.addPost(post1);
-
                 try {
                     image.setImageBitmap(MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedimg));
+                    imageURI = "Image_" + getRandomNumberInRange(1, 10000) + ".jpg";
+                    UploadTask task = new UploadTask(null, imageURI, selectedimg);
+                    task.execute();
                 } catch (IOException e) {
                     e.printStackTrace();
                     Log.e("Error Occred for ", e.getMessage().toString());
@@ -261,8 +299,12 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
 
             } else if (requestCode == CAMERA_IMAGE) {
                 imageURI = ImageName;
-
-                image.setImageURI(Uri.fromFile(new File(Environment.getExternalStorageDirectory(), imageURI)));
+                //image.setImageURI(Uri.fromFile(new File(Environment.getExternalStorageDirectory(), imageURI)));
+                //here we can add ftp call    i will open camera yes onslsy camer only camera.....ok
+                UploadTask task = new UploadTask(new File(Environment.getExternalStorageDirectory(), imageURI), imageURI,null);
+                task.execute();
+                image.setImageBitmap(BitmapFactory.decodeFile(new File(Environment.getExternalStorageDirectory(), imageURI).getAbsolutePath()));
+                pd.show();
                 User user = new User();
                 user.userName = "user1";
                 user.profilePictureUrl = imageURI;
@@ -273,12 +315,55 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
                 PostsDatabaseHelper databaseHelper = PostsDatabaseHelper.getInstance(getActivity());
                 databaseHelper.addPost(post1);
 
-
             } else {
                 super.onActivityResult(requestCode, resultCode, data);
             }
         }
 
+    }
+
+    private class UploadTask extends AsyncTask<Void, Void, String> {
+        File f;
+        String Image;
+        Uri fileUri;
+
+        public UploadTask(File file, String imageName, Uri u) {
+            f = file;
+            fileUri = u;
+            Image = imageName;
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            //uploadFile(f);
+            try {
+                easyFTP ftp = new easyFTP();
+                ftp.connect(FTP_HOST, FTP_USER, FTP_PASS);
+                boolean status = false;
+                status = ftp.setWorkingDirectory("/makeindiakart.com/taskfiles");
+                //InputStream targetStream = getResources().openRawResource(+R.drawable.ic_launcher);
+                if (fileUri == null) {
+                    InputStream targetStream = new FileInputStream(f);
+                    ftp.uploadFile(targetStream, Image);
+                } else {
+                    InputStream stream = getActivity().getContentResolver().openInputStream(fileUri);
+                    ftp.uploadFile(stream, Image);
+                }
+                Log.e("Status", status + "");
+                pd.dismiss();
+                return new String("Upload Successful");
+            } catch (Exception e) {
+                pd.dismiss();
+                String t = "Failure : " + e.getLocalizedMessage();
+                return t;
+            }
+
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            Toast.makeText(getActivity(), s, Toast.LENGTH_LONG).show();
+        }
     }
 
     public String getAbsolutePath(Uri uri) {
@@ -293,30 +378,6 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
             return null;
     }
 
-    public Bitmap decodeFile(String path) {
-        try {
-            // Decode image size
-            BitmapFactory.Options o = new BitmapFactory.Options();
-            o.inJustDecodeBounds = true;
-            BitmapFactory.decodeFile(path, o);
-            // The new size we want to scale to
-            final int REQUIRED_SIZE = 100;
-
-            // Find the correct scale value. It should be the power of 2.
-            int scale = 1;
-            while (o.outWidth / scale / 2 >= REQUIRED_SIZE && o.outHeight / scale / 2 >= REQUIRED_SIZE)
-                scale *= 2;
-
-            // Decode with inSampleSize
-            BitmapFactory.Options o2 = new BitmapFactory.Options();
-            o2.inSampleSize = scale;
-            return BitmapFactory.decodeFile(path, o2);
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-        return null;
-
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -341,12 +402,14 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
                     mlastName.setText("");
                     companyID = "";
                     imageURI = "";
+                    userRolesID = "";
                     edt_mobile.setText("");
                     edt_password.setText("");
                     image.setImageDrawable(getActivity().getDrawable(R.drawable.imge_placeholder));
                     ProjectVariables.MAILID = emailAndMobile.getText().toString();
                     ProjectVariables.FIRSTNAME = mfirstName.getText().toString();
                     ProjectVariables.LASTNAME = mlastName.getText().toString();
+                    ProjectVariables.ImAGE = imageURI.toString();
 
                     JSONArray Response = new JSONArray(s);
                     JSONObject loginResponse = Response.getJSONObject(0);
@@ -370,19 +433,14 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
             }
         } else if (type == 002) {
             try {
-                JSONArray array = new JSONArray(s);
+                jsonArray = new JSONArray(s);
 
-                for (int i = 0; i < array.length(); i++) {
-
-                    JSONObject obj = array.getJSONObject(i);
-
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    jsonObject = jsonArray.getJSONObject(i);
 
                     TaskBranches branch = new TaskBranches();
-
-                    branch.setBranchName(obj.getString(ProjectVariables.BNAME));
-
-                    branch.setBranchId(obj.getString(ProjectVariables.BRANCHID));
-
+                    branch.setBranchName(jsonObject.getString(ProjectVariables.BNAME));
+                    branch.setBranchId(jsonObject.getString(ProjectVariables.BRANCHID));
 
                     branches.add(branch);
                 }
@@ -392,17 +450,85 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
                 for (int i = 0; i < branches.size(); i++) {
                     us[i] = branches.get(i).getBranchName();
                 }
-                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, us); //selected item will look like a spinner set from XML
+
+                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, us);
                 spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 essentialBranches.setAdapter(spinnerArrayAdapter);
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        } else if (type == 003) {
+            try {
+                jsonArray = new JSONArray(s);
 
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    jsonObject = jsonArray.getJSONObject(i);
+
+                    UserRoles roles = new UserRoles();
+                    roles.setRoleName(jsonObject.getString(ProjectVariables.ROLENAME));
+                    roles.setRoId(jsonObject.getString(ProjectVariables.ROID));
+
+                    userRolesArrayList.add(roles);
+
+                }
+                AppUtil.setUserRolesInfo(userRolesArrayList);
+                String[] user = new String[userRolesArrayList.size()];
+                for (int i = 0; i < userRolesArrayList.size(); i++) {
+                    user[i] = userRolesArrayList.get(i).getRoleName();
+                }
+
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, user);
+                arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                mUserRoles.setAdapter(arrayAdapter);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
         }
-
     }
 
+    private void initPermissions() {
+        if (ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
 
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                    Manifest.permission.CAMERA)) {
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{Manifest.permission.CAMERA},
+                        1);
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
+        if (ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        2);
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
+    }
 }

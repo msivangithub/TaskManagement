@@ -243,10 +243,12 @@ public class UserTaskDetails extends Fragment implements View.OnClickListener, R
                     String tstat = obj.getString(ProjectVariables.TASKSTAT);
                     String ttoid = obj.getString(ProjectVariables.TASKOID);
                     String prty = obj.getString(ProjectVariables.PRIORITY);
+                    String comments = obj.getString("Comments");
                     String taskId = obj.getString("Cid");
                     int tid = Integer.parseInt(taskId);
                     Task t = new Task();
                     t.setTaskId(tid);
+                    t.setTaskComment(comments);
                     t.setActEndDate(aed);
                     t.setActStartDate(asd);
                     t.setExpEndDate(eed);

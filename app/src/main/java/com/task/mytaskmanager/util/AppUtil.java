@@ -8,6 +8,7 @@ import com.task.mytaskmanager.Pojo.Task;
 import com.task.mytaskmanager.Pojo.TaskBranches;
 import com.task.mytaskmanager.Pojo.TaskUser;
 import com.task.mytaskmanager.Pojo.User;
+import com.task.mytaskmanager.Pojo.UserRoles;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,14 +19,22 @@ import java.util.Date;
  */
 public class AppUtil {
     public static ArrayList<TaskBranches> branchesInfo= new ArrayList<>();
-
     public static ArrayList<TaskBranches> getBranchesInfo() {
         return branchesInfo;
     }
-
     public static void setBranchesInfo(ArrayList<TaskBranches> branchesInfo) {
         AppUtil.branchesInfo = branchesInfo;
     }
+
+    /*UserRoles Info*/
+    public static ArrayList<UserRoles> userRolesInfo = new ArrayList<>();
+    public static ArrayList<UserRoles> getUserRolesInfo() {
+        return userRolesInfo;
+    }
+    public static void setUserRolesInfo(ArrayList<UserRoles> userRolesInfo) {
+        AppUtil.userRolesInfo = userRolesInfo;
+    }
+
 
     public static ArrayList<Task> userArrayList = new ArrayList<>();
     public static ArrayList<TaskUser> seekUsers = new ArrayList<>();

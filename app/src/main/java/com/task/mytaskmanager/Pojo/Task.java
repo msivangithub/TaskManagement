@@ -5,9 +5,18 @@ package com.task.mytaskmanager.Pojo;
  */
 public class Task {
     private int taskId;
+    private String taskComment;
 
     public int getTaskId() {
         return taskId;
+    }
+
+    public String getTaskComment() {
+        return taskComment;
+    }
+
+    public void setTaskComment(String taskComment) {
+        this.taskComment = taskComment;
     }
 
     public void setTaskId(int taskId) {

@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/side_nav_bar">
+    android:background="@drawable/taskmanager_background">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -10,74 +10,59 @@
         <LinearLayout
             android:id="@+id/login_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:layout_gravity="center_vertical"
             android:orientation="vertical"
             android:padding="@dimen/loginScreen_padding">
 
-            <ImageView
-                android:layout_width="@dimen/loginScreen_ImageView_width"
-                android:layout_height="@dimen/loginScreen_ImageView_height"
-                android:id="@+id/imageView3"
-                android:src="@drawable/myaccountslogo"
-                android:layout_marginBottom="@dimen/loginScreen_marginBottom"
-                android:layout_gravity="center_horizontal" />
 
-
-
-            <android.support.design.widget.TextInputLayout
+            <EditText
+                android:id="@+id/login_emailid"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/loginScreen_marginTop"
+                android:background="@drawable/rounded_edittext1"
+                android:drawableLeft="@drawable/email24"
+                android:drawablePadding="8dp"
+                android:gravity="center_vertical"
+                android:hint="@string/email1"
+                android:inputType="textEmailAddress"
+                android:padding="@dimen/loginScreen_EditText_padding"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="@dimen/loginScreen_EditText_textSize" />
 
-                <EditText
-                    android:id="@+id/login_emailid"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/loginScreen_marginTop"
-                    android:background="@android:color/transparent"
-                    android:drawableLeft="@drawable/email24"
-                    android:drawablePadding="8dp"
-                    android:gravity="center_vertical"
-                    android:hint="@string/email"
-                    android:inputType="textEmailAddress"
-                    android:padding="@dimen/loginScreen_EditText_padding"
-                    android:singleLine="true"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/white"
-                    android:textSize="@dimen/loginScreen_EditText_textSize" />
-            </android.support.design.widget.TextInputLayout>
 
-            <View
+            <!--<View
                 android:layout_width="fill_parent"
-                android:layout_height="1px"
-                android:background="@color/white_greyish" />
+                android:layout_height="2px"
+                android:background="@color/white_greyish" />-->
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
 
-                <EditText
-                    android:id="@+id/login_password"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:drawableLeft="@drawable/padlock"
-                    android:drawablePadding="8dp"
-                    android:gravity="center_vertical"
-                    android:hint="@string/passowrd"
-                    android:inputType="textPassword"
-                    android:padding="@dimen/loginScreen_EditText_padding"
-                    android:singleLine="true"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/white"
-                    android:textSize="@dimen/loginScreen_EditText_textSize"  />
-            </android.support.design.widget.TextInputLayout>
-
-            <View
+            <EditText
+                android:id="@+id/login_password"
                 android:layout_width="fill_parent"
-                android:layout_height="1px"
-                android:background="@color/white_greyish" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/rounded_edittext1"
+                android:drawableLeft="@drawable/padlock"
+                android:drawablePadding="8dp"
+                android:gravity="center_vertical"
+                android:hint="@string/passowrd"
+                android:inputType="textPassword"
+                android:padding="@dimen/loginScreen_EditText_padding"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="@dimen/loginScreen_EditText_textSize" />
+
+
+            <!--  <View
+                  android:layout_width="fill_parent"
+                  android:layout_height="2px"
+                  android:background="@color/white_greyish" />-->
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -91,6 +76,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:buttonTint="@color/white"
                     android:text="@string/show_pwd"
                     android:textColor="@color/white"
                     android:textSize="@dimen/loginScreen_CheckBox_textSize" />
@@ -104,35 +90,82 @@
                     android:padding="5dp"
                     android:text="@string/forgot"
                     android:textColor="@color/white"
-                    android:visibility="visible"
-                    android:textSize="@dimen/loginScreen_CheckBox_textSize"/>
+                    android:textSize="@dimen/loginScreen_CheckBox_textSize"
+                    android:visibility="gone" />
             </LinearLayout>
 
-            <Button
-                android:id="@+id/loginBtn"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:background="@drawable/loginbutton_selector"
-                android:padding="3dp"
-                android:text="@string/login"
-                android:textColor="#009688"
-                android:textSize="@dimen/loginScreen_EditText_textSize"
-                android:textStyle="bold" />
-
-
-            <TextView
-                android:id="@+id/createAccount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/login_layout"
-                android:layout_centerHorizontal="true"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="15dp"
-                android:padding="5dp"
-                android:text="@string/newUser"
-                android:textColor="@color/white"
-                android:textSize="@dimen/loginScreen_EditText_textSize" />
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <Button
+                    android:id="@+id/loginBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="@drawable/rounded_edittext1"
+                    android:padding="2dp"
+                    android:text="@string/login"
+                    android:textColor="#fff"
+                    android:textSize="@dimen/loginScreen_EditText_textSize"
+                    android:textStyle="normal" />
+
+                <Button
+                    android:id="@+id/createAccount"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/rounded_edittext1"
+                    android:padding="2dp"
+                    android:text="@string/newUser"
+                    android:textColor="#fff"
+                    android:textSize="@dimen/loginScreen_EditText_textSize"
+                    android:textStyle="normal" />
+                <!-- <TextView
+                     android:id="@+id/createAccount"
+                     android:layout_width="0dp"
+                     android:layout_height="wrap_content"
+                     android:layout_below="@+id/login_layout"
+                     android:layout_centerHorizontal="true"
+                     android:layout_marginTop="15dp"
+                     android:layout_weight="1"
+                     android:gravity="center"
+                     android:padding="5dp"
+                     android:text="@string/newUser"
+                     android:textColor="@color/white"
+                     android:textSize="@dimen/loginScreen_EditText_textSize" />-->
+            </LinearLayout>
+
         </LinearLayout>
+
     </ScrollView>
+
+    <TextView
+        android:layout_width="@dimen/loginScreen_ImageView_width"
+        android:layout_height="@dimen/loginScreen_ImageView_height"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_gravity="right|bottom"
+        android:layout_marginBottom="0dp"
+        android:gravity="center"
+        android:text="Demo"
+        android:textColor="#fff"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="@dimen/loginScreen_ImageView_width"
+        android:layout_height="@dimen/loginScreen_ImageView_height"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="right|bottom"
+        android:layout_marginBottom="0dp"
+        android:src="@drawable/myaccountslogo" />
 </RelativeLayout>

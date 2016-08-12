@@ -52,8 +52,8 @@
     <dimen name="dashboardRowitems_textSize">11dp</dimen>
     <!--Activity_LoginScreen-->
     <dimen name="loginScreen_padding">20dp</dimen>
-    <dimen name="loginScreen_ImageView_width">250dp</dimen>
-    <dimen name="loginScreen_ImageView_height">100dp</dimen>
+    <dimen name="loginScreen_ImageView_width">100dp</dimen>
+    <dimen name="loginScreen_ImageView_height">50dp</dimen>
     <dimen name="loginScreen_marginBottom">30dp</dimen>
     <dimen name="loginScreen_marginTop">20dp</dimen>
     <dimen name="loginScreen_EditText_padding">10dp</dimen>

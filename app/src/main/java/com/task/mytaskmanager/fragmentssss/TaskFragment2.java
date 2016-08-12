@@ -104,7 +104,7 @@ public class TaskFragment2 extends Fragment implements RestfulListener {
             for (int i = 0; i < users.size(); i++) {
                 us[i] = users.get(i).getFirstName();
             }
-            SeekAdapter sdadapter1 = new SeekAdapter(getActivity(), R.layout.show_task_detils_row, users);
+            SeekAdapter sdadapter1 = new SeekAdapter(getActivity(), R.layout.task_row, users);
             rc.setLayoutManager(new LinearLayoutManager(getActivity()));
             rc.setItemAnimator(new DefaultItemAnimator());
             rc.setHasFixedSize(true);

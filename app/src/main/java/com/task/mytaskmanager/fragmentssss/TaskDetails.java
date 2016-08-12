@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.task.mytaskmanager.Adaptes.ShowDetailsAdapter;
 import com.task.mytaskmanager.Adaptes.TaskDetailsAdapter;
+import com.task.mytaskmanager.Adaptes.USERTaskDetailsAdapter;
 import com.task.mytaskmanager.Pojo.Task;
 import com.task.mytaskmanager.Pojo.TaskUser;
 import com.task.mytaskmanager.R;
@@ -56,7 +57,7 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
     RecyclerView recyclerView;
     TasksAdapter statusAdapter;
     Spinner employeename;
-    TaskDetailsAdapter adapter1 = null;
+    USERTaskDetailsAdapter adapter1 = null;
 
     public static TaskDetails newInstance() {
 
@@ -129,76 +130,76 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.id_show:
-                RecyclerView rv;
-                //  AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
-                Dialog d = new Dialog(getActivity());
-                d.setTitle("Task Details");
-                d.setContentView(R.layout.show_details);
-                rv = (RecyclerView) d.findViewById(R.id.recyclerview_showdet);
-                // (That new View is just there to have something inside the dialog that can grow big enough to cover the whole screen.)
-                ArrayList<Task> users = AppUtil.getUserArrayList();
-                ShowDetailsAdapter sdadapter = new ShowDetailsAdapter(getActivity(), R.layout.show_task_detils_row, users,false);
-                rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-                rv.setItemAnimator(new DefaultItemAnimator());
-                rv.setHasFixedSize(true);
-                rv.setAdapter(sdadapter);
-                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                lp.copyFrom(d.getWindow().getAttributes());
-                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-                d.show();
-                d.getWindow().setAttributes(lp);
-
-                break;
-            case R.id.id_edit:
-                RecyclerView rv1 = null;
-                //  AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
-                Dialog d1 = new Dialog(getActivity());
-                d1.setTitle("Task Details");
-                d1.setContentView(R.layout.show_details);
-                rv1 = (RecyclerView) d1.findViewById(R.id.recyclerview_showdet);
-                // (That new View is just there to have something inside the dialog that can grow big enough to cover the whole screen.)
-                ArrayList<Task> users1 = AppUtil.getUserArrayList();
-                ShowDetailsAdapter sdadapter1 = new ShowDetailsAdapter(getActivity(), R.layout.show_task_detils_row, users1,true);
-                rv1.setLayoutManager(new LinearLayoutManager(getActivity()));
-                rv1.setItemAnimator(new DefaultItemAnimator());
-                rv1.setHasFixedSize(true);
-                rv1.setAdapter(sdadapter1);
-                WindowManager.LayoutParams lp1 = new WindowManager.LayoutParams();
-                lp1.copyFrom(d1.getWindow().getAttributes());
-                lp1.width = WindowManager.LayoutParams.MATCH_PARENT;
-                lp1.height = WindowManager.LayoutParams.MATCH_PARENT;
-                d1.show();
-                d1.getWindow().setAttributes(lp1);
-                break;
-            case R.id.id_remind:
-                break;
-            case R.id.id_delete:
-                ArrayList<Task> deletedTasks = AppUtil.getDeletedUserList();
-                ArrayList<Task> modifyTasks = AppUtil.removedTasksByTwoLists(TaskList, deletedTasks);
-                TaskList = modifyTasks;
-                adapter1.notifyDataSetChanged();
-
-                adapter1 = new TaskDetailsAdapter(getActivity(),TaskDetails.this, R.layout.task_row, modifyTasks,"delete");
-
-
-                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                recyclerView.setItemAnimator(new DefaultItemAnimator());
-                recyclerView.setHasFixedSize(true);
-
-                recyclerView.setAdapter(adapter1);
-                break;
-            case R.id.id_smsalert:
-                break;
-            case R.id.id_score:
-                break;
-            case R.id.id_status:
-
-
-                break;
-        }
+//        switch (v.getId()) {
+//            case R.id.id_show:
+//                RecyclerView rv;
+//                //  AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
+//                Dialog d = new Dialog(getActivity());
+//                d.setTitle("Task Details");
+//                d.setContentView(R.layout.show_details);
+//                rv = (RecyclerView) d.findViewById(R.id.recyclerview_showdet);
+//                // (That new View is just there to have something inside the dialog that can grow big enough to cover the whole screen.)
+//                ArrayList<Task> users = AppUtil.getUserArrayList();
+//                ShowDetailsAdapter sdadapter = new ShowDetailsAdapter(getActivity(), R.layout.show_task_detils_row, users,false);
+//                rv.setLayoutManager(new LinearLayoutManager(getActivity()));
+//                rv.setItemAnimator(new DefaultItemAnimator());
+//                rv.setHasFixedSize(true);
+//                rv.setAdapter(sdadapter);
+//                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+//                lp.copyFrom(d.getWindow().getAttributes());
+//                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+//                lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+//                d.show();
+//                d.getWindow().setAttributes(lp);
+//
+//                break;
+//            case R.id.id_edit:
+//                RecyclerView rv1 = null;
+//                //  AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
+//                Dialog d1 = new Dialog(getActivity());
+//                d1.setTitle("Task Details");
+//                d1.setContentView(R.layout.show_details);
+//                rv1 = (RecyclerView) d1.findViewById(R.id.recyclerview_showdet);
+//                // (That new View is just there to have something inside the dialog that can grow big enough to cover the whole screen.)
+//                ArrayList<Task> users1 = AppUtil.getUserArrayList();
+//                ShowDetailsAdapter sdadapter1 = new ShowDetailsAdapter(getActivity(), R.layout.show_task_detils_row, users1,true);
+//                rv1.setLayoutManager(new LinearLayoutManager(getActivity()));
+//                rv1.setItemAnimator(new DefaultItemAnimator());
+//                rv1.setHasFixedSize(true);
+//                rv1.setAdapter(sdadapter1);
+//                WindowManager.LayoutParams lp1 = new WindowManager.LayoutParams();
+//                lp1.copyFrom(d1.getWindow().getAttributes());
+//                lp1.width = WindowManager.LayoutParams.MATCH_PARENT;
+//                lp1.height = WindowManager.LayoutParams.MATCH_PARENT;
+//                d1.show();
+//                d1.getWindow().setAttributes(lp1);
+//                break;
+//            case R.id.id_remind:
+//                break;
+//            case R.id.id_delete:
+//                ArrayList<Task> deletedTasks = AppUtil.getDeletedUserList();
+//                ArrayList<Task> modifyTasks = AppUtil.removedTasksByTwoLists(TaskList, deletedTasks);
+//                TaskList = modifyTasks;
+//                adapter1.notifyDataSetChanged();
+//
+//                adapter1 = new TaskDetailsAdapter(getActivity(),TaskDetails.this, R.layout.task_row, modifyTasks,"delete");
+//
+//
+//                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+//                recyclerView.setItemAnimator(new DefaultItemAnimator());
+//                recyclerView.setHasFixedSize(true);
+//
+//                recyclerView.setAdapter(adapter1);
+//                break;
+//            case R.id.id_smsalert:
+//                break;
+//            case R.id.id_score:
+//                break;
+//            case R.id.id_status:
+//
+//
+//                break;
+//        }
     }
 
     @Override
@@ -207,6 +208,17 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
         Log.e("Response from server is ", s);
         selectedUsers = new ArrayList<>();
         TaskList = new ArrayList<>();
+        if(rType == 888){
+            try {
+                JSONArray array = new JSONArray(s);
+                JSONObject obj = array.getJSONObject(0);
+
+                String result = obj.getString("Result");
+                Toast.makeText(getActivity(), result, Toast.LENGTH_LONG).show();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
         if (rType == 123) {
             if (adapter1 != null) {
                 adapter1.notifyDataSetChanged();
@@ -226,9 +238,12 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
                     String tstat = obj.getString(ProjectVariables.TASKSTAT);
                     String ttoid = obj.getString(ProjectVariables.TASKOID);
                     String prty = obj.getString(ProjectVariables.PRIORITY);
-
+                    String comments = obj.getString("Comments");
+                    String taskId = obj.getString("Cid");
+                    int cid = Integer.parseInt(taskId);
                     Task t = new Task();
-                    t.setTaskId(i);
+                    t.setTaskId(cid);
+                    t.setTaskComment(comments);
                     t.setActEndDate(aed);
                     t.setActStartDate(asd);
                     t.setExpEndDate(eed);
@@ -245,7 +260,7 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
                 e.printStackTrace();
                 Toast.makeText(getActivity(), e.getMessage().toString(), Toast.LENGTH_LONG).show();
             }
-            adapter1 = new TaskDetailsAdapter(getActivity(),TaskDetails.this, R.layout.task_row, TaskList,"add");
+            adapter1 = new USERTaskDetailsAdapter(getActivity(),TaskDetails.this, R.layout.task_row, TaskList,"add");
 
 
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

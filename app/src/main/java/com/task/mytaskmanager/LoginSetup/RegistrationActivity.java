@@ -26,8 +26,8 @@ public class RegistrationActivity extends AppCompatActivity implements RestfulLi
 
 
     EditText ETcompanyID, ETcompanyname, ETbranchname, ETaddrs1, ETaddrs2, ETaddrs3, ETcityid, ETphonenumber, ETemailid;
-    Button registerbutton;
-    TextView alredyusertext;
+    Button registerbutton ,alredyusertext;
+
     String customer, company, branch, add1, add2, add3, city, phone, email;
 
     @Override
@@ -40,7 +40,7 @@ public class RegistrationActivity extends AppCompatActivity implements RestfulLi
         ETphonenumber = (EditText) findViewById(R.id.id_phonenumber);
         ETemailid = (EditText) findViewById(R.id.id_emailid);
         registerbutton = (Button) findViewById(R.id.id_register);
-        alredyusertext = (TextView) findViewById(R.id.alreadyuser);
+        alredyusertext = (Button) findViewById(R.id.alreadyuser);
 
         registerbutton.setOnClickListener(new View.OnClickListener() {
             @Override
