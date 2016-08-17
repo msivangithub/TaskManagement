@@ -1,18 +1,19 @@
 package com.task.mytaskmanager.fragmentssss;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -23,12 +24,15 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.adeel.library.easyFTP;
 import com.task.mytaskmanager.LoginSetup.LoginActivity;
 import com.task.mytaskmanager.Pojo.Task;
 import com.task.mytaskmanager.Pojo.TaskUser;
@@ -39,6 +43,7 @@ import com.task.mytaskmanager.util.AppUtil;
 import com.task.mytaskmanager.util.PreferenceUtil;
 import com.task.mytaskmanager.util.ProjectVariables;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -52,6 +57,17 @@ public class MainActivity extends AppCompatActivity
     ImageView image;
     URL url = null;
     Bitmap bitmap;
+    ProjectVariables variables = new ProjectVariables();
+    static final String FTP_HOST = "myaccountsretail.com";
+    ProgressDialog pd;
+    /*********
+     * FTP USERNAME
+     ***********/
+    static final String FTP_USER = "myRetail";
+    /*********
+     * FTP PASSWORD
+     ***********/
+    static final String FTP_PASS = "vKsj30!9";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,12 +125,14 @@ public class MainActivity extends AppCompatActivity
             }
         }
     }
-    public class LoadImageFromURL extends AsyncTask<String, Void, Bitmap>{
+
+    public class LoadImageFromURL extends AsyncTask<String, Void, Bitmap> {
         @Override
         protected Bitmap doInBackground(String... params) {
-            // TODO Auto-generated method stub
+            //http://makeindiakart.com/taskfiles/Image_1290.jpg
             try {
-                URL url = new URL("http://makeindiakart.com/taskfiles/"+"Image");
+                String MainUrl = "http://makeindiakart.com/taskfiles/";
+                URL url = new URL( MainUrl + variables.ImAGES);
                 InputStream is = url.openConnection().getInputStream();
                 Bitmap bitMap = BitmapFactory.decodeStream(is);
                 return bitMap;
@@ -128,6 +146,7 @@ public class MainActivity extends AppCompatActivity
             }
             return null;
         }
+
         @Override
         protected void onPostExecute(Bitmap result) {
             // TODO Auto-generated method stub
@@ -135,6 +154,7 @@ public class MainActivity extends AppCompatActivity
             image.setImageBitmap(result);
         }
     }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -226,6 +246,57 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    public String getPath(Uri uri) {
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = managedQuery(uri, projection, null, null, null);
+        if (cursor != null) {
+
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } else
+            return null;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Toast.makeText(getApplicationContext(), "Main activity result", Toast.LENGTH_LONG).show();
+        if (resultCode == Activity.RESULT_OK) {
+            //  Toast.makeText(getApplicationContext(), "Main activity result1"+requestCode, Toast.LENGTH_LONG).show();
+            if (requestCode == 667) {
+                Uri selectedimg = data.getData();
+                String origanImage = getPath(selectedimg);
+                String[] imageArray = origanImage.split("/");
+
+                int length = imageArray.length;
+
+                String convertedImage = imageArray[length - 1];
+
+                SharedPreferences sharedPreferences = getSharedPreferences("CurrentVideo", MODE_PRIVATE);
+                SharedPreferences.Editor curentEdit = sharedPreferences.edit();
+                curentEdit.putString("video", convertedImage);
+                curentEdit.commit();
+
+                Toast.makeText(getApplicationContext(), "Video Recorded " + convertedImage, Toast.LENGTH_LONG).show();
+
+
+                UploadTask u = null;
+
+                try {
+                    u = new UploadTask(getContentResolver().openInputStream(selectedimg), convertedImage);
+                    u.execute();
+                } catch (FileNotFoundException e) {
+
+                }
+
+
+            }
+        } else {
+            Toast.makeText(getApplicationContext(), "failure", Toast.LENGTH_LONG).show();
+        }
+    }
+
     private void initPermissions() {
         if (ContextCompat.checkSelfPermission(MainActivity.this,
                 Manifest.permission.CAMERA)
@@ -307,6 +378,52 @@ public class MainActivity extends AppCompatActivity
                 // app-defined int constant. The callback method gets the
                 // result of the request.
             }
+        }
+    }
+
+
+    private class UploadTask extends AsyncTask<Void, Void, String> {
+        InputStream f;
+        String v;
+        ProgressDialog pdForVideoUpload;
+
+        @Override
+        protected void onPreExecute() {
+            pdForVideoUpload = new ProgressDialog(MainActivity.this);
+            pdForVideoUpload.show();
+            pdForVideoUpload.setTitle("Video Uploading....");
+        }
+
+        public UploadTask(InputStream file, String videoName) {
+            f = file;
+            v = videoName;
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            //uploadFile(f);
+            try {
+                easyFTP ftp = new easyFTP();
+                ftp.connect(FTP_HOST, FTP_USER, FTP_PASS);
+                boolean status = false;
+                status = ftp.setWorkingDirectory("/makeindiakart.com/taskfiles");
+                //InputStream targetStream = getResources().openRawResource(+R.drawable.ic_launcher);
+                InputStream targetStream = f;
+                ftp.uploadFile(targetStream, v);
+                Log.e("Status", status + "");
+                pdForVideoUpload.dismiss();
+                return new String("Upload Successful");
+            } catch (Exception e) {
+                pdForVideoUpload.dismiss();
+                String t = "Failure : " + e.getLocalizedMessage();
+                return t;
+            }
+
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
         }
     }
 

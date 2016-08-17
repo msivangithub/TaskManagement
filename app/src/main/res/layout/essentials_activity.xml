@@ -62,7 +62,9 @@
                     android:layout_gravity="center"
                     android:layout_weight="2"
                     android:paddingLeft="4dp"
+                    android:inputType="textEmailAddress"
                     android:singleLine="true"
+                    android:hint="Enter EmailID"
                     android:background="@drawable/rounded_edittext" />
 
 
@@ -91,7 +93,9 @@
                     android:layout_weight="2"
                     android:inputType="numberDecimal"
                     android:paddingLeft="4dp"
+                    android:maxLength="10"
                     android:singleLine="true"
+                    android:hint="Enter MobileNo"
                     android:background="@drawable/rounded_edittext" />
 
 
@@ -209,6 +213,8 @@
                     android:layout_weight="2"
                     android:singleLine="true"
                     android:paddingLeft="4dp"
+                    android:inputType="numberDecimal"
+                    android:hint="Enter Password"
                     android:background="@drawable/rounded_edittext" />
 
 

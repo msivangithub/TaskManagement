@@ -53,6 +53,8 @@
     <string name="back">BACK</string>
     <string name="email1">Email Id</string>
 
+    <string name="select">Select-UserRoles</string>
+
     <string name="RegistrationActivity">Registration</string>
     <string name="EditProfileNames">EditProfile</string>
     <string name="LoginActivity">Login</string>

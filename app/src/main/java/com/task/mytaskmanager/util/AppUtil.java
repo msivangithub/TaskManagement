@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.task.mytaskmanager.Pojo.Comments;
 import com.task.mytaskmanager.Pojo.Task;
 import com.task.mytaskmanager.Pojo.TaskBranches;
 import com.task.mytaskmanager.Pojo.TaskUser;
@@ -18,19 +19,43 @@ import java.util.Date;
  * Created by GhanaShyam on 7/9/2016.
  */
 public class AppUtil {
-    public static ArrayList<TaskBranches> branchesInfo= new ArrayList<>();
+    public static ArrayList<TaskBranches> branchesInfo = new ArrayList<>();
+
     public static ArrayList<TaskBranches> getBranchesInfo() {
         return branchesInfo;
     }
+
     public static void setBranchesInfo(ArrayList<TaskBranches> branchesInfo) {
         AppUtil.branchesInfo = branchesInfo;
     }
 
+    /*Get Current POjo*/
+    public static ArrayList<Comments> currentPojo = new ArrayList<>();
+    public static ArrayList<Comments> getCurrentPojo() {
+        return currentPojo;
+    }
+    public static void setCurrentPojo(ArrayList<Comments> currentPojo) {
+        AppUtil.currentPojo = currentPojo;
+    }
+
+    /*Comments list*/
+    public static ArrayList<String> currentComments = new ArrayList<>();
+
+    public static ArrayList<String> getCurrentComments() {
+        return currentComments;
+    }
+
+    public static void setCurrentComments(ArrayList<String> currentComments) {
+        AppUtil.currentComments = currentComments;
+    }
+
     /*UserRoles Info*/
     public static ArrayList<UserRoles> userRolesInfo = new ArrayList<>();
+
     public static ArrayList<UserRoles> getUserRolesInfo() {
         return userRolesInfo;
     }
+
     public static void setUserRolesInfo(ArrayList<UserRoles> userRolesInfo) {
         AppUtil.userRolesInfo = userRolesInfo;
     }

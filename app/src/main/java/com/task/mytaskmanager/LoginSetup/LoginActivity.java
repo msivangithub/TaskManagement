@@ -3,9 +3,13 @@ package com.task.mytaskmanager.LoginSetup;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -65,6 +69,32 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         forgotPassword = (TextView) findViewById(R.id.forgot_password);
         signUp = (Button) findViewById(R.id.createAccount);
         show_hide_password = (CheckBox) findViewById(R.id.show_hide_password);
+        show_hide_password.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton button,
+                                         boolean isChecked) {
+                // If it is checkec then show password else hide
+                // password
+                if (isChecked) {
+                    show_hide_password.setText(R.string.hide_pwd);// change
+                    // checkbox
+                    // text
+                    password.setInputType(InputType.TYPE_CLASS_TEXT);
+                    password.setTransformationMethod(HideReturnsTransformationMethod
+                            .getInstance());// show password
+                } else {
+                    show_hide_password.setText(R.string.show_pwd);// change
+                    // checkbox
+                    // text
+                    password.setInputType(InputType.TYPE_CLASS_TEXT
+                            | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    password.setTransformationMethod(PasswordTransformationMethod
+                            .getInstance());// hide password
+                }
+
+            }
+        });
     }
 
     @Override
@@ -92,11 +122,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     public void getLogin() {
 
+      //  if (validation()) {
 
-        if (AppUtil.isNetworkAvailable(LoginActivity.this)) {
             userText = username.getText().toString();
             passText = password.getText().toString();
-
             if ((!userText.isEmpty() && !userText.equalsIgnoreCase("")) && (!passText.isEmpty() && !passText.equalsIgnoreCase(""))) {
                 try {
 
@@ -104,24 +133,26 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     loginObject.accumulate(ProjectVariables.LOGIN_PHONE, userText);
                     loginObject.accumulate(ProjectVariables.PASSWORD, passText);
 
-                    AsynHttpPost post = new AsynHttpPost(LoginActivity.this, 1, 0, ProjectVariables.LOGIN, LoginActivity.this, loginObject, "");
-                    post.execute();
+                    if (AppUtil.isNetworkAvailable(LoginActivity.this)) {
+
+                        AsynHttpPost post = new AsynHttpPost(LoginActivity.this, 1, 0, ProjectVariables.LOGIN, LoginActivity.this, loginObject, "");
+                        post.execute();
+
+                    } else {
+                        Toast.makeText(LoginActivity.this, ProjectVariables.PLEASE_CHECK_YOUR_NETWORK_CONNECTION, Toast.LENGTH_LONG).show();
+                    }
                 } catch (Exception e) {
-
                 }
-
             } else {
-                Toast.makeText(LoginActivity.this, "Please enter username or password", Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, "Please enter username & password", Toast.LENGTH_LONG).show();
+
             }
-        } else {
-            Toast.makeText(LoginActivity.this, ProjectVariables.PLEASE_CHECK_YOUR_NETWORK_CONNECTION, Toast.LENGTH_LONG).show();
-        }
+
     }
 
     @Override
     public void getData(String s, String status, int rType) {
         if (status.equalsIgnoreCase("1")) {
-
 
             try {
                 JSONArray Response = new JSONArray(s);
@@ -135,7 +166,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     util.saveString(LoginActivity.this, ProjectVariables.USERLOGINID, loginUserId);
                     util.saveString(LoginActivity.this, "MailID", mailId);
                     util.saveString(LoginActivity.this, "FirstName", UserName);
-                   // Toast.makeText(getApplicationContext(), jsonObject.getString(ProjectVariables.USER_ROLE), Toast.LENGTH_LONG).show();
+                    // Toast.makeText(getApplicationContext(), jsonObject.getString(ProjectVariables.USER_ROLE), Toast.LENGTH_LONG).show();
                     util.saveString(LoginActivity.this, ProjectVariables.USER_ROLE, jsonObject.getString(ProjectVariables.USER_ROLE));
                     util.saveString(LoginActivity.this, ProjectVariables.STATUS, ProjectVariables.LOGGED_IN);
                     util.saveString(LoginActivity.this, ProjectVariables.USERNAME, userText);
@@ -156,4 +187,65 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             Toast.makeText(LoginActivity.this, "Response from server " + s, Toast.LENGTH_LONG).show();
         }
     }
+
+    private boolean validation() {
+        boolean result = false;
+        boolean validEmailIdFlag = false;
+        boolean emailFlag = false;
+        boolean passFlag = false;
+        username = (EditText) findViewById(R.id.login_emailid);
+
+        passText = password.getText().toString();
+        userText = username.getText().toString();
+
+        if (userText != null) {
+            if (userText.trim().equalsIgnoreCase("")) {
+                username.setError("Email  is empty");
+                emailFlag = false;
+            } else {
+                username.setError(null);
+                emailFlag = true;
+            }
+        } else {
+            username.setError("Email  is empty");
+            emailFlag = false;
+        }
+        if (passText != null) {
+            if (passText.trim().equalsIgnoreCase("")) {
+                password.setError("Password  is empty");
+                passFlag = false;
+            } else {
+                password.setError(null);
+                passFlag = true;
+            }
+        } else {
+            password.setError("Password  is empty");
+            passFlag = false;
+        }
+        if (userText != null) {
+            if (!isValidMail(userText)) {
+                username.setError("Enter valid email Id");
+                validEmailIdFlag = false;
+            } else {
+                username.setError(null);
+                validEmailIdFlag = true;
+            }
+        } else {
+            username.setError(" email is empty");
+            validEmailIdFlag = false;
+        }
+        if (validEmailIdFlag && validEmailIdFlag) {
+            result = true;
+        } else {
+            result = false;
+        }
+        return result;
+
+    }
+
+    private boolean isValidMail(String email) {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+
 }

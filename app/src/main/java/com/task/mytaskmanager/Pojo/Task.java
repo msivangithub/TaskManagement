@@ -6,6 +6,28 @@ package com.task.mytaskmanager.Pojo;
 public class Task {
     private int taskId;
     private String taskComment;
+    private String video;
+    private String ImeId;
+    private String TaskFromId;
+    private String TaskToId;
+    private String ExpStartDate;
+    private String ExpEndDate;
+    private String ActStartDate;
+    private String ActEndDate;
+    private String TaskStatus;
+    private String TaskHeading;
+    private String TaskDes;
+    private String priority;
+
+
+
+    public String getVideo() {
+        return video;
+    }
+
+    public void setVideo(String video) {
+        this.video = video;
+    }
 
     public int getTaskId() {
         return taskId;
@@ -22,18 +44,6 @@ public class Task {
     public void setTaskId(int taskId) {
         this.taskId = taskId;
     }
-
-    private String ImeId;
-    private String TaskFromId;
-    private String TaskToId;
-    private String ExpStartDate;
-    private String ExpEndDate;
-    private String ActStartDate;
-    private String ActEndDate;
-    private String TaskStatus;
-    private String TaskHeading;
-    private String TaskDes;
-    private String priority;
 
 
     public String getImeId() {

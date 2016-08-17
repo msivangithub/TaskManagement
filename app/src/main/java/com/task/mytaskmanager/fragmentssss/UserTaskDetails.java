@@ -1,6 +1,9 @@
 package com.task.mytaskmanager.fragmentssss;
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -21,6 +24,7 @@ import android.widget.Toast;
 
 import com.task.mytaskmanager.Adaptes.ShowDetailsAdapter;
 import com.task.mytaskmanager.Adaptes.TaskDetailsAdapter;
+import com.task.mytaskmanager.Pojo.Comments;
 import com.task.mytaskmanager.Pojo.Task;
 import com.task.mytaskmanager.Pojo.TaskUser;
 import com.task.mytaskmanager.R;
@@ -36,6 +40,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 /**
@@ -187,12 +192,12 @@ public class UserTaskDetails extends Fragment implements View.OnClickListener, R
 
                 adapter1 = new TaskDetailsAdapter(getActivity(), UserTaskDetails.this, R.layout.task_row, modifyTasks, "delete");
 
-
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
                 recyclerView.setHasFixedSize(true);
 
                 recyclerView.setAdapter(adapter1);
+
                 break;
             case R.id.id_smsalert:
                 break;
@@ -204,6 +209,7 @@ public class UserTaskDetails extends Fragment implements View.OnClickListener, R
                 break;
         }
     }
+
 
     @Override
     public void getData(String s, String status, int rType) {
@@ -221,6 +227,38 @@ public class UserTaskDetails extends Fragment implements View.OnClickListener, R
                 Toast.makeText(getActivity(), result, Toast.LENGTH_LONG).show();
             } catch (JSONException e) {
                 e.printStackTrace();
+            }
+
+        }
+
+        if (rType == 999) {
+            try {
+                ArrayList<String> comments = new ArrayList<>();
+                String comm, userroles ,videoPlay;
+                ArrayList<Comments> current = new ArrayList<>();
+                JSONArray array = new JSONArray(s);
+                for (int c = 0; c < array.length(); c++) {
+                    Comments c1 = new Comments();
+                    JSONObject obj = array.getJSONObject(c);
+                    comm = obj.getString("Comments");
+                    userroles = obj.getString("UserRole");
+                    videoPlay = obj.getString("video");
+                    c1.setComments(comm);
+                    c1.setUserRole(userroles);
+                    c1.setVideo(videoPlay);
+                    current.add(c1);
+                    comments.add(comm);
+                    comments.add(userroles);
+
+                }
+                AppUtil.setCurrentPojo(current);
+                if (array.length() > 0)
+                    AppUtil.setCurrentComments(comments);
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                AppUtil.setCurrentComments(new ArrayList<String>());
             }
 
         }
@@ -245,6 +283,7 @@ public class UserTaskDetails extends Fragment implements View.OnClickListener, R
                     String prty = obj.getString(ProjectVariables.PRIORITY);
                     String comments = obj.getString("Comments");
                     String taskId = obj.getString("Cid");
+                    String video = obj.getString("video");
                     int tid = Integer.parseInt(taskId);
                     Task t = new Task();
                     t.setTaskId(tid);
@@ -259,6 +298,7 @@ public class UserTaskDetails extends Fragment implements View.OnClickListener, R
                     t.setTaskStatus(tstat);
                     t.setTaskToId(ttoid);
                     t.setPriority(prty);
+                    t.setVideo(video);
                     TaskList.add(t);
                 }
             } catch (JSONException e) {
@@ -266,8 +306,6 @@ public class UserTaskDetails extends Fragment implements View.OnClickListener, R
                 Toast.makeText(getActivity(), e.getMessage().toString(), Toast.LENGTH_LONG).show();
             }
             adapter1 = new TaskDetailsAdapter(getActivity(), UserTaskDetails.this, R.layout.task_row, TaskList, "add");
-
-
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             recyclerView.setItemAnimator(new DefaultItemAnimator());
             recyclerView.setHasFixedSize(true);
@@ -275,12 +313,8 @@ public class UserTaskDetails extends Fragment implements View.OnClickListener, R
             recyclerView.setAdapter(adapter1);
 
         } else {
-
-
             users = new ArrayList<>();
             try {
-
-
                 JSONArray array = new JSONArray(s);
 
                 for (int i = 0; i < array.length(); i++) {

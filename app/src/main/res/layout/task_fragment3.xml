@@ -9,16 +9,16 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="left"
         android:text="Choose the priority of this task"
         android:textColor="#000"
-        android:layout_gravity="left"
-        android:textStyle="bold"
-        android:textSize="18sp"/>
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
     <LinearLayout
-        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:orientation="horizontal">
 
         <RadioGroup
@@ -33,49 +33,63 @@
                 android:id="@+id/none"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="None "
                 android:textColor="@color/grey_600"
-                android:textStyle="bold"
                 android:textSize="20sp"
-                android:text="None " />
+                android:textStyle="bold" />
 
             <RadioButton
                 android:id="@+id/low"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Low "
                 android:textColor="@color/green_800"
-                android:textStyle="bold"
                 android:textSize="20sp"
-                android:text="Low " />
+                android:textStyle="bold" />
 
             <RadioButton
                 android:id="@+id/Medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Medium "
                 android:textColor="@color/blue_900"
-                android:textStyle="bold"
                 android:textSize="20sp"
-                android:text="Medium " />
+                android:textStyle="bold" />
 
             <RadioButton
                 android:id="@+id/High"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="High "
                 android:textColor="@color/red_900"
-                android:textStyle="bold"
                 android:textSize="20sp"
-                android:text="High " />
+                android:textStyle="bold" />
         </RadioGroup>
     </LinearLayout>
-    <Button
-        android:layout_marginTop="20dp"
-        android:layout_width="wrap_content"
-        android:text="Submit"
-        android:id="@+id/adduser"
-        android:layout_gravity="center"
-        android:textColor="#fff"
-        android:background="@drawable/button_background"
-        android:layout_height="wrap_content" />
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/record"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Record Video" />
+
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/adduser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/button_background"
+        android:text="Submit"
+        android:textColor="#fff" />
 
 
 </LinearLayout>

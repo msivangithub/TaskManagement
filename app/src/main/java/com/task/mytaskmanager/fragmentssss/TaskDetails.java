@@ -1,7 +1,14 @@
 package com.task.mytaskmanager.fragmentssss;
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -20,11 +27,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.adeel.library.easyFTP;
 import com.task.mytaskmanager.Adaptes.ShowDetailsAdapter;
 import com.task.mytaskmanager.Adaptes.TaskDetailsAdapter;
 import com.task.mytaskmanager.Adaptes.USERTaskDetailsAdapter;
+import com.task.mytaskmanager.Pojo.Comments;
 import com.task.mytaskmanager.Pojo.Task;
 import com.task.mytaskmanager.Pojo.TaskUser;
+import com.task.mytaskmanager.Pojo.UserRoles;
 import com.task.mytaskmanager.R;
 
 import com.task.mytaskmanager.activity.Tasks;
@@ -38,7 +48,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by GhanaShyam on 7/18/2016.
@@ -49,7 +62,8 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
     ArrayList<Task> TaskList;
     RestfulListener listener;
     Spinner status;
-    Button show_Details, delete_Tasks,show_edt;
+    ProgressDialog pdForVideoUpload;
+    Button show_Details, delete_Tasks, show_edt;
     ArrayList<TaskUser> selectedUsers;
     TextView statusdisplay;
     Tasks tasks;
@@ -58,6 +72,16 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
     TasksAdapter statusAdapter;
     Spinner employeename;
     USERTaskDetailsAdapter adapter1 = null;
+    static final String FTP_HOST = "myaccountsretail.com";
+    ProgressDialog pd;
+    /*********
+     * FTP USERNAME
+     ***********/
+    static final String FTP_USER = "myRetail";
+    /*********
+     * FTP PASSWORD
+     ***********/
+    static final String FTP_PASS = "vKsj30!9";
 
     public static TaskDetails newInstance() {
 
@@ -74,6 +98,7 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
         View view = inflater.inflate(R.layout.activity_task_details, container, false);
         getActivity().setTitle("Task Details");
         setHasOptionsMenu(true);
+        pdForVideoUpload = new ProgressDialog(getActivity());
         users = new ArrayList<>();
         show_Details = (Button) view.findViewById(R.id.id_show);
         delete_Tasks = (Button) view.findViewById(R.id.id_delete);
@@ -205,10 +230,11 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
     @Override
     public void getData(String s, String status, int rType) {
 //        Toast.makeText(getActivity(),s,Toast.LENGTH_LONG).show();
-        Log.e("Response from server is ", s);
+        Log.e("Response from server is ", s + " " + rType);
         selectedUsers = new ArrayList<>();
         TaskList = new ArrayList<>();
-        if(rType == 888){
+        /**/
+        if (rType == 888) {
             try {
                 JSONArray array = new JSONArray(s);
                 JSONObject obj = array.getJSONObject(0);
@@ -219,7 +245,38 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
                 e.printStackTrace();
             }
         }
-        if (rType == 123) {
+
+        if (rType == 999) {
+            try {
+                ArrayList<String> comments = new ArrayList<>();
+                String comm, userroles ,videoPlay;
+                ArrayList<Comments> current = new ArrayList<>();
+                JSONArray array = new JSONArray(s);
+                for (int c = 0; c < array.length(); c++) {
+                    Comments c1 = new Comments();
+                    JSONObject obj = array.getJSONObject(c);
+                    comm = obj.getString("Comments");
+                    userroles = obj.getString("UserRole");
+                    videoPlay = obj.getString("video");
+                    c1.setComments(comm);
+                    c1.setUserRole(userroles);
+                    c1.setVideo(videoPlay);
+                    current.add(c1);
+                    comments.add(comm);
+                    comments.add(userroles);
+
+                }
+                AppUtil.setCurrentPojo(current);
+                if (array.length() > 0)
+                    AppUtil.setCurrentComments(comments);
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                AppUtil.setCurrentComments(new ArrayList<String>());
+            }
+
+        } else if (rType == 123) {
             if (adapter1 != null) {
                 adapter1.notifyDataSetChanged();
                 TaskList = new ArrayList<>();
@@ -238,6 +295,7 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
                     String tstat = obj.getString(ProjectVariables.TASKSTAT);
                     String ttoid = obj.getString(ProjectVariables.TASKOID);
                     String prty = obj.getString(ProjectVariables.PRIORITY);
+                    String video = obj.getString("video");
                     String comments = obj.getString("Comments");
                     String taskId = obj.getString("Cid");
                     int cid = Integer.parseInt(taskId);
@@ -254,28 +312,25 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
                     t.setTaskStatus(tstat);
                     t.setTaskToId(ttoid);
                     t.setPriority(prty);
+                    t.setVideo(video);
                     TaskList.add(t);
+
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
                 Toast.makeText(getActivity(), e.getMessage().toString(), Toast.LENGTH_LONG).show();
             }
-            adapter1 = new USERTaskDetailsAdapter(getActivity(),TaskDetails.this, R.layout.task_row, TaskList,"add");
-
-
+            adapter1 = new USERTaskDetailsAdapter(getActivity(), TaskDetails.this, R.layout.task_row, TaskList, "add");
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             recyclerView.setItemAnimator(new DefaultItemAnimator());
             recyclerView.setHasFixedSize(true);
 
             recyclerView.setAdapter(adapter1);
 
-        } else {
-
+        } else if (rType == 0) {
 
             users = new ArrayList<>();
             try {
-
-
                 JSONArray array = new JSONArray(s);
 
                 for (int i = 0; i < array.length(); i++) {
@@ -294,6 +349,7 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
                 for (int i = 0; i < users.size(); i++) {
                     us[i] = users.get(i).getFirstName();
                 }
+
                 ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, us); //selected item will look like a spinner set from XML
                 spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 employeename.setAdapter(spinnerArrayAdapter);
@@ -303,5 +359,87 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
 
         }
     }
+
+    public String getPath(Uri uri) {
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getActivity().managedQuery(uri, projection, null, null, null);
+        if (cursor != null) {
+
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } else
+            return null;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == 667) {
+                Uri selectedimg = data.getData();
+                String origanImage = getPath(selectedimg);
+                String[] imageArray = origanImage.split("/");
+
+                int length = imageArray.length;
+
+                String convertedImage = imageArray[length];
+                Toast.makeText(getActivity(), "Video Recorded " + convertedImage, Toast.LENGTH_LONG).show();
+
+                pdForVideoUpload.show();
+                pdForVideoUpload.setTitle("Video uploading...");
+
+                UploadTask uploadTask = null;
+
+                try {
+                    uploadTask = new UploadTask(getActivity().getContentResolver().openInputStream(selectedimg), convertedImage);
+                    uploadTask.execute();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        }
+    }
+
+    private class UploadTask extends AsyncTask<Void, Void, String> {
+        InputStream f;
+        String v;
+
+        public UploadTask(InputStream file, String videoName) {
+            f = file;
+            v = videoName;
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            //uploadFile(f);
+            try {
+                easyFTP ftp = new easyFTP();
+                ftp.connect(FTP_HOST, FTP_USER, FTP_PASS);
+                boolean status = false;
+                status = ftp.setWorkingDirectory("/makeindiakart.com/taskfiles");
+                //InputStream targetStream = getResources().openRawResource(+R.drawable.ic_launcher);
+                InputStream targetStream = f;
+                ftp.uploadFile(targetStream, v);
+                Log.e("Status", status + "");
+                pdForVideoUpload.dismiss();
+                return new String("Upload Successful");
+            } catch (Exception e) {
+                pdForVideoUpload.dismiss();
+                String t = "Failure : " + e.getLocalizedMessage();
+                return t;
+            }
+
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            Toast.makeText(getActivity(), s, Toast.LENGTH_LONG).show();
+        }
+    }
+
+
 }
 

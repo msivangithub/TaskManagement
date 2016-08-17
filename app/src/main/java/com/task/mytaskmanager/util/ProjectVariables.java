@@ -25,6 +25,7 @@ public class ProjectVariables {
     public static final String BRANCHES = "Branches/C001";
     public static final String USER_ROLES = "TaskUserRoles";
     public static final String TASK_UPDATE="Task_Update";
+    public static final String TASK_COMMENTS="TaskComments";
     public static final String getTasksByUserId = "TaskUserTasksById";
     public static final int APK_CONNECTION_TIMEOUT = 15000;
     public static final int APK_WAIT_DATA_TIMEOUT = 30000;
@@ -53,6 +54,7 @@ public class ProjectVariables {
 
     public static String JREMARKS = "";
     public static String JRESULT = "";
+    public static String ImAGES = "";
 
     public static final String BASE_URL = URL;
     public static final String USER_PROFILE = "Task_UserMaster";
