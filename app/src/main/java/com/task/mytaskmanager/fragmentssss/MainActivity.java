@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity
             //http://makeindiakart.com/taskfiles/Image_1290.jpg
             try {
                 String MainUrl = "http://makeindiakart.com/taskfiles/";
-                URL url = new URL( MainUrl + variables.ImAGES);
+                URL url = new URL( MainUrl +PreferenceUtil.getInstance().getString(MainActivity.this,"ProfileImage","Image_5756.jpg"));
                 InputStream is = url.openConnection().getInputStream();
                 Bitmap bitMap = BitmapFactory.decodeStream(is);
                 return bitMap;

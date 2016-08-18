@@ -180,8 +180,8 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
                         obj.accumulate(ProjectVariables.TASKHEAD, AppUtil.getTaskHeading());
                         obj.accumulate(ProjectVariables.TASKDES, AppUtil.getTaskDes());
                         obj.accumulate(ProjectVariables.PRIORITY, AppUtil.getPriority());
-
                         obj.accumulate("video", Video);
+
                     } catch (Exception e) {
 
                     }

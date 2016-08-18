@@ -25,6 +25,7 @@ import com.task.mytaskmanager.services.addbutton;
 import com.task.mytaskmanager.util.AppUtil;
 import com.task.mytaskmanager.util.DatePickerFragment;
 import com.task.mytaskmanager.util.OnDateSetCompleted;
+import com.task.mytaskmanager.util.PreferenceUtil;
 import com.task.mytaskmanager.util.ProjectVariables;
 
 import org.json.JSONArray;
@@ -84,8 +85,8 @@ public class TaskFragment1 extends Fragment implements RestfulListener {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (users.size() != 0)
-                    AppUtil.setTaskFromId("C001");
-                AppUtil.setTaskToId(users.get(position).getUid());
+                    AppUtil.setTaskFromId(PreferenceUtil.getInstance().getString(getActivity(),"Uid","c001"));
+                   AppUtil.setTaskToId(users.get(position).getUid());
             }
 
             @Override

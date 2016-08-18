@@ -101,6 +101,7 @@ public class UserTaskDetails extends Fragment implements View.OnClickListener, R
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 String employeeId = users.get(position).getUid();
+                PreferenceUtil.getInstance().saveString(getActivity(),"currentUser",employeeId);
                 JSONObject obj = new JSONObject();
                 try {
                     obj.accumulate(ProjectVariables.UID, employeeId);
@@ -232,10 +233,10 @@ public class UserTaskDetails extends Fragment implements View.OnClickListener, R
         }
 
         if (rType == 999) {
+            ArrayList<Comments> current = new ArrayList<>();
             try {
-                ArrayList<String> comments = new ArrayList<>();
                 String comm, userroles ,videoPlay;
-                ArrayList<Comments> current = new ArrayList<>();
+
                 JSONArray array = new JSONArray(s);
                 for (int c = 0; c < array.length(); c++) {
                     Comments c1 = new Comments();
@@ -247,18 +248,17 @@ public class UserTaskDetails extends Fragment implements View.OnClickListener, R
                     c1.setUserRole(userroles);
                     c1.setVideo(videoPlay);
                     current.add(c1);
-                    comments.add(comm);
-                    comments.add(userroles);
 
                 }
-                AppUtil.setCurrentPojo(current);
-                if (array.length() > 0)
-                    AppUtil.setCurrentComments(comments);
 
+               // if (array.length() > 0)
+                    AppUtil.setCurrentPojo(current);
 
             } catch (JSONException e) {
                 e.printStackTrace();
-                AppUtil.setCurrentComments(new ArrayList<String>());
+                AppUtil.setCurrentPojo(current);
+               // Toast.makeText(getActivity(),s,Toast.LENGTH_SHORT).show();
+                //AppUtil.setCurrentComments(new ArrayList<String>());
             }
 
         }

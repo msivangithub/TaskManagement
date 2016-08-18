@@ -38,6 +38,7 @@ import com.task.mytaskmanager.activity.Tasks;
 import com.task.mytaskmanager.services.AsynHttpPost;
 import com.task.mytaskmanager.services.RestfulListener;
 import com.task.mytaskmanager.util.AppUtil;
+import com.task.mytaskmanager.util.PreferenceUtil;
 import com.task.mytaskmanager.util.ProjectVariables;
 
 import org.json.JSONException;
@@ -146,10 +147,10 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
                     @Override
                     public void onClick(View view) {
                         ArrayList<Comments> currentPojo = new ArrayList<Comments>();
-                        currentPojo= AppUtil.getCurrentPojo();
+                        currentPojo = AppUtil.getCurrentPojo();
 
                         if (currentPojo.size() > 0) {
-                            CommentsAdapter cAdapter = new CommentsAdapter(currentPojo,_context);
+                            CommentsAdapter cAdapter = new CommentsAdapter(currentPojo, _context);
                             Comment.setLayoutManager(new LinearLayoutManager(_context));
                             Comment.setItemAnimator(new DefaultItemAnimator());
                             Comment.setHasFixedSize(true);
@@ -276,7 +277,8 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
                                         obj.accumulate("TaskStatus", status[0]);
                                         obj.accumulate("Comments", task_comment);
                                         obj.accumulate("video", video);
-
+                                        obj.accumulate("TaskToId", PreferenceUtil.getInstance().getString(_context, "currentUser", "000"));
+                                        obj.accumulate("TaskFromId", PreferenceUtil.getInstance().getString(_context, "Uid", "c001"));
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }

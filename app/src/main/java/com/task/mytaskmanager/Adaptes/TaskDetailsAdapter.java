@@ -179,6 +179,8 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
                             finalComment.setHasFixedSize(true);
                             finalComment.setAdapter(cAdapter);
 
+                        }else{
+                            Toast.makeText(_context,"No comments list",Toast.LENGTH_SHORT).show();
                         }
 
                     }
@@ -293,6 +295,8 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
                                         obj.accumulate("TaskStatus", status[0]);
                                         obj.accumulate("Comments", task_comment);
                                         obj.accumulate("video", video);
+                                        obj.accumulate("TaskToId", PreferenceUtil.getInstance().getString(_context, "currentUser", "000"));
+                                        obj.accumulate("TaskFromId", PreferenceUtil.getInstance().getString(_context, "Uid", "c001"));
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }

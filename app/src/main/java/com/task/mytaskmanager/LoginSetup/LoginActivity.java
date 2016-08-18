@@ -160,16 +160,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 String loginUserId = jsonObject.getString(ProjectVariables.UID);
                 String mailId = jsonObject.getString("MailID");
                 String UserName = jsonObject.getString("FirstName");
+                String fromUid = jsonObject.getString("Uid");
+                String Image = jsonObject.getString("Image");
                 ProjectVariables.JRESULT = jsonObject.getString(ProjectVariables.RESULT);
                 ProjectVariables.JREMARKS = jsonObject.getString(ProjectVariables.REMARKS);
                 if (ProjectVariables.JRESULT.equals("Sucess")) {
                     util.saveString(LoginActivity.this, ProjectVariables.USERLOGINID, loginUserId);
                     util.saveString(LoginActivity.this, "MailID", mailId);
                     util.saveString(LoginActivity.this, "FirstName", UserName);
+                    util.saveString(LoginActivity.this, "Uid",fromUid);
                     // Toast.makeText(getApplicationContext(), jsonObject.getString(ProjectVariables.USER_ROLE), Toast.LENGTH_LONG).show();
                     util.saveString(LoginActivity.this, ProjectVariables.USER_ROLE, jsonObject.getString(ProjectVariables.USER_ROLE));
                     util.saveString(LoginActivity.this, ProjectVariables.STATUS, ProjectVariables.LOGGED_IN);
                     util.saveString(LoginActivity.this, ProjectVariables.USERNAME, userText);
+                    util.saveString(LoginActivity.this, "ProfileImage", Image);
 
                     Intent mainActivity = new Intent(LoginActivity.this, MainActivity.class);
                     Toast.makeText(LoginActivity.this, ProjectVariables.JRESULT, Toast.LENGTH_LONG).show();

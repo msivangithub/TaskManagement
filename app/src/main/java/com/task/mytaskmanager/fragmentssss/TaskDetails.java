@@ -42,6 +42,7 @@ import com.task.mytaskmanager.activity.TasksAdapter;
 import com.task.mytaskmanager.services.AsynHttpPost;
 import com.task.mytaskmanager.services.RestfulListener;
 import com.task.mytaskmanager.util.AppUtil;
+import com.task.mytaskmanager.util.PreferenceUtil;
 import com.task.mytaskmanager.util.ProjectVariables;
 
 import org.json.JSONArray;
@@ -115,14 +116,13 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
         status = (Spinner) view.findViewById(R.id.id_status);
         statusAdapter = new TasksAdapter(getActivity(), android.R.layout.simple_spinner_item, mytasks);
         status.setAdapter(statusAdapter);
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, employee);
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        employeename.setAdapter(adapter);
+
         employeename.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 String employeeId = users.get(position).getUid();
+                PreferenceUtil.getInstance().saveString(getActivity(),"currentUser",employeeId);
                 JSONObject obj = new JSONObject();
                 try {
                     obj.accumulate(ProjectVariables.UID, employeeId);
@@ -155,76 +155,7 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
 
     @Override
     public void onClick(View v) {
-//        switch (v.getId()) {
-//            case R.id.id_show:
-//                RecyclerView rv;
-//                //  AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
-//                Dialog d = new Dialog(getActivity());
-//                d.setTitle("Task Details");
-//                d.setContentView(R.layout.show_details);
-//                rv = (RecyclerView) d.findViewById(R.id.recyclerview_showdet);
-//                // (That new View is just there to have something inside the dialog that can grow big enough to cover the whole screen.)
-//                ArrayList<Task> users = AppUtil.getUserArrayList();
-//                ShowDetailsAdapter sdadapter = new ShowDetailsAdapter(getActivity(), R.layout.show_task_detils_row, users,false);
-//                rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-//                rv.setItemAnimator(new DefaultItemAnimator());
-//                rv.setHasFixedSize(true);
-//                rv.setAdapter(sdadapter);
-//                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-//                lp.copyFrom(d.getWindow().getAttributes());
-//                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-//                lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-//                d.show();
-//                d.getWindow().setAttributes(lp);
-//
-//                break;
-//            case R.id.id_edit:
-//                RecyclerView rv1 = null;
-//                //  AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
-//                Dialog d1 = new Dialog(getActivity());
-//                d1.setTitle("Task Details");
-//                d1.setContentView(R.layout.show_details);
-//                rv1 = (RecyclerView) d1.findViewById(R.id.recyclerview_showdet);
-//                // (That new View is just there to have something inside the dialog that can grow big enough to cover the whole screen.)
-//                ArrayList<Task> users1 = AppUtil.getUserArrayList();
-//                ShowDetailsAdapter sdadapter1 = new ShowDetailsAdapter(getActivity(), R.layout.show_task_detils_row, users1,true);
-//                rv1.setLayoutManager(new LinearLayoutManager(getActivity()));
-//                rv1.setItemAnimator(new DefaultItemAnimator());
-//                rv1.setHasFixedSize(true);
-//                rv1.setAdapter(sdadapter1);
-//                WindowManager.LayoutParams lp1 = new WindowManager.LayoutParams();
-//                lp1.copyFrom(d1.getWindow().getAttributes());
-//                lp1.width = WindowManager.LayoutParams.MATCH_PARENT;
-//                lp1.height = WindowManager.LayoutParams.MATCH_PARENT;
-//                d1.show();
-//                d1.getWindow().setAttributes(lp1);
-//                break;
-//            case R.id.id_remind:
-//                break;
-//            case R.id.id_delete:
-//                ArrayList<Task> deletedTasks = AppUtil.getDeletedUserList();
-//                ArrayList<Task> modifyTasks = AppUtil.removedTasksByTwoLists(TaskList, deletedTasks);
-//                TaskList = modifyTasks;
-//                adapter1.notifyDataSetChanged();
-//
-//                adapter1 = new TaskDetailsAdapter(getActivity(),TaskDetails.this, R.layout.task_row, modifyTasks,"delete");
-//
-//
-//                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-//                recyclerView.setItemAnimator(new DefaultItemAnimator());
-//                recyclerView.setHasFixedSize(true);
-//
-//                recyclerView.setAdapter(adapter1);
-//                break;
-//            case R.id.id_smsalert:
-//                break;
-//            case R.id.id_score:
-//                break;
-//            case R.id.id_status:
-//
-//
-//                break;
-//        }
+
     }
 
     @Override
@@ -247,10 +178,10 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
         }
 
         if (rType == 999) {
+            ArrayList<Comments> current = new ArrayList<>();
             try {
-                ArrayList<String> comments = new ArrayList<>();
                 String comm, userroles ,videoPlay;
-                ArrayList<Comments> current = new ArrayList<>();
+
                 JSONArray array = new JSONArray(s);
                 for (int c = 0; c < array.length(); c++) {
                     Comments c1 = new Comments();
@@ -262,18 +193,20 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
                     c1.setUserRole(userroles);
                     c1.setVideo(videoPlay);
                     current.add(c1);
-                    comments.add(comm);
-                    comments.add(userroles);
+
 
                 }
-                AppUtil.setCurrentPojo(current);
-                if (array.length() > 0)
-                    AppUtil.setCurrentComments(comments);
+
+                //if (array.length() > 0)
+                    AppUtil.setCurrentPojo(current);
+
+
 
 
             } catch (JSONException e) {
                 e.printStackTrace();
-                AppUtil.setCurrentComments(new ArrayList<String>());
+                AppUtil.setCurrentPojo(current);
+               // AppUtil.setCurrentComments(new ArrayList<String>());
             }
 
         } else if (rType == 123) {
