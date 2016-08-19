@@ -3,11 +3,15 @@ package com.task.mytaskmanager.fragmentssss;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -31,9 +35,12 @@ import com.adeel.library.easyFTP;
 import com.task.mytaskmanager.Adaptes.ShowDetailsAdapter;
 import com.task.mytaskmanager.Adaptes.TaskDetailsAdapter;
 import com.task.mytaskmanager.Adaptes.USERTaskDetailsAdapter;
+import com.task.mytaskmanager.Databases.PostsDatabaseHelper;
 import com.task.mytaskmanager.Pojo.Comments;
+import com.task.mytaskmanager.Pojo.Post;
 import com.task.mytaskmanager.Pojo.Task;
 import com.task.mytaskmanager.Pojo.TaskUser;
+import com.task.mytaskmanager.Pojo.User;
 import com.task.mytaskmanager.Pojo.UserRoles;
 import com.task.mytaskmanager.R;
 
@@ -49,7 +56,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Random;
@@ -83,6 +93,8 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
      * FTP PASSWORD
      ***********/
     static final String FTP_PASS = "vKsj30!9";
+    String ImageName = "";
+    String imageURI = "";
 
     public static TaskDetails newInstance() {
 
@@ -122,7 +134,7 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 String employeeId = users.get(position).getUid();
-                PreferenceUtil.getInstance().saveString(getActivity(),"currentUser",employeeId);
+                PreferenceUtil.getInstance().saveString(getActivity(), "currentUser", employeeId);
                 JSONObject obj = new JSONObject();
                 try {
                     obj.accumulate(ProjectVariables.UID, employeeId);
@@ -171,6 +183,17 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
                 JSONObject obj = array.getJSONObject(0);
 
                 String result = obj.getString("Result");
+
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("CurrentVideo", Context.MODE_PRIVATE);
+                SharedPreferences.Editor curentEdit = sharedPreferences.edit();
+                curentEdit.putString("video", ProjectVariables.NOVIDEO);
+                curentEdit.commit();
+
+                SharedPreferences sharedPreferences1 = getActivity().getSharedPreferences("CurrentImage", Context.MODE_PRIVATE);
+                SharedPreferences.Editor curentEdit1 = sharedPreferences1.edit();
+                curentEdit1.putString("Image", ProjectVariables.NOIMAGE);
+                curentEdit1.commit();
+
                 Toast.makeText(getActivity(), result, Toast.LENGTH_LONG).show();
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -180,7 +203,7 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
         if (rType == 999) {
             ArrayList<Comments> current = new ArrayList<>();
             try {
-                String comm, userroles ,videoPlay;
+                String comm, userroles, videoPlay;
 
                 JSONArray array = new JSONArray(s);
                 for (int c = 0; c < array.length(); c++) {
@@ -198,15 +221,13 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
                 }
 
                 //if (array.length() > 0)
-                    AppUtil.setCurrentPojo(current);
-
-
+                AppUtil.setCurrentPojo(current);
 
 
             } catch (JSONException e) {
                 e.printStackTrace();
                 AppUtil.setCurrentPojo(current);
-               // AppUtil.setCurrentComments(new ArrayList<String>());
+                // AppUtil.setCurrentComments(new ArrayList<String>());
             }
 
         } else if (rType == 123) {
@@ -315,7 +336,6 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
                 String[] imageArray = origanImage.split("/");
 
                 int length = imageArray.length;
-
                 String convertedImage = imageArray[length];
                 Toast.makeText(getActivity(), "Video Recorded " + convertedImage, Toast.LENGTH_LONG).show();
 
@@ -331,30 +351,38 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
                     e.printStackTrace();
                 }
 
+            }
+            else {
+                super.onActivityResult(requestCode, resultCode, data);
+
 
             }
         }
+
     }
 
     private class UploadTask extends AsyncTask<Void, Void, String> {
-        InputStream f;
+        InputStream stream;
         String v;
 
-        public UploadTask(InputStream file, String videoName) {
-            f = file;
+        public UploadTask(InputStream inputStream, String videoName) {
+
             v = videoName;
+            stream = inputStream;
+
         }
 
         @Override
         protected String doInBackground(Void... voids) {
             //uploadFile(f);
+
             try {
                 easyFTP ftp = new easyFTP();
                 ftp.connect(FTP_HOST, FTP_USER, FTP_PASS);
                 boolean status = false;
                 status = ftp.setWorkingDirectory("/makeindiakart.com/taskfiles");
                 //InputStream targetStream = getResources().openRawResource(+R.drawable.ic_launcher);
-                InputStream targetStream = f;
+                InputStream targetStream = stream;
                 ftp.uploadFile(targetStream, v);
                 Log.e("Status", status + "");
                 pdForVideoUpload.dismiss();
@@ -369,10 +397,9 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
 
         @Override
         protected void onPostExecute(String s) {
+
             Toast.makeText(getActivity(), s, Toast.LENGTH_LONG).show();
         }
     }
-
-
 }
 

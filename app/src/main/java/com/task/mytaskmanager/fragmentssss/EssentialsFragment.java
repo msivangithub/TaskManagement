@@ -437,31 +437,34 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
         if (type == 001) {
             if (status.equalsIgnoreCase("1")) {
                 try {
-                    mEmail.setText("");
-                    mfirstName.setText("");
-                    mlastName.setText("");
-                    companyID = "";
-                    imageURI = "";
-                    userRolesID = "";
-                    mMobileNo.setText("");
-                    mPassword.setText("");
-                    image.setImageDrawable(getActivity().getDrawable(R.drawable.imge_placeholder));
-                    ProjectVariables.MAILID = mMobileNo.getText().toString();
-                    ProjectVariables.FIRSTNAME = mfirstName.getText().toString();
-                    ProjectVariables.LASTNAME = mlastName.getText().toString();
-                    ProjectVariables.ImAGE = imageURI.toString();
-
-                    JSONArray Response = new JSONArray(s);
-                    JSONObject loginResponse = Response.getJSONObject(0);
-
-                    String result = loginResponse.getString("Result");
-                    if (result.equalsIgnoreCase("inserted successfully")) {
-
-                        Toast.makeText(getActivity(), result, Toast.LENGTH_LONG).show();
-
-                    } else {
-                        Toast.makeText(getActivity(), "User not created!", Toast.LENGTH_LONG).show();
+                        mEmail.setText("");
+                        mfirstName.setText("");
+                        mlastName.setText("");
+                        companyID = "";
+                        imageURI = "";
+                        userRolesID = "";
+                        mMobileNo.setText("");
+                        mPassword.setText("");
+                    if (android.os.Build.VERSION.SDK_INT >= 21) {
+                        image.setImageDrawable(getActivity().getDrawable(R.drawable.imge_placeholder));
                     }
+                        ProjectVariables.MAILID = mMobileNo.getText().toString();
+                        ProjectVariables.FIRSTNAME = mfirstName.getText().toString();
+                        ProjectVariables.LASTNAME = mlastName.getText().toString();
+                        ProjectVariables.ImAGE = imageURI.toString();
+
+                        JSONArray Response = new JSONArray(s);
+                        JSONObject loginResponse = Response.getJSONObject(0);
+
+                        String result = loginResponse.getString("Result");
+                        if (result.equalsIgnoreCase("inserted successfully")) {
+
+                            Toast.makeText(getActivity(), result, Toast.LENGTH_LONG).show();
+
+                        } else {
+                            Toast.makeText(getActivity(), "User not created!", Toast.LENGTH_LONG).show();
+                        }
+
 
 
                 } catch (Exception e) {

@@ -62,6 +62,7 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
     String _type;
     Activity a;
     RestfulListener listener;
+    LinearLayout mImage, mVideo;
 
     public TaskDetailsAdapter(Context context, RestfulListener rl, int taskId, List<Task> billToBillArrayList, String type) {
         this.billToBillArrayList = billToBillArrayList;
@@ -179,8 +180,8 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
                             finalComment.setHasFixedSize(true);
                             finalComment.setAdapter(cAdapter);
 
-                        }else{
-                            Toast.makeText(_context,"No comments list",Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(_context, "No comments list", Toast.LENGTH_SHORT).show();
                         }
 
                     }
@@ -248,17 +249,48 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
 
                         /*Record video in Task Replay  */
                         Button record = (Button) updateDialog.findViewById(R.id.record);
+
+                        /**
+                         *Click the Capture Video and Capture Image Using Alear Dialog
+                         */
                         record.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-
-                                Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-                                takeVideoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 20);
-                                // takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Environment.getExternalStorageDirectory().getPath()+"videocapture_example.mp4");
-                                Activity act = (Activity) _context;
-                                act.startActivityForResult(takeVideoIntent, 667);
-
-
+                                final Dialog d = new Dialog(_context);
+                                d.setContentView(R.layout.image_video);
+                                d.setTitle("Select video or Image.....!");
+                                d.show();
+                                mImage = (LinearLayout) d.findViewById(R.id.getImage);
+                                mVideo = (LinearLayout) d.findViewById(R.id.getVideo);
+                                Button CAncel = (Button) d.findViewById(R.id.CAncel);
+                                CAncel.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        d.dismiss();
+                                    }
+                                });
+                                /*Click the AleartDialog video popsition*/
+                                mVideo.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        d.dismiss();
+                                        Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+                                        takeVideoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 10);
+                                        //takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Environment.getExternalStorageDirectory().getPath()+"videocapture_example.mp4");
+                                        Activity act = (Activity) _context;
+                                        act.startActivityForResult(takeVideoIntent, 667);
+                                    }
+                                });
+                                 /*Click the AleartDialog image popsition*/
+                                mImage.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        d.dismiss();
+                                        Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                                        Activity act = (Activity) _context;
+                                        act.startActivityForResult(intent, 202);
+                                    }
+                                });
                             }
                         });
 
@@ -287,6 +319,8 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
 
                                 SharedPreferences sharedPreferences = _context.getSharedPreferences("CurrentVideo", Context.MODE_PRIVATE);
                                 String video = sharedPreferences.getString("video", "novideo");
+                                SharedPreferences sharedPreferences1 = _context.getSharedPreferences("CurrentImage", Context.MODE_PRIVATE);
+                                String images = sharedPreferences1.getString("Image", "noimages");
                                 String task_comment = comment.getText().toString();
                                 if (!(task_comment.equalsIgnoreCase("") && task_comment.isEmpty()) && !(status[0].equalsIgnoreCase("") && status[0].isEmpty())) {
                                     JSONObject obj = new JSONObject();
@@ -294,9 +328,15 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
                                         obj.accumulate("Cid", t.getTaskId() + "");
                                         obj.accumulate("TaskStatus", status[0]);
                                         obj.accumulate("Comments", task_comment);
-                                        obj.accumulate("video", video);
+
+                                        if (!video.equalsIgnoreCase(ProjectVariables.NOVIDEO))
+                                            obj.accumulate("video", video);
+                                        if (!images.equalsIgnoreCase(ProjectVariables.NOIMAGE))
+                                            obj.accumulate("Image", images);
+
                                         obj.accumulate("TaskToId", PreferenceUtil.getInstance().getString(_context, "currentUser", "000"));
                                         obj.accumulate("TaskFromId", PreferenceUtil.getInstance().getString(_context, "Uid", "c001"));
+
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }

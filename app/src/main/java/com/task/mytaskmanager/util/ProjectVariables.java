@@ -6,6 +6,8 @@ package com.task.mytaskmanager.util;
 
 public class ProjectVariables {
 
+    public static final String NOVIDEO="novideo";
+    public static final String NOIMAGE="noimage";
 
     public static final String LOGIN_STATUS = "loginstatus";
     public static final String LOGGED_IN = "loggedin";

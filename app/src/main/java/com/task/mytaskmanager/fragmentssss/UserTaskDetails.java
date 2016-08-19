@@ -2,7 +2,9 @@ package com.task.mytaskmanager.fragmentssss;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -223,8 +225,18 @@ public class UserTaskDetails extends Fragment implements View.OnClickListener, R
             try {
                 JSONArray array = new JSONArray(s);
                 JSONObject obj = array.getJSONObject(0);
-
                 String result = obj.getString("Result");
+
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("CurrentVideo", Context.MODE_PRIVATE);
+                SharedPreferences.Editor curentEdit = sharedPreferences.edit();
+                curentEdit.putString("video", ProjectVariables.NOVIDEO);
+                curentEdit.commit();
+                SharedPreferences sharedPreferences1 = getActivity().getSharedPreferences("CurrentImage", Context.MODE_PRIVATE);
+                SharedPreferences.Editor curentEdit1 = sharedPreferences1.edit();
+                curentEdit1.putString("Image", ProjectVariables.NOIMAGE);
+                curentEdit1.commit();
+
+
                 Toast.makeText(getActivity(), result, Toast.LENGTH_LONG).show();
             } catch (JSONException e) {
                 e.printStackTrace();

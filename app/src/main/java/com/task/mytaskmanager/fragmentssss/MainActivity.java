@@ -12,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -39,10 +40,13 @@ import com.task.mytaskmanager.Pojo.TaskUser;
 import com.task.mytaskmanager.R;
 import com.task.mytaskmanager.fragment.AddUserFragment;
 import com.task.mytaskmanager.fragment.TaskcreationFragment;
+import com.task.mytaskmanager.util.AlertUtil;
 import com.task.mytaskmanager.util.AppUtil;
 import com.task.mytaskmanager.util.PreferenceUtil;
 import com.task.mytaskmanager.util.ProjectVariables;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -57,6 +61,8 @@ public class MainActivity extends AppCompatActivity
     ImageView image;
     URL url = null;
     Bitmap bitmap;
+    String ImageName = "";
+    String imageURI = "";
     ProjectVariables variables = new ProjectVariables();
     static final String FTP_HOST = "myaccountsretail.com";
     ProgressDialog pd;
@@ -132,7 +138,7 @@ public class MainActivity extends AppCompatActivity
             //http://makeindiakart.com/taskfiles/Image_1290.jpg
             try {
                 String MainUrl = "http://makeindiakart.com/taskfiles/";
-                URL url = new URL( MainUrl +PreferenceUtil.getInstance().getString(MainActivity.this,"ProfileImage","Image_5756.jpg"));
+                URL url = new URL(MainUrl + PreferenceUtil.getInstance().getString(MainActivity.this, "ProfileImage", "Image_5756.jpg"));
                 InputStream is = url.openConnection().getInputStream();
                 Bitmap bitMap = BitmapFactory.decodeStream(is);
                 return bitMap;
@@ -161,7 +167,8 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            AlertUtil.displayExitDialog(MainActivity.this);
+
         }
     }
 
@@ -236,9 +243,8 @@ public class MainActivity extends AppCompatActivity
 
             PreferenceUtil util = PreferenceUtil.getInstance();
             util.saveString(MainActivity.this, ProjectVariables.STATUS, ProjectVariables.LOGGED_OUT);
-            finish();
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
-
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -280,7 +286,6 @@ public class MainActivity extends AppCompatActivity
 
                 Toast.makeText(getApplicationContext(), "Video Recorded " + convertedImage, Toast.LENGTH_LONG).show();
 
-
                 UploadTask u = null;
 
                 try {
@@ -289,14 +294,79 @@ public class MainActivity extends AppCompatActivity
                 } catch (FileNotFoundException e) {
 
                 }
+            } else if (requestCode == 202) {
 
+                Uri selectedimg = data.getData();
+                imageURI = getPath(selectedimg);
+                String[] imageArray = imageURI.split("/");
 
+                int length = imageArray.length;
+                String convertedImage = imageArray[length - 1];
+
+                SharedPreferences sharedPreferences = getSharedPreferences("CurrentImage", MODE_PRIVATE);
+                SharedPreferences.Editor curentEdit = sharedPreferences.edit();
+                curentEdit.putString("Image", convertedImage);
+                curentEdit.commit();
+                UploadTask u = null;
+
+                try {
+                    u = new UploadTask(getContentResolver().openInputStream(selectedimg), convertedImage);
+                    u.execute();
+                } catch (FileNotFoundException e) {
+
+                }
+            } else {
+
+                Toast.makeText(getApplicationContext(), "failure", Toast.LENGTH_LONG).show();
             }
-        } else {
-            Toast.makeText(getApplicationContext(), "failure", Toast.LENGTH_LONG).show();
         }
     }
 
+    private class UploadTask extends AsyncTask<Void, Void, String> {
+        InputStream f;
+        String v;
+        ProgressDialog pdForVideoUpload;
+
+        @Override
+        protected void onPreExecute() {
+            pdForVideoUpload = new ProgressDialog(MainActivity.this);
+            pdForVideoUpload.show();
+            pdForVideoUpload.setTitle("Video Uploading....");
+        }
+
+        public UploadTask(InputStream file, String videoName) {
+            f = file;
+            v = videoName;
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            //uploadFile(f);
+            try {
+                easyFTP ftp = new easyFTP();
+                ftp.connect(FTP_HOST, FTP_USER, FTP_PASS);
+                boolean status = false;
+                status = ftp.setWorkingDirectory("/makeindiakart.com/taskfiles");
+                //InputStream targetStream = getResources().openRawResource(+R.drawable.ic_launcher);
+                InputStream targetStream = f;
+                ftp.uploadFile(targetStream, v);
+                Log.e("Status", status + "");
+                pdForVideoUpload.dismiss();
+                return new String("Upload Successful");
+
+            } catch (Exception e) {
+                pdForVideoUpload.dismiss();
+                String t = "Failure : " + e.getLocalizedMessage();
+                return t;
+            }
+
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+        }
+    }
     private void initPermissions() {
         if (ContextCompat.checkSelfPermission(MainActivity.this,
                 Manifest.permission.CAMERA)
@@ -381,50 +451,5 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-
-    private class UploadTask extends AsyncTask<Void, Void, String> {
-        InputStream f;
-        String v;
-        ProgressDialog pdForVideoUpload;
-
-        @Override
-        protected void onPreExecute() {
-            pdForVideoUpload = new ProgressDialog(MainActivity.this);
-            pdForVideoUpload.show();
-            pdForVideoUpload.setTitle("Video Uploading....");
-        }
-
-        public UploadTask(InputStream file, String videoName) {
-            f = file;
-            v = videoName;
-        }
-
-        @Override
-        protected String doInBackground(Void... voids) {
-            //uploadFile(f);
-            try {
-                easyFTP ftp = new easyFTP();
-                ftp.connect(FTP_HOST, FTP_USER, FTP_PASS);
-                boolean status = false;
-                status = ftp.setWorkingDirectory("/makeindiakart.com/taskfiles");
-                //InputStream targetStream = getResources().openRawResource(+R.drawable.ic_launcher);
-                InputStream targetStream = f;
-                ftp.uploadFile(targetStream, v);
-                Log.e("Status", status + "");
-                pdForVideoUpload.dismiss();
-                return new String("Upload Successful");
-            } catch (Exception e) {
-                pdForVideoUpload.dismiss();
-                String t = "Failure : " + e.getLocalizedMessage();
-                return t;
-            }
-
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
-        }
-    }
 
 }

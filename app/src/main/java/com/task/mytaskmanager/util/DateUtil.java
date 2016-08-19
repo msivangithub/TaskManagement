@@ -1,6 +1,7 @@
 package com.task.mytaskmanager.util;
 
 import java.text.DateFormatSymbols;
+import java.util.Random;
 
 /**
  * Created by NEWSYSTEM1 on 5/20/2016.
@@ -27,5 +28,15 @@ public final class DateUtil {
             monthName = months[month];
         }
         return monthName;
+    }
+
+    public static int getRandomNumberInRange(int min, int max) {
+
+        if (min >= max) {
+            throw new IllegalArgumentException("max must be greater than min");
+        }
+
+        Random r = new Random();
+        return r.nextInt((max - min) + 1) + min;
     }
 }

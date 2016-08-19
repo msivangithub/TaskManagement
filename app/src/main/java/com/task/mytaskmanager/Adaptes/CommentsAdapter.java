@@ -13,6 +13,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.task.mytaskmanager.Pojo.Comments;
@@ -54,11 +55,12 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
         public MyViewHolder(View itemView) {
             super(itemView);
             comment = (TextView) itemView.findViewById(R.id.insidecomment);
-            roles =(TextView)itemView.findViewById(R.id.user_roles);
-            play =(ImageButton)itemView.findViewById(R.id.playVideo);
+            roles = (TextView) itemView.findViewById(R.id.user_roles);
+            play = (ImageButton) itemView.findViewById(R.id.playVideo);
 
         }
     }
+
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         final Comments comments = commentsList.get(position);
@@ -68,23 +70,27 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
         holder.play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Dialog showVideo = new Dialog(context);
-                showVideo.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                showVideo.setContentView(R.layout.showvideo);
-                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                lp.copyFrom(showVideo.getWindow().getAttributes());
-                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-                showVideo.show();
-                VideoView videoview = (VideoView) showVideo.findViewById(R.id.videoPreview);
-                MediaController mediaController = new MediaController(context);
-                mediaController.setAnchorView(videoview);
-                String MainUrl = "http://makeindiakart.com/taskfiles/";
-                MainUrl = MainUrl + comments.getVideo();
-                Uri video = Uri.parse(MainUrl);
-                videoview.setMediaController(mediaController);
-                videoview.setVideoURI(video);
-                videoview.start();
+                if (comments.getVideo().isEmpty() || comments.getVideo().equalsIgnoreCase("") || comments.getVideo().length() == 0 || comments.getVideo().equalsIgnoreCase("novideo")) {
+                    Toast.makeText(context, "No video available for this comment", Toast.LENGTH_SHORT).show();
+                } else {
+                    Dialog showVideo = new Dialog(context);
+                    showVideo.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    showVideo.setContentView(R.layout.showvideo);
+                    WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                    lp.copyFrom(showVideo.getWindow().getAttributes());
+                    lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                    lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+                    showVideo.show();
+                    VideoView videoview = (VideoView) showVideo.findViewById(R.id.videoPreview);
+                    MediaController mediaController = new MediaController(context);
+                    mediaController.setAnchorView(videoview);
+                    String MainUrl = "http://makeindiakart.com/taskfiles/";
+                    MainUrl = MainUrl + comments.getVideo();
+                    Uri video = Uri.parse(MainUrl);
+                    videoview.setMediaController(mediaController);
+                    videoview.setVideoURI(video);
+                    videoview.start();
+                }
 
             }
         });
