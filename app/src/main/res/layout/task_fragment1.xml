@@ -30,8 +30,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
+                android:background="@drawable/rounded_edittext"
                 android:gravity="bottom"
                 android:hint="Select type of task?"
+                android:padding="10dp"
                 android:textSize="14sp" />
 
 
@@ -50,8 +52,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
+                android:background="@drawable/rounded_edittext"
                 android:gravity="bottom"
                 android:hint="What neds to be done?"
+                android:padding="10dp"
                 android:textSize="14sp" />
 
 
@@ -96,27 +100,31 @@
             </RelativeLayout>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:orientation="horizontal"
-                android:padding="7dp">
+                android:orientation="vertical"
+                android:padding="5dp">
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="From Date and From Time" />
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="left"
+                    android:gravity="center"
                     android:orientation="horizontal"
                     android:padding="2dp">
 
                     <TextView
                         android:id="@+id/fromDate"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:gravity="center"
+                        android:layout_weight="3"
+                        android:gravity="left"
                         android:text="From Date"
                         android:textColor="#000"
                         android:textSize="@dimen/Date_textsize"
@@ -124,18 +132,42 @@
 
                     <ImageButton
                         android:id="@+id/fromDateImage"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="10dp"
+                        android:layout_weight="2"
+                        android:background="@color/white"
                         android:src="@drawable/calender" />
+
+                    <TextView
+                        android:id="@+id/fromTime"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="2"
+                        android:gravity="left"
+                        android:text="fromTime"
+                        android:textColor="#000"
+                        android:textSize="@dimen/Date_textsize"
+                        android:textStyle="bold" />
+
+                    <ImageButton
+                        android:id="@+id/fromTimeImage"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="2"
+                        android:background="@color/white"
+                        android:onClick="onButtonClicked"
+                        android:src="@drawable/time" />
                 </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
+                <TextView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="60dp"
+                    android:text="To Date and To Time" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="left"
                     android:orientation="horizontal"
@@ -143,26 +175,47 @@
 
                     <TextView
                         android:id="@+id/toDate"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:gravity="center"
+                        android:layout_weight="1.5"
+                        android:gravity="left"
                         android:text="To Date"
                         android:textColor="#000"
                         android:textSize="@dimen/Date_textsize"
                         android:textStyle="bold" />
 
-
                     <ImageButton
                         android:id="@+id/toDateImage"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:background="@color/white"
                         android:src="@drawable/calender" />
+
+
+                    <TextView
+                        android:id="@+id/toTime"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:text="toTime"
+                        android:textColor="#000"
+                        android:textSize="@dimen/Date_textsize"
+                        android:textStyle="bold" />
+
+                    <ImageButton
+                        android:id="@+id/toTimeImage"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:background="@color/white"
+                        android:src="@drawable/time" />
                 </LinearLayout>
-
-
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

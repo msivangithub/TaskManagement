@@ -61,7 +61,8 @@
         android:layout_marginTop="20dp"
         android:elevation="10dp"
         android:text="CANCEL"
-        android:textColor="@color/colorAccent" />
+        android:background="@drawable/button_background"
+        android:textColor="@color/white" />
 
 </LinearLayout>
 

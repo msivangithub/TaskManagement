@@ -2,7 +2,10 @@ package com.task.mytaskmanager.Adaptes;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +14,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,7 +23,12 @@ import android.widget.VideoView;
 import com.task.mytaskmanager.Pojo.Comments;
 import com.task.mytaskmanager.R;
 import com.task.mytaskmanager.services.RestfulListener;
+import com.task.mytaskmanager.util.PreferenceUtil;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,19 +59,21 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView comment, roles;
-        ImageButton play;
+        ImageButton play, image;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             comment = (TextView) itemView.findViewById(R.id.insidecomment);
             roles = (TextView) itemView.findViewById(R.id.user_roles);
             play = (ImageButton) itemView.findViewById(R.id.playVideo);
+            image = (ImageButton) itemView.findViewById(R.id.image);
+
 
         }
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, final int position) {
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
         final Comments comments = commentsList.get(position);
         holder.comment.setText(comments.getComments());
         holder.roles.setText(comments.getUserRole());
@@ -90,11 +101,9 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
                     videoview.setMediaController(mediaController);
                     videoview.setVideoURI(video);
                     videoview.start();
-                }
 
+                }
             }
         });
     }
-
-
 }

@@ -18,6 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -51,6 +53,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.StringTokenizer;
 
 /**
@@ -63,6 +66,7 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
     Activity a;
     RestfulListener listener;
     LinearLayout mImage, mVideo;
+    private int lastPosition = -1;
 
     public TaskDetailsAdapter(Context context, RestfulListener rl, int taskId, List<Task> billToBillArrayList, String type) {
         this.billToBillArrayList = billToBillArrayList;
@@ -94,9 +98,11 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
         public TextView task, task_header;
         public CheckBox check;
         public LinearLayout taskrow;
+        public View itemView;
 
         public MyViewHolder(View convertView) {
             super(convertView);
+            itemView = convertView;
             task = (TextView) convertView.findViewById(R.id.taskTitle);
             task_header = (TextView) convertView.findViewById(R.id.txt_taskheader);
             taskrow = (LinearLayout) convertView.findViewById(R.id.taskrow);
@@ -111,6 +117,12 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
         final Task t = billToBillArrayList.get(position);
         viewHolder.task.setText(t.getTaskDes());
         viewHolder.task_header.setText(t.getTaskHeading());
+        setAnimation(viewHolder.itemView, position);
+        if (position % 2 == 0) {
+            viewHolder.itemView.setBackgroundColor(Color.parseColor("#AFB42B"));
+        } else {
+            viewHolder.itemView.setBackgroundColor(Color.parseColor("#AFB42B"));
+        }
         viewHolder.taskrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -358,6 +370,15 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
             }
         });
 
+    }
+
+    private void setAnimation(View itemView, int position) {
+        if (position > lastPosition) {
+            ScaleAnimation anim = new ScaleAnimation(0.0f, 1.0f, 0.0f, 1.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            anim.setDuration(new Random().nextInt(2000));//to make duration random number between [0,501)
+            itemView.startAnimation(anim);
+            lastPosition = position;
+        }
     }
 
     public ArrayList<Tasks> TaskList() {

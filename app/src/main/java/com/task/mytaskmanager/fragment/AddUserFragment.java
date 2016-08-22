@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -44,6 +45,7 @@ public class AddUserFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.activity_add_user_fragment, container, false);
         getActivity().setTitle("Task Creation");
+
         /*toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setSupportActionBar(toolbar);

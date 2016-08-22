@@ -6,14 +6,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:visibility="gone"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <Spinner
             android:id="@+id/id_employeenames"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
         <Spinner
             android:id="@+id/id_status"
@@ -21,37 +21,39 @@
             android:layout_height="match_parent"
             android:layout_gravity="right"
             android:layout_weight="0.9"
-            android:gravity="right"/>
+            android:gravity="right" />
 
 
     </LinearLayout>
-<LinearLayout
-    android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:layout_weight="1"
 
-    android:layout_height="0dp">
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerview"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="1"
-        android:cacheColorHint="#aca9a9"
-        android:divider="#bab9b9"
-        android:elevation="2dp"
-        android:footerDividersEnabled="true"
-        android:scrollbars="vertical">
 
-    </android.support.v7.widget.RecyclerView>
-</LinearLayout>
+        android:orientation="vertical">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:cacheColorHint="#aca9a9"
+            android:divider="#bab9b9"
+            android:elevation="2dp"
+            android:footerDividersEnabled="true"
+            android:scrollbars="vertical">
+
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:background="#fff"
         android:orientation="vertical"
-        android:padding="5dp">
+        android:padding="5dp"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"

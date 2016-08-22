@@ -34,6 +34,9 @@ import org.json.JSONObject;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by GhanaShyam on 7/15/2016.
@@ -49,7 +52,8 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
     String android_id;
     Button recordVideo;
     static final String FTP_HOST = "myaccountsretail.com";
-
+    private int month, day, year;
+    private int seconds, minutes, hour;
     /*********
      * FTP USERNAME
      ***********/
@@ -58,6 +62,7 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
      * FTP PASSWORD
      ***********/
     static final String FTP_PASS = "vKsj30!9";
+    private Object currentdate;
 
     public static TaskFragment3 newInstance(addbutton ab) {
         Bundle args = new Bundle();
@@ -78,7 +83,6 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
         } else
             return null;
     }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -88,31 +92,21 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
                 Uri selectedimg = data.getData();
                 String origanImage = getPath(selectedimg);
                 String[] imageArray = origanImage.split("/");
-
                 int length = imageArray.length;
 
                 String convertedImage = imageArray[length - 1];
-
-
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences("CurrentVideo", Context.MODE_PRIVATE);
-
                 SharedPreferences.Editor curentEdit = sharedPreferences.edit();
-
                 curentEdit.putString("video", convertedImage);
-
                 curentEdit.commit();
                 Toast.makeText(getActivity(), "Video Recorded " + convertedImage, Toast.LENGTH_LONG).show();
-
-
                 UploadTask u = null;
-
                 try {
                     u = new UploadTask(getActivity().getContentResolver().openInputStream(selectedimg), convertedImage);
                     u.execute();
                 } catch (FileNotFoundException e) {
 
                 }
-
 
             }
         }
@@ -132,6 +126,21 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
         low = (RadioButton) view.findViewById(R.id.low);
         Medium = (RadioButton) view.findViewById(R.id.Medium);
         High = (RadioButton) view.findViewById(R.id.High);
+        /*Time Format*/
+        final Calendar calander = Calendar.getInstance();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a");
+        hour = calander.get(Calendar.HOUR_OF_DAY);
+        minutes = calander.get(Calendar.MINUTE);
+        final String time = simpleDateFormat.format(calander.getTime());
+          /*Date Format*/
+        final Calendar c = Calendar.getInstance();
+        SimpleDateFormat ss = new SimpleDateFormat("dd-MM-yyyy");
+        final Date date = new Date();
+        year = c.get(Calendar.YEAR);
+        month = c.get(Calendar.MONTH);
+        day = c.get(Calendar.DAY_OF_MONTH);
+        final String currentdate = ss.format(date);
+        /*Record Video Button*/
         recordVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -143,15 +152,16 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
 
             }
         });
+        /*Task Creation Fragment using User Details and Submit The AddUser Button*/
         addUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences("CurrentVideo", Context.MODE_PRIVATE);
                 String Video = sharedPreferences.getString("video", "novideo");
-                if (Video.equalsIgnoreCase("novideo")) {
+              /*  if (Video.equalsIgnoreCase("novideo")) {
                     Toast.makeText(getActivity(), "Please record the Video", Toast.LENGTH_LONG).show();
                     return;
-                }
+                }*/
                 if (priority.equalsIgnoreCase("") && priority.isEmpty()) {
                     Toast.makeText(getActivity(), "Please select priority of task", Toast.LENGTH_LONG).show();
                 } else {
@@ -172,28 +182,28 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
                         obj.accumulate(ProjectVariables.IMEID, AppUtil.getImeId());
                         obj.accumulate(ProjectVariables.TASKFROMID, AppUtil.getTaskFromId());
                         obj.accumulate(ProjectVariables.TASKOID, AppUtil.getTaskToId());
-                        obj.accumulate(ProjectVariables.EXPSTARTDAE, AppUtil.getExpStartDate());
-                        obj.accumulate(ProjectVariables.EXPENDDATE, AppUtil.getExpEndDate());
+                        obj.accumulate(ProjectVariables.EXPSTARTDAE, (AppUtil.getExpStartDate() == null) ? currentdate : AppUtil.getExpStartDate());
+                        obj.accumulate(ProjectVariables.EXPENDDATE, (AppUtil.getExpEndDate() == null) ? currentdate : AppUtil.getExpEndDate());
                         obj.accumulate(ProjectVariables.ACTSDATE, AppUtil.getActStartDate());
                         obj.accumulate(ProjectVariables.ACTENDDATE, AppUtil.getActEndDate());
                         obj.accumulate(ProjectVariables.TASKSTAT, AppUtil.getTaskStatus());
                         obj.accumulate(ProjectVariables.TASKHEAD, AppUtil.getTaskHeading());
                         obj.accumulate(ProjectVariables.TASKDES, AppUtil.getTaskDes());
                         obj.accumulate(ProjectVariables.PRIORITY, AppUtil.getPriority());
+                        obj.accumulate(ProjectVariables.STARTTIME, (AppUtil.getStartFromTime() == null) ? time : AppUtil.getStartFromTime());
+                        obj.accumulate(ProjectVariables.ENDTIME, (AppUtil.getStartToTime() == null) ? time : AppUtil.getStartToTime());
                         obj.accumulate("video", Video);
 
                     } catch (Exception e) {
 
                     }
-                    Log.e("Sending json is ",obj.toString());
+                    Log.e("Sending json is ", obj.toString());
                     AsynHttpPost post = new AsynHttpPost(getActivity(), 0, 0, ProjectVariables.TASK_CREAT, listener, obj, "");
                     post.execute();
 //                    } else {
 //                        Toast.makeText(getActivity(), "Please answer the all fields", Toast.LENGTH_LONG).show();
 //                    }
                 }
-
-
             }
         });
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -222,7 +232,6 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
         super.onResume();
         _ab.addVisible(true);
     }
-
     public void clearAputils() {
         AppUtil.setActEndDate("");
         AppUtil.setExpEndDate("");

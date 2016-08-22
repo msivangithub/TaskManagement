@@ -93,7 +93,6 @@ public class TaskcreationFragment extends Fragment implements addbutton {
     public void addVisible(boolean b) {
 
 
-
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {

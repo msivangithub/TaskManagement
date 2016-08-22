@@ -94,7 +94,6 @@ public class ProjectVariables {
     public static String COUNTRY="Country";
     public static String  CREATEDDATE="CreatedDate";
     public static String ENDDATE="EndDate";
-    public static String ENDTIME ="EndTime";
     public static String FLAG="Flag";
     public static String IMAGE="IMage";
     public static String ID="Id";
@@ -102,6 +101,8 @@ public class ProjectVariables {
     public static String USERLOGINID="uuid";
     public static String ROLENAME = "RoleName";
     public static String ROID ="RoId";
+    public static String STARTTIME = "StartTime";
+    public static String ENDTIME = "EndTime";
 
     //  public static String STATUS="Status";
 }

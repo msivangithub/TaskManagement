@@ -22,7 +22,9 @@
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabMode="scrollable" />
+            app:tabGravity="center"
+            app:tabMode="scrollable"
+            android:fitsSystemWindows="true"/>
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager

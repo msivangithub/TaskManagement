@@ -90,4 +90,6 @@
     <dimen name="FooterTotal_textsize">10sp</dimen>
     <dimen name="footerspacewidth">15dp</dimen>
     <dimen name="textsize">10sp</dimen>
+
+
 </resources>

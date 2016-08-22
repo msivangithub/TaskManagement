@@ -6,9 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,13 +16,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.MediaController;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -33,25 +32,20 @@ import android.widget.VideoView;
 
 import com.task.mytaskmanager.Pojo.Comments;
 import com.task.mytaskmanager.Pojo.Task;
-import com.task.mytaskmanager.Pojo.UserRoles;
 import com.task.mytaskmanager.R;
 import com.task.mytaskmanager.activity.Tasks;
 import com.task.mytaskmanager.services.AsynHttpPost;
 import com.task.mytaskmanager.services.RestfulListener;
 import com.task.mytaskmanager.util.AppUtil;
-import com.task.mytaskmanager.util.DateUtil;
 import com.task.mytaskmanager.util.PreferenceUtil;
 import com.task.mytaskmanager.util.ProjectVariables;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import jp.wasabeef.recyclerview.animators.ScaleInAnimator;
 
 /**
  * Created by NEWSYSTEM1 on 6/9/2016.
@@ -63,7 +57,7 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
     Activity a;
     RestfulListener listener;
     LinearLayout mImage, mVideo;
-
+    private int lastPosition = -1;
     public USERTaskDetailsAdapter(Context context, RestfulListener rl, int taskId, List<Task> billToBillArrayList, String type) {
         this.billToBillArrayList = billToBillArrayList;
         _context = context;
@@ -93,9 +87,11 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
         public TextView task, task_header;
         public CheckBox check;
         public LinearLayout taskrow;
+        public View itemView;
 
         public MyViewHolder(View convertView) {
             super(convertView);
+            itemView = convertView;
             task = (TextView) convertView.findViewById(R.id.taskTitle);
             task_header = (TextView) convertView.findViewById(R.id.txt_taskheader);
             taskrow = (LinearLayout) convertView.findViewById(R.id.taskrow);
@@ -109,6 +105,13 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
         final Task t = billToBillArrayList.get(position);
         viewHolder.task.setText(t.getTaskDes());
         viewHolder.task_header.setText(t.getTaskHeading());
+        setAnimation(viewHolder.itemView, position);
+
+        if (position % 2 == 0) {
+            viewHolder.itemView.setBackgroundColor(Color.parseColor("#AFB42B"));
+        } else {
+            viewHolder.itemView.setBackgroundColor(Color.parseColor("#AFB42B"));
+        }
         viewHolder.taskrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,6 +119,7 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
                 //d.setTitle("Task Details");
 
                 d.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                d.setContentView(R.layout.show_task_detils_row);
                 d.setContentView(R.layout.show_task_detils_row);
                 WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
                 lp.copyFrom(d.getWindow().getAttributes());
@@ -136,13 +140,15 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
 //                        .setTitle("Enter An Administrative Password")
 //                        .setView(R.layout.show_task_detils_row)
 //                        .create();
-                final TextView task, taskHead, asignBy, start, end, status;
+                final TextView task, taskHead, asignBy, start, end, status ,startTime,endTime;
                 final RecyclerView Comment;
                 task = (TextView) d.findViewById(R.id.txt_show_desc);
                 taskHead = (TextView) d.findViewById(R.id.txt_show_task_head);
                 asignBy = (TextView) d.findViewById(R.id.txt_show_assignBy);
                 start = (TextView) d.findViewById(R.id.txt_show_start);
                 end = (TextView) d.findViewById(R.id.txt_show_endDate);
+                startTime = (TextView) d.findViewById(R.id.startTime);
+                endTime = (TextView) d.findViewById(R.id.endTime);
                 status = (TextView) d.findViewById(R.id.TaskStatus);
 
                 Button pComments = (Button) d.findViewById(R.id.previousComments);
@@ -238,9 +244,9 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
 
                         Button record = (Button) updateDialog.findViewById(R.id.record);
 
-/**
- *Click the Capture Video and Capture Image Using Alear Dialog
- */
+                /**
+                *Click the Capture Video and Capture Image Using Alear Dialog
+                */
                         record.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -345,6 +351,15 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
             }
         });
 
+    }
+
+    private void setAnimation(View itemView, int position) {
+        if (position > lastPosition) {
+            ScaleAnimation anim = new ScaleAnimation(0.0f, 1.0f, 0.0f, 1.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            anim.setDuration(new Random().nextInt(2000));//to make duration random number between [0,501)
+            itemView.startAnimation(anim);
+            lastPosition = position;
+        }
     }
 
     public ArrayList<Tasks> TaskList() {

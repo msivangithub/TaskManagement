@@ -125,9 +125,9 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
         selectedUsers = new ArrayList<>();
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
         employeename = (Spinner) view.findViewById(R.id.id_employeenames);
-        status = (Spinner) view.findViewById(R.id.id_status);
+       // status = (Spinner) view.findViewById(R.id.id_status);
         statusAdapter = new TasksAdapter(getActivity(), android.R.layout.simple_spinner_item, mytasks);
-        status.setAdapter(statusAdapter);
+       // status.setAdapter(statusAdapter);
 
         employeename.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

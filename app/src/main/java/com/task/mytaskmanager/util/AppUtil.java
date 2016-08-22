@@ -19,6 +19,7 @@ import java.util.Date;
  * Created by GhanaShyam on 7/9/2016.
  */
 public class AppUtil {
+
     public static ArrayList<TaskBranches> branchesInfo = new ArrayList<>();
 
     public static ArrayList<TaskBranches> getBranchesInfo() {
@@ -101,7 +102,26 @@ public class AppUtil {
     public static String TaskHeading = "";
     public static String TaskDes = "";
     public static String priority = "";
+    public static String StartFromTime = "";
+    public static String StartToTime = "";
 
+
+
+    public static String getStartToTime() {
+        return StartToTime;
+    }
+
+    public static void setStartToTime(String startToTime) {
+        StartToTime = startToTime;
+    }
+
+    public static String getStartFromTime() {
+        return StartFromTime;
+    }
+
+    public static void setStartFromTime(String startFromTime) {
+        StartFromTime = startFromTime;
+    }
     public static String getImeId() {
         return ImeId;
     }
@@ -253,4 +273,6 @@ public class AppUtil {
         return returnedTasks;
 
     }
+
+
 }

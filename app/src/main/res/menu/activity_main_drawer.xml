@@ -3,23 +3,32 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
+            android:id="@+id/nav_addUser"
+            android:icon="@drawable/add_users"
             android:title="Add User" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
+            android:id="@+id/nav_taxCreation"
+            android:icon="@drawable/task_creation"
             android:title="Task Creation" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:id="@+id/nav_taxDetails"
+            android:icon="@drawable/task_details"
             android:title="Task Details" />
-        <item
-            android:id="@+id/logout"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Logout" />
+
     </group>
 
+    <item android:title="Communicate">
+        <menu>
 
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Share" />
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/logout"
+                android:title="Logout" />
+        </menu>
+    </item>
 
 </menu>

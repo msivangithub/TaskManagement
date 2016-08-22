@@ -3,13 +3,14 @@
     android:id="@+id/header_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/light_blue_800"
+    android:background="@color/pink_900"
     android:gravity="left"
     android:orientation="vertical"
     android:padding="@dimen/DrawerHeader_paddin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/imageView"
         android:layout_width="@dimen/DrawerHeader_CircleImageView_width"
         android:layout_height="@dimen/DrawerHeader_CircleImageView_height"

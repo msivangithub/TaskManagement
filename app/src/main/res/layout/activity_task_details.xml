@@ -6,55 +6,57 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal"
-        android:padding="5dp">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="Select User"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
+        android:background="@color/lime_700"
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="8dp"
-            android:layout_weight="1"
-            android:background="@drawable/rounded_edittext">
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/lime_700"
+            android:orientation="horizontal"
+            android:padding="5dp">
 
-            <Spinner
-                android:id="@+id/id_employeenames"
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:gravity="center"/>
+                android:layout_weight=".7"
+                android:gravity="left|center"
+                android:text="Select User"
+                android:textStyle="bold"
+                android:textColor="#fff" />
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="3dp"
+                android:layout_weight="2"
+                android:background="@drawable/rounded_edittext1"
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:id="@+id/id_employeenames"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:padding="5dp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center"
+                    android:padding="5sp"
+                    android:src="@drawable/drop_down" />
+
+            </RelativeLayout>
         </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/rounded_edittext"
-            android:visibility="gone">
-
-            <Spinner
-                android:id="@+id/id_status"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="right"
-                android:layout_weight="0.9"
-                android:gravity="right" />
-        </LinearLayout>
-
-
     </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -82,7 +82,6 @@ public class MainActivity extends AppCompatActivity
 
         initPermissions();
 
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         UserRole = PreferenceUtil.getInstance().getString(MainActivity.this, ProjectVariables.USER_ROLE, "4");
@@ -107,11 +106,17 @@ public class MainActivity extends AppCompatActivity
         if (UserRole.equalsIgnoreCase("3")) {
             Menu m = navigationView.getMenu();
 
-            MenuItem addItem = m.findItem(R.id.nav_camera);
+            MenuItem addItem = m.findItem(R.id.nav_addUser);
             addItem.setVisible(false);
 
-            MenuItem creatItem = m.findItem(R.id.nav_gallery);
+            MenuItem creatItem = m.findItem(R.id.nav_taxCreation);
             creatItem.setVisible(false);
+
+        } else if (UserRole.equalsIgnoreCase("5")) {
+            Menu m = navigationView.getMenu();
+
+            MenuItem addItem = m.findItem(R.id.nav_addUser);
+            addItem.setVisible(false);
 
         }
         if (savedInstanceState == null) {
@@ -203,14 +208,14 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_addUser) {
             // Handle the camera action
             Fragment f = AddUserFragment.newInstance();
             FragmentManager fm = getSupportFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
             ft.replace(R.id.container, f);
             ft.commit();
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_taxCreation) {
 
             /*startActivity(new Intent(MainActivity.this, AddUserActivity.class));*/
             Fragment f = TaskcreationFragment.newInstance();
@@ -219,7 +224,7 @@ public class MainActivity extends AppCompatActivity
             ft.replace(R.id.container, f);
             ft.commit();
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_taxDetails) {
 
             if (UserRole.equalsIgnoreCase("3")) {
                 Fragment f = UserTaskDetails.newInstance();
@@ -238,8 +243,16 @@ public class MainActivity extends AppCompatActivity
                 ft.replace(R.id.container, f);
                 ft.commit();
             }
+        } else if (id == R.id.nav_share) {
+            // https://play.google.com/store/apps/details?id=com.share.myapplication&hl=en
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_TEXT, "https://play.google" +
+                    ".com/store/apps/details?id=" + getApplicationContext().getPackageName());
+            intent.putExtra(Intent.EXTRA_SUBJECT, "Check out this app!");
+            startActivity(Intent.createChooser(intent, "Share"));
 
-        } else if (id == R.id.logout) {
+        } else if (id == R.id.nav_logout) {
 
             PreferenceUtil util = PreferenceUtil.getInstance();
             util.saveString(MainActivity.this, ProjectVariables.STATUS, ProjectVariables.LOGGED_OUT);
@@ -367,6 +380,7 @@ public class MainActivity extends AppCompatActivity
             Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
         }
     }
+
     private void initPermissions() {
         if (ContextCompat.checkSelfPermission(MainActivity.this,
                 Manifest.permission.CAMERA)
