@@ -305,7 +305,8 @@
                 android:drawableLeft="@drawable/remindr"
                 android:text="REMIND"
                 android:textColor="#fff"
-                android:textSize="13dp" />
+                android:textSize="13dp"
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/showvideo"
@@ -325,7 +326,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <Button
                 android:id="@+id/id_delete"

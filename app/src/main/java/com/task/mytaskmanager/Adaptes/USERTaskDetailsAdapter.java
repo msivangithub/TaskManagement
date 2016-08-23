@@ -3,15 +3,22 @@ package com.task.mytaskmanager.Adaptes;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -57,14 +64,17 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
     Activity a;
     RestfulListener listener;
     LinearLayout mImage, mVideo;
+    String UserRole = "";
     private int lastPosition = -1;
+    Task t;
+
     public USERTaskDetailsAdapter(Context context, RestfulListener rl, int taskId, List<Task> billToBillArrayList, String type) {
         this.billToBillArrayList = billToBillArrayList;
         _context = context;
         _type = type;
         listener = rl;
         a = (Activity) context;
-
+        UserRole = PreferenceUtil.getInstance().getString(_context, ProjectVariables.USER_ROLE, "4");
     }
 
     @Override
@@ -84,37 +94,56 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView task, task_header;
+        public TextView task, task_header, icon_entry;
         public CheckBox check;
-        public LinearLayout taskrow;
+        public LinearLayout taskrow, deleteTask;
         public View itemView;
+        public ImageButton mImageMenu;
+
 
         public MyViewHolder(View convertView) {
             super(convertView);
             itemView = convertView;
+
             task = (TextView) convertView.findViewById(R.id.taskTitle);
             task_header = (TextView) convertView.findViewById(R.id.txt_taskheader);
             taskrow = (LinearLayout) convertView.findViewById(R.id.taskrow);
+
             //check = (CheckBox) convertView.findViewById(R.id.check);
+            icon_entry = (TextView) itemView.findViewById(R.id.icon_entry);
+            mImageMenu = (ImageButton) convertView.findViewById(R.id.Button_menu);
         }
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(final MyViewHolder viewHolder, final int position) {
         final int pos = position;
-        final Task t = billToBillArrayList.get(position);
+        t = billToBillArrayList.get(position);
         viewHolder.task.setText(t.getTaskDes());
         viewHolder.task_header.setText(t.getTaskHeading());
+        viewHolder.icon_entry.setText("" + billToBillArrayList.get(position).getTaskHeading().charAt(0));
         setAnimation(viewHolder.itemView, position);
+        viewHolder.mImageMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showPopupMenu(viewHolder.mImageMenu, position);
+            }
+        });
 
-        if (position % 2 == 0) {
+        Log.e("UserRole", UserRole);
+        if (UserRole.equalsIgnoreCase("3")) {
+            viewHolder.mImageMenu.setVisibility(View.GONE);
+        }
+      /*  if (position % 2 == 0) {
             viewHolder.itemView.setBackgroundColor(Color.parseColor("#AFB42B"));
         } else {
             viewHolder.itemView.setBackgroundColor(Color.parseColor("#AFB42B"));
-        }
+        }*/
+
         viewHolder.taskrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.e("UserRole", UserRole);
                 final Dialog d = new Dialog(_context);
                 //d.setTitle("Task Details");
 
@@ -136,11 +165,8 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
                 }
                 AsynHttpPost post = new AsynHttpPost(_context, 0, 999, ProjectVariables.TASK_COMMENTS, listener, obj, "");
                 post.execute();
-//                final AlertDialog d = new AlertDialog.Builder(_context)
-//                        .setTitle("Enter An Administrative Password")
-//                        .setView(R.layout.show_task_detils_row)
-//                        .create();
-                final TextView task, taskHead, asignBy, start, end, status ,startTime,endTime;
+
+                final TextView task, taskHead, asignBy, start, end, status, startTime, endTime;
                 final RecyclerView Comment;
                 task = (TextView) d.findViewById(R.id.txt_show_desc);
                 taskHead = (TextView) d.findViewById(R.id.txt_show_task_head);
@@ -244,9 +270,9 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
 
                         Button record = (Button) updateDialog.findViewById(R.id.record);
 
-                /**
-                *Click the Capture Video and Capture Image Using Alear Dialog
-                */
+                        /**
+                         *Click the Capture Video and Capture Image Using Alear Dialog
+                         */
                         record.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -371,5 +397,57 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
         return taskses;
     }
 
+    private void showPopupMenu(View view, int position) {
+        PopupMenu popup = new PopupMenu(view.getContext(), view);
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.card_menu, popup.getMenu());
+        popup.setOnMenuItemClickListener(new MyMenuItemClickListener(position));
+        popup.show();
+    }
 
+    private class MyMenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
+        private int position;
+
+        public MyMenuItemClickListener(int positon) {
+            this.position = positon;
+        }
+
+        @Override
+        public boolean onMenuItemClick(MenuItem menuItem) {
+            switch (menuItem.getItemId()) {
+                case R.id.cardMenu_items:
+                    final AlertDialog.Builder dialog = new AlertDialog.Builder(_context);
+                    dialog.setTitle("Confirm Delete...");
+                    dialog.setMessage("Are you sure you want delete this?");
+                    dialog.setIcon(android.R.drawable.ic_delete);
+                    dialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            JSONObject obj = new JSONObject();
+                            try {
+                                obj.accumulate("Cid", t.getTaskId() + "");
+                                Log.e("Delete taskId :" ,t.getTaskToId());
+                                billToBillArrayList.remove(position);
+                                notifyDataSetChanged();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            AsynHttpPost post = new AsynHttpPost(_context, 0, 143, ProjectVariables.TASK_DELETED, listener, obj, "");
+                            post.execute();
+
+                        }
+                    });
+                    dialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    });
+                    dialog.show();
+                    return true;
+                default:
+            }
+            return false;
+        }
+    }
 }

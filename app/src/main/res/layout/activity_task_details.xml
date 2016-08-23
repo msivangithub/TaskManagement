@@ -12,7 +12,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@color/lime_700"
+            android:background="@color/white"
             android:orientation="horizontal"
             android:padding="5dp">
 
@@ -23,8 +23,8 @@
                 android:layout_weight=".7"
                 android:gravity="left|center"
                 android:text="Select User"
-                android:textStyle="bold"
-                android:textColor="#fff" />
+                android:textColor="#000"
+                android:textStyle="bold" />
 
             <RelativeLayout
                 android:layout_width="0dp"
@@ -69,7 +69,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/teal_50"
+            android:background="@color/white"
             android:cacheColorHint="#aca9a9"
             android:divider="#bab9b9"
             android:elevation="2dp"

@@ -13,6 +13,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,14 +68,14 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
     RestfulListener listener;
     LinearLayout mImage, mVideo;
     private int lastPosition = -1;
-
+    String UserRole = "";
     public TaskDetailsAdapter(Context context, RestfulListener rl, int taskId, List<Task> billToBillArrayList, String type) {
         this.billToBillArrayList = billToBillArrayList;
         _context = context;
         _type = type;
         listener = rl;
         a = (Activity) context;
-
+        UserRole = PreferenceUtil.getInstance().getString(_context, ProjectVariables.USER_ROLE, "4");
     }
 
     @Override
@@ -95,18 +96,20 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView task, task_header;
+        public TextView task, task_header ,icon_entry;
         public CheckBox check;
-        public LinearLayout taskrow;
+        public LinearLayout taskrow,deleteTask;
         public View itemView;
-
+        public ImageButton mImageMenu;
         public MyViewHolder(View convertView) {
             super(convertView);
             itemView = convertView;
             task = (TextView) convertView.findViewById(R.id.taskTitle);
             task_header = (TextView) convertView.findViewById(R.id.txt_taskheader);
             taskrow = (LinearLayout) convertView.findViewById(R.id.taskrow);
+            mImageMenu = (ImageButton) convertView.findViewById(R.id.Button_menu);
             //check = (CheckBox) convertView.findViewById(R.id.check);
+            icon_entry = (TextView) itemView.findViewById(R.id.icon_entry);
         }
     }
 
@@ -118,6 +121,11 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
         viewHolder.task.setText(t.getTaskDes());
         viewHolder.task_header.setText(t.getTaskHeading());
         setAnimation(viewHolder.itemView, position);
+        viewHolder.icon_entry.setText("" + billToBillArrayList.get(position).getTaskHeading().charAt(0));
+        if(UserRole.equalsIgnoreCase("3")){
+            viewHolder.mImageMenu.setVisibility(View.GONE);
+        }
+
         if (position % 2 == 0) {
             viewHolder.itemView.setBackgroundColor(Color.parseColor("#AFB42B"));
         } else {
@@ -126,6 +134,7 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
         viewHolder.taskrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.e("UserRole",UserRole);
                 final Dialog d = new Dialog(_context);
                 //d.setTitle("Task Details");
                 d.requestWindowFeature(Window.FEATURE_NO_TITLE);

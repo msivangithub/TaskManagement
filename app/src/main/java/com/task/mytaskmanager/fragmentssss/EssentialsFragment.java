@@ -82,6 +82,7 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
 
     private Spinner mSpinnerCompanyId, mSpinnerCounter;
     String companyID = "";
+    String cityname = "";
     String userRolesID = "";
     RestfulListener listener;
     Button mSubmit;
@@ -150,6 +151,7 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
                 branches = AppUtil.getBranchesInfo();
                 branchpos = position;
                 companyID = branches.get(position).getBranchId();
+                cityname = branches.get(position).getBranchName();
 
             }
 
@@ -225,11 +227,11 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
                 if (validation1()) {
                     //Here we can call listener for calling webservice
                     String t6 = branches.get(branchpos).getBranchId();
-                    String t7 = imageURI;
+
                     String t8 = userRolesArrayList.get(userpos).getRoId();
 
                     if (!(t6.isEmpty() && t6.equalsIgnoreCase(""))
-                            && !(t7.isEmpty() && t7.equalsIgnoreCase(""))
+
                             && !(t8.isEmpty() && t8.equalsIgnoreCase(""))) {
                         JSONObject obj = new JSONObject();
                         try {
@@ -244,8 +246,9 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
                             obj.accumulate("Macid", "456789");
                             obj.accumulate("android", "98445");
                             obj.accumulate("UserRole", userRolesID);
-                            obj.accumulate("BranchName", "myaccounts");
+                            obj.accumulate("BranchName", cityname);
                             obj.accumulate("AppName", "TaskManager");
+                            obj.accumulate("City", cityname);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -256,8 +259,6 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
                         } else {
                             Toast.makeText(getActivity(), ProjectVariables.PLEASE_CHECK_YOUR_NETWORK_CONNECTION, Toast.LENGTH_LONG).show();
                         }
-                    } else {
-                        Toast.makeText(getActivity(), "Please Select Image", Toast.LENGTH_LONG).show();
                     }
                 }
             }
@@ -437,34 +438,34 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
         if (type == 001) {
             if (status.equalsIgnoreCase("1")) {
                 try {
-                        mEmail.setText("");
-                        mfirstName.setText("");
-                        mlastName.setText("");
-                        companyID = "";
-                        imageURI = "";
-                        userRolesID = "";
-                        mMobileNo.setText("");
-                        mPassword.setText("");
+                    mEmail.setText("");
+                    mfirstName.setText("");
+                    mlastName.setText("");
+                    companyID = "";
+                    cityname = "";
+                    imageURI = "";
+                    userRolesID = "";
+                    mMobileNo.setText("");
+                    mPassword.setText("");
                     if (android.os.Build.VERSION.SDK_INT >= 21) {
                         image.setImageDrawable(getActivity().getDrawable(R.drawable.imge_placeholder));
                     }
-                        ProjectVariables.MAILID = mMobileNo.getText().toString();
-                        ProjectVariables.FIRSTNAME = mfirstName.getText().toString();
-                        ProjectVariables.LASTNAME = mlastName.getText().toString();
-                        ProjectVariables.ImAGE = imageURI.toString();
+                    ProjectVariables.MAILID = mMobileNo.getText().toString();
+                    ProjectVariables.FIRSTNAME = mfirstName.getText().toString();
+                    ProjectVariables.LASTNAME = mlastName.getText().toString();
+                    ProjectVariables.ImAGE = imageURI.toString();
 
-                        JSONArray Response = new JSONArray(s);
-                        JSONObject loginResponse = Response.getJSONObject(0);
+                    JSONArray Response = new JSONArray(s);
+                    JSONObject loginResponse = Response.getJSONObject(0);
 
-                        String result = loginResponse.getString("Result");
-                        if (result.equalsIgnoreCase("inserted successfully")) {
+                    String result = loginResponse.getString("Result");
+                    if (result.equalsIgnoreCase("inserted successfully")) {
 
-                            Toast.makeText(getActivity(), result, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), result, Toast.LENGTH_LONG).show();
 
-                        } else {
-                            Toast.makeText(getActivity(), "User not created!", Toast.LENGTH_LONG).show();
-                        }
-
+                    } else {
+                        Toast.makeText(getActivity(), "User not created!", Toast.LENGTH_LONG).show();
+                    }
 
 
                 } catch (Exception e) {

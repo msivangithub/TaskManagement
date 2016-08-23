@@ -40,7 +40,7 @@ public class AlertUtil {
                         // TODO Auto-generated method stub
                         dialog.dismiss();
                     }
-                }).setIcon(R.drawable.my_taskmanager);
+                }).setIcon(R.drawable.my_taskmanager96);
         AlertDialog alert = alertDialog.create();
         alert.show();
         Button nbutton = alert.getButton(DialogInterface.BUTTON_NEGATIVE);

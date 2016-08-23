@@ -1,6 +1,7 @@
 package com.task.mytaskmanager.Adaptes;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -39,10 +40,11 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
 
     ArrayList<Comments> commentsList;
     Context context;
-
+ProgressDialog pdDialog;
     public CommentsAdapter(ArrayList<Comments> commentsList, Context context) {
         this.commentsList = commentsList;
         this.context = context;
+        pdDialog = new ProgressDialog(this.context);
     }
 
     @Override
@@ -77,7 +79,12 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
         final Comments comments = commentsList.get(position);
         holder.comment.setText(comments.getComments());
         holder.roles.setText(comments.getUserRole());
-
+        if (comments.getImage().isEmpty() || comments.getImage().equalsIgnoreCase("") || comments.getImage().length() == 0 || comments.getImage().equalsIgnoreCase("noimage")) {
+            holder.image.setVisibility(View.GONE);
+        }
+        if (comments.getVideo().isEmpty() || comments.getVideo().equalsIgnoreCase("") || comments.getVideo().length() == 0 || comments.getVideo().equalsIgnoreCase("novideo")) {
+            holder.play.setVisibility(View.GONE);
+        }
         holder.play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -105,5 +112,59 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
                 }
             }
         });
+        holder.image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (comments.getImage().isEmpty() || comments.getImage().equalsIgnoreCase("") || comments.getImage().length() == 0) {
+                    Toast.makeText(context, "No image available for this comment", Toast.LENGTH_SHORT).show();
+                } else {
+pdDialog.show();
+                    LoadImageFromURL loadImage = new LoadImageFromURL();
+                    loadImage.execute(comments.getImage());
+
+
+                }
+            }
+        });
+    }
+
+
+    public class LoadImageFromURL extends AsyncTask<String, Void, Bitmap> {
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            //http://makeindiakart.com/taskfiles/Image_1290.jpg
+            try {
+                String MainUrl = "http://makeindiakart.com/taskfiles/";
+                URL url = new URL(MainUrl + params[0]);
+                InputStream is = url.openConnection().getInputStream();
+                Bitmap bitMap = BitmapFactory.decodeStream(is);
+                return bitMap;
+
+            } catch (MalformedURLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            // TODO Auto-generated method stub
+            super.onPostExecute(result);
+            pdDialog.dismiss();
+            Dialog showVideo = new Dialog(context);
+            showVideo.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            showVideo.setContentView(R.layout.showimage);
+            WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+            lp.copyFrom(showVideo.getWindow().getAttributes());
+            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+            lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+            showVideo.show();
+            ImageView image = (ImageView) showVideo.findViewById(R.id.showImage);
+            image.setImageBitmap(result);
+        }
     }
 }

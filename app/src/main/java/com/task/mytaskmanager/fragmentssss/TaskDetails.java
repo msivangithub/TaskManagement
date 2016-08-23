@@ -203,7 +203,7 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
         if (rType == 999) {
             ArrayList<Comments> current = new ArrayList<>();
             try {
-                String comm, userroles, videoPlay;
+                String comm, userroles, videoPlay, image;
 
                 JSONArray array = new JSONArray(s);
                 for (int c = 0; c < array.length(); c++) {
@@ -212,18 +212,15 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
                     comm = obj.getString("Comments");
                     userroles = obj.getString("UserRole");
                     videoPlay = obj.getString("video");
+                    image = obj.getString("image");
                     c1.setComments(comm);
                     c1.setUserRole(userroles);
                     c1.setVideo(videoPlay);
+                    c1.setImage(image);
                     current.add(c1);
-
-
                 }
-
                 //if (array.length() > 0)
                 AppUtil.setCurrentPojo(current);
-
-
             } catch (JSONException e) {
                 e.printStackTrace();
                 AppUtil.setCurrentPojo(current);
@@ -310,7 +307,17 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        } else if (rType == 143) {
+            try {
+                JSONArray array = new JSONArray(s);
+                JSONObject obj = array.getJSONObject(0);
 
+                String result = obj.getString("Result");
+
+                Toast.makeText(getActivity(), result, Toast.LENGTH_LONG).show();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 

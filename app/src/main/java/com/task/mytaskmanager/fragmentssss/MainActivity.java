@@ -252,6 +252,14 @@ public class MainActivity extends AppCompatActivity
             intent.putExtra(Intent.EXTRA_SUBJECT, "Check out this app!");
             startActivity(Intent.createChooser(intent, "Share"));
 
+        } else if (id == R.id.nav_setting) {
+
+            Fragment f = SettingsFragments.newInstance();
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.replace(R.id.container, f);
+            ft.commit();
+
         } else if (id == R.id.nav_logout) {
 
             PreferenceUtil util = PreferenceUtil.getInstance();
