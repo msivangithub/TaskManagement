@@ -61,6 +61,8 @@ public class TaskFragment1 extends Fragment implements RestfulListener {
         _ab = addbutton;
         TaskFragment1 fragment1 = new TaskFragment1();
         fragment1.setArguments(args);
+        Log.e("Values", AppUtil.getActStartDate());
+        Log.e("Values", AppUtil.getActEndDate());
         return fragment1;
     }
 
@@ -87,6 +89,11 @@ public class TaskFragment1 extends Fragment implements RestfulListener {
         JSONObject obj = new JSONObject();
         edt_task.addTextChangedListener(watcher);
         TaskHeader.addTextChangedListener(watcher1);
+
+
+        Log.e("Values", AppUtil.getActStartDate());
+        Log.e("Values", AppUtil.getActEndDate());
+
         AsynHttpPost post = new AsynHttpPost(getActivity(), 0, 0, ProjectVariables.USERS, this, null, "");
         post.execute();
         dateFormat();
@@ -105,7 +112,18 @@ public class TaskFragment1 extends Fragment implements RestfulListener {
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
+
         });
+        Log.e("Values", AppUtil.getActStartDate());
+        if (!AppUtil.getActStartDate().equalsIgnoreCase(""))
+            mTextViewFromDate.setText(AppUtil.getActStartDate());
+        if (!AppUtil.getActEndDate().equalsIgnoreCase(""))
+            mTextViewToDate.setText(AppUtil.getActEndDate());
+
+        if (!AppUtil.getStartFromTime().equalsIgnoreCase(""))
+            mTextViewFromTime.setText(AppUtil.getStartFromTime());
+        if (!AppUtil.getStartToTime().equalsIgnoreCase(""))
+            mTextViewToTime.setText(AppUtil.getStartToTime());
 
         return view;
     }
@@ -162,9 +180,9 @@ public class TaskFragment1 extends Fragment implements RestfulListener {
     };
 
     private void timeFormat() {
-
+        SimpleDateFormat simpleDateFormat;
         final Calendar calander = Calendar.getInstance();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a");
+        simpleDateFormat = new SimpleDateFormat("hh:mm a");
         hour = calander.get(Calendar.HOUR_OF_DAY);
         minutes = calander.get(Calendar.MINUTE);
         String time = simpleDateFormat.format(calander.getTime());
@@ -214,7 +232,6 @@ public class TaskFragment1 extends Fragment implements RestfulListener {
 
 
     private void dateFormat() {
-
 
         final Calendar c = Calendar.getInstance();
         SimpleDateFormat ss = new SimpleDateFormat("dd-MM-yyyy");

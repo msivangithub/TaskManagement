@@ -217,6 +217,7 @@ public class MainActivity extends AppCompatActivity
             ft.commit();
         } else if (id == R.id.nav_taxCreation) {
 
+            clearAputils();
             /*startActivity(new Intent(MainActivity.this, AddUserActivity.class));*/
             Fragment f = TaskcreationFragment.newInstance();
             FragmentManager fm = getSupportFragmentManager();
@@ -284,7 +285,20 @@ public class MainActivity extends AppCompatActivity
         } else
             return null;
     }
-
+    public void clearAputils() {
+        AppUtil.setActEndDate("");
+        AppUtil.setExpEndDate("");
+        AppUtil.setExpStartDate("");
+        AppUtil.setActStartDate("");
+        AppUtil.setPriority("");
+        AppUtil.setTaskDes("");
+        AppUtil.setTaskFromId("");
+        AppUtil.setTaskHeading("");
+        AppUtil.setTaskStatus("");
+        AppUtil.setTaskToId("");
+        AppUtil.setStartFromTime("");
+        AppUtil.setStartToTime("");
+    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

@@ -32,4 +32,5 @@ dependencies {
     compile 'com.adeel:easyFTP:1.0'
     compile 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
     compile 'jp.wasabeef:recyclerview-animators:2.2.3'
+
 }

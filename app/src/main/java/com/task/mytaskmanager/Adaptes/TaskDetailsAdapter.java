@@ -69,6 +69,7 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
     LinearLayout mImage, mVideo;
     private int lastPosition = -1;
     String UserRole = "";
+
     public TaskDetailsAdapter(Context context, RestfulListener rl, int taskId, List<Task> billToBillArrayList, String type) {
         this.billToBillArrayList = billToBillArrayList;
         _context = context;
@@ -92,15 +93,15 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
     @Override
     public void getData(String s, String status, int rType) {
 
-
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView task, task_header ,icon_entry;
+        public TextView task, task_header, icon_entry,mTaskDate,mTaskTime;
         public CheckBox check;
-        public LinearLayout taskrow,deleteTask;
+        public LinearLayout taskrow, deleteTask;
         public View itemView;
         public ImageButton mImageMenu;
+
         public MyViewHolder(View convertView) {
             super(convertView);
             itemView = convertView;
@@ -110,6 +111,8 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
             mImageMenu = (ImageButton) convertView.findViewById(R.id.Button_menu);
             //check = (CheckBox) convertView.findViewById(R.id.check);
             icon_entry = (TextView) itemView.findViewById(R.id.icon_entry);
+            mTaskDate = (TextView)convertView.findViewById(R.id.taskDate);
+            mTaskTime = (TextView)convertView.findViewById(R.id.taskTime);
         }
     }
 
@@ -120,21 +123,24 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
         final Task t = billToBillArrayList.get(position);
         viewHolder.task.setText(t.getTaskDes());
         viewHolder.task_header.setText(t.getTaskHeading());
+        viewHolder.mTaskDate.setText(t.getActStartDate());
+        viewHolder.mTaskTime.setText(t.getStartTime());
         setAnimation(viewHolder.itemView, position);
-        viewHolder.icon_entry.setText("" + billToBillArrayList.get(position).getTaskHeading().charAt(0));
-        if(UserRole.equalsIgnoreCase("3")){
+        if (billToBillArrayList.get(position).getTaskHeading().length() > 0)
+            viewHolder.icon_entry.setText("" + billToBillArrayList.get(position).getTaskHeading().charAt(0));
+        if (UserRole.equalsIgnoreCase("3")) {
             viewHolder.mImageMenu.setVisibility(View.GONE);
         }
 
         if (position % 2 == 0) {
-            viewHolder.itemView.setBackgroundColor(Color.parseColor("#AFB42B"));
+            viewHolder.itemView.setBackgroundColor(Color.parseColor("#ffffff"));
         } else {
-            viewHolder.itemView.setBackgroundColor(Color.parseColor("#AFB42B"));
+            viewHolder.itemView.setBackgroundColor(Color.parseColor("#ffffff"));
         }
         viewHolder.taskrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("UserRole",UserRole);
+                Log.e("UserRole", UserRole);
                 final Dialog d = new Dialog(_context);
                 //d.setTitle("Task Details");
                 d.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -176,18 +182,21 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
                     }
                 });
 
-                final TextView task, taskHead, asignBy, start, end, status;
-                RecyclerView Comment = null;
+                final TextView task, taskHead, asignBy, start, end, status, startTime, endTime;
+                final RecyclerView Comment;
                 task = (TextView) d.findViewById(R.id.txt_show_desc);
                 taskHead = (TextView) d.findViewById(R.id.txt_show_task_head);
                 asignBy = (TextView) d.findViewById(R.id.txt_show_assignBy);
                 start = (TextView) d.findViewById(R.id.txt_show_start);
                 end = (TextView) d.findViewById(R.id.txt_show_endDate);
                 status = (TextView) d.findViewById(R.id.TaskStatus);
+                startTime = (TextView) d.findViewById(R.id.startTime);
+                endTime = (TextView) d.findViewById(R.id.endTime);
+
                 Button pComments = (Button) d.findViewById(R.id.previousComments);
                 Comment = (RecyclerView) d.findViewById(R.id.TaskComment);
-                // Comment.setDivider(new ColorDrawable(Color.parseColor("#000000")));
-                final RecyclerView finalComment = Comment;
+                //  Comment.setDivider(new ColorDrawable(Color.parseColor("#000000")));
+                // Comment.setText(t.getTaskComment());
                 pComments.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -196,23 +205,22 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
 
                         if (currentPojo.size() > 0) {
                             CommentsAdapter cAdapter = new CommentsAdapter(currentPojo, _context);
-                            finalComment.setLayoutManager(new LinearLayoutManager(_context));
-                            finalComment.setItemAnimator(new DefaultItemAnimator());
-                            finalComment.setHasFixedSize(true);
-                            finalComment.setAdapter(cAdapter);
-
-                        } else {
-                            Toast.makeText(_context, "No comments list", Toast.LENGTH_SHORT).show();
+                            Comment.setLayoutManager(new LinearLayoutManager(_context));
+                            Comment.setItemAnimator(new DefaultItemAnimator());
+                            Comment.setHasFixedSize(true);
+                            Comment.setAdapter(cAdapter);
                         }
-
                     }
                 });
+
                 task.setText(t.getTaskDes());
                 taskHead.setText(t.getTaskHeading());
                 asignBy.setText(t.getTaskFromId());
                 start.setText(t.getExpStartDate());
                 end.setText(t.getExpEndDate());
                 status.setText(t.getTaskStatus());
+                startTime.setText(t.getStartTime());
+                endTime.setText(t.getEndTime());
                 Button b = (Button) d.findViewById(R.id.showvideo);
                 b.setOnClickListener(new View.OnClickListener() {
                     @Override

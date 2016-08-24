@@ -20,6 +20,7 @@ import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
+import android.widget.ZoomControls;
 
 import com.task.mytaskmanager.Pojo.Comments;
 import com.task.mytaskmanager.R;
@@ -40,11 +41,14 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
 
     ArrayList<Comments> commentsList;
     Context context;
-ProgressDialog pdDialog;
+    ProgressDialog pdDialog;
+    private ImageView image;
+    private ZoomControls zoom;
     public CommentsAdapter(ArrayList<Comments> commentsList, Context context) {
         this.commentsList = commentsList;
         this.context = context;
         pdDialog = new ProgressDialog(this.context);
+
     }
 
     @Override
@@ -63,14 +67,13 @@ ProgressDialog pdDialog;
         TextView comment, roles;
         ImageButton play, image;
 
+
         public MyViewHolder(View itemView) {
             super(itemView);
             comment = (TextView) itemView.findViewById(R.id.insidecomment);
             roles = (TextView) itemView.findViewById(R.id.user_roles);
             play = (ImageButton) itemView.findViewById(R.id.playVideo);
             image = (ImageButton) itemView.findViewById(R.id.image);
-
-
         }
     }
 
@@ -79,6 +82,7 @@ ProgressDialog pdDialog;
         final Comments comments = commentsList.get(position);
         holder.comment.setText(comments.getComments());
         holder.roles.setText(comments.getUserRole());
+
         if (comments.getImage().isEmpty() || comments.getImage().equalsIgnoreCase("") || comments.getImage().length() == 0 || comments.getImage().equalsIgnoreCase("noimage")) {
             holder.image.setVisibility(View.GONE);
         }
@@ -90,6 +94,7 @@ ProgressDialog pdDialog;
             public void onClick(View view) {
                 if (comments.getVideo().isEmpty() || comments.getVideo().equalsIgnoreCase("") || comments.getVideo().length() == 0 || comments.getVideo().equalsIgnoreCase("novideo")) {
                     Toast.makeText(context, "No video available for this comment", Toast.LENGTH_SHORT).show();
+
                 } else {
                     Dialog showVideo = new Dialog(context);
                     showVideo.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -118,11 +123,8 @@ ProgressDialog pdDialog;
                 if (comments.getImage().isEmpty() || comments.getImage().equalsIgnoreCase("") || comments.getImage().length() == 0) {
                     Toast.makeText(context, "No image available for this comment", Toast.LENGTH_SHORT).show();
                 } else {
-pdDialog.show();
                     LoadImageFromURL loadImage = new LoadImageFromURL();
                     loadImage.execute(comments.getImage());
-
-
                 }
             }
         });
@@ -143,11 +145,21 @@ pdDialog.show();
             } catch (MalformedURLException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
+
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+
             return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pdDialog = new ProgressDialog(context);
+            pdDialog.setMessage("Loading Image ....");
+            pdDialog.show();
         }
 
         @Override
@@ -155,16 +167,39 @@ pdDialog.show();
             // TODO Auto-generated method stub
             super.onPostExecute(result);
             pdDialog.dismiss();
-            Dialog showVideo = new Dialog(context);
-            showVideo.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            showVideo.setContentView(R.layout.showimage);
+            Dialog showimage = new Dialog(context);
+            showimage.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            showimage.setContentView(R.layout.showimage);
             WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-            lp.copyFrom(showVideo.getWindow().getAttributes());
+            lp.copyFrom(showimage.getWindow().getAttributes());
             lp.width = WindowManager.LayoutParams.MATCH_PARENT;
             lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-            showVideo.show();
-            ImageView image = (ImageView) showVideo.findViewById(R.id.showImage);
+            showimage.show();
+            image = (ImageView) showimage.findViewById(R.id.showImage);
+            zoom = (ZoomControls) showimage.findViewById(R.id.zoomControls1);
+            zoom.setOnZoomInClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // TODO Auto-generated method stub
+                    float x = image.getScaleX();
+                    float y = image.getScaleY();
+                    image.setScaleX((float) (x + 1));
+                    image.setScaleY((float) (y + 1));
+                }
+            });
+            zoom.setOnZoomOutClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // TODO Auto-generated method stub
+                    float x = image.getScaleX();
+                    float y = image.getScaleY();
+                    image.setScaleX((float) (x - 1));
+                    image.setScaleY((float) (y - 1));
+                }
+            });
+
             image.setImageBitmap(result);
+
         }
     }
 }

@@ -7,7 +7,7 @@
         android:title="Delete"
         android:icon="@android:drawable/ic_menu_upload"
         app:showAsAction="never" />
-    <item
+   <!-- <item
         android:orderInCategory="100"
         android:title="Update"
         android:icon="@android:drawable/ic_menu_upload"
@@ -16,5 +16,5 @@
         android:orderInCategory="100"
         android:title="Replay"
         android:icon="@android:drawable/ic_menu_upload"
-        app:showAsAction="never" />
+        app:showAsAction="never" />-->
 </menu>

@@ -14,7 +14,7 @@ public class Comments {
     private String TaskToId;
     private String UserRole;
     private String video;
-private String Image;
+    private String Image;
 
     public String getImage() {
         return Image;

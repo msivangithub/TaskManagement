@@ -5,10 +5,12 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,6 +35,7 @@ import com.task.mytaskmanager.R;
 import com.task.mytaskmanager.activity.Tasks;
 import com.task.mytaskmanager.activity.TasksAdapter;
 import com.task.mytaskmanager.services.AsynHttpPost;
+import com.task.mytaskmanager.services.AsynHttpPost143;
 import com.task.mytaskmanager.services.RestfulListener;
 import com.task.mytaskmanager.util.AppUtil;
 import com.task.mytaskmanager.util.PreferenceUtil;
@@ -63,6 +66,9 @@ public class UserTaskDetails extends Fragment implements View.OnClickListener, R
     TasksAdapter statusAdapter;
     Spinner employeename;
     TaskDetailsAdapter adapter1 = null;
+    SwipeRefreshLayout mSwipeRefreshLayout;
+    String employeeId;
+    JSONObject obj;
 
     public static UserTaskDetails newInstance() {
 
@@ -95,23 +101,49 @@ public class UserTaskDetails extends Fragment implements View.OnClickListener, R
         status = (Spinner) view.findViewById(R.id.id_status);
         statusAdapter = new TasksAdapter(getActivity(), android.R.layout.simple_spinner_item, mytasks);
         status.setAdapter(statusAdapter);
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, employee);
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        employeename.setAdapter(adapter);
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swifeRefresh);
+        mSwipeRefreshLayout.setColorSchemeColors(Color.RED, Color.GREEN, Color.BLUE, Color.CYAN);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                obj = new JSONObject();
+                try {
+                    obj.accumulate(ProjectVariables.UID, PreferenceUtil.getInstance().getString(getActivity(), ProjectVariables.USERLOGINID, "0"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                if (AppUtil.isNetworkAvailable(getActivity())) {
+
+                    AsynHttpPost143 post = new AsynHttpPost143(getActivity(), 0, 123, ProjectVariables.getTasksByUserId, listener, obj, "");
+                    post.execute();
+
+                } else {
+                    ToastMessegNetwork();
+                }
+            }
+        });
         employeename.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                String employeeId = users.get(position).getUid();
-                PreferenceUtil.getInstance().saveString(getActivity(),"currentUser",employeeId);
-                JSONObject obj = new JSONObject();
+                employeeId = users.get(position).getUid();
+                PreferenceUtil.getInstance().saveString(getActivity(), "currentUser", employeeId);
+                obj = new JSONObject();
                 try {
                     obj.accumulate(ProjectVariables.UID, employeeId);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                AsynHttpPost post = new AsynHttpPost(getActivity(), 0, 123, ProjectVariables.getTasksByUserId, listener, obj, "");
-                post.execute();
+                if (AppUtil.isNetworkAvailable(getActivity())) {
+
+                    AsynHttpPost post1 = new AsynHttpPost(getActivity(), 0, 123, ProjectVariables.getTasksByUserId, listener, obj, "");
+                    post1.execute();
+
+                } else {
+                    ToastMessegNetwork();
+                }
             }
 
             @Override
@@ -119,15 +151,30 @@ public class UserTaskDetails extends Fragment implements View.OnClickListener, R
 
             }
         });
-        JSONObject obj = new JSONObject();
+
+        obj = new JSONObject();
         try {
             obj.accumulate(ProjectVariables.UID, PreferenceUtil.getInstance().getString(getActivity(), ProjectVariables.USERLOGINID, "0"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        AsynHttpPost post = new AsynHttpPost(getActivity(), 0, 123, ProjectVariables.getTasksByUserId, listener, obj, "");
-        post.execute();
+
+        if (AppUtil.isNetworkAvailable(getActivity())) {
+            AsynHttpPost143 post = new AsynHttpPost143(getActivity(), 0, 123, ProjectVariables.getTasksByUserId, listener, obj, "");
+            post.execute();
+        } else {
+            ToastMessegNetwork();
+        }
         return view;
+    }
+
+    private void ToastMessegNetwork() {
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View toastlayout = inflater.inflate(R.layout.toast_network_connection, (ViewGroup) getActivity().findViewById(R.id.custom_toast_layout));
+        Toast toast = new Toast(getActivity());
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(toastlayout);
+        toast.show();
     }
 
     public ArrayList<Tasks> TaskList() {
@@ -247,7 +294,7 @@ public class UserTaskDetails extends Fragment implements View.OnClickListener, R
         if (rType == 999) {
             ArrayList<Comments> current = new ArrayList<>();
             try {
-                String comm, userroles ,videoPlay;
+                String comm, userroles, videoPlay, image;
 
                 JSONArray array = new JSONArray(s);
                 for (int c = 0; c < array.length(); c++) {
@@ -256,20 +303,22 @@ public class UserTaskDetails extends Fragment implements View.OnClickListener, R
                     comm = obj.getString("Comments");
                     userroles = obj.getString("UserRole");
                     videoPlay = obj.getString("video");
+                    image = obj.getString("image");
                     c1.setComments(comm);
                     c1.setUserRole(userroles);
                     c1.setVideo(videoPlay);
+                    c1.setImage(image);
                     current.add(c1);
 
                 }
 
-               // if (array.length() > 0)
-                    AppUtil.setCurrentPojo(current);
+                // if (array.length() > 0)
+                AppUtil.setCurrentPojo(current);
 
             } catch (JSONException e) {
                 e.printStackTrace();
                 AppUtil.setCurrentPojo(current);
-               // Toast.makeText(getActivity(),s,Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getActivity(),s,Toast.LENGTH_SHORT).show();
                 //AppUtil.setCurrentComments(new ArrayList<String>());
             }
 
@@ -293,6 +342,8 @@ public class UserTaskDetails extends Fragment implements View.OnClickListener, R
                     String tstat = obj.getString(ProjectVariables.TASKSTAT);
                     String ttoid = obj.getString(ProjectVariables.TASKOID);
                     String prty = obj.getString(ProjectVariables.PRIORITY);
+                    String startTime = obj.getString(ProjectVariables.STARTTIME);
+                    String endTime = obj.getString(ProjectVariables.ENDTIME);
                     String comments = obj.getString("Comments");
                     String taskId = obj.getString("Cid");
                     String video = obj.getString("video");
@@ -311,12 +362,15 @@ public class UserTaskDetails extends Fragment implements View.OnClickListener, R
                     t.setTaskToId(ttoid);
                     t.setPriority(prty);
                     t.setVideo(video);
+                    t.setStartTime(startTime);
+                    t.setEndTime(endTime);
                     TaskList.add(t);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
                 Toast.makeText(getActivity(), e.getMessage().toString(), Toast.LENGTH_LONG).show();
             }
+            mSwipeRefreshLayout.setRefreshing(false);
             adapter1 = new TaskDetailsAdapter(getActivity(), UserTaskDetails.this, R.layout.task_row, TaskList, "add");
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             recyclerView.setItemAnimator(new DefaultItemAnimator());

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.Network;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,6 +85,7 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
         } else
             return null;
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -162,6 +165,30 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
                     Toast.makeText(getActivity(), "Please record the Video", Toast.LENGTH_LONG).show();
                     return;
                 }*/
+                Log.e("values", AppUtil.getTaskDes());
+                Log.e("values", AppUtil.getTaskHeading());
+                Log.e("values", AppUtil.getActStartDate());
+                Log.e("values", AppUtil.getActEndDate());
+
+                if (AppUtil.getTaskDes().isEmpty() || AppUtil.getTaskDes().length() == 0) {
+                    Toast.makeText(getActivity(), "Please write task description", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (AppUtil.getTaskHeading().isEmpty() || AppUtil.getTaskHeading().length() == 0) {
+                    Toast.makeText(getActivity(), "Please write task heading", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (AppUtil.getActStartDate().isEmpty() || AppUtil.getActStartDate().length() == 0) {
+                    Toast.makeText(getActivity(), "Please select start date", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (AppUtil.getActEndDate().isEmpty() || AppUtil.getActEndDate().length() == 0) {
+                    Toast.makeText(getActivity(), "Please select end date", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (priority.equalsIgnoreCase("") && priority.isEmpty()) {
                     Toast.makeText(getActivity(), "Please select priority of task", Toast.LENGTH_LONG).show();
                 } else {
@@ -184,7 +211,7 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
                         obj.accumulate(ProjectVariables.TASKOID, AppUtil.getTaskToId());
                         obj.accumulate(ProjectVariables.EXPSTARTDAE, (AppUtil.getExpStartDate() == null) ? currentdate : AppUtil.getExpStartDate());
                         obj.accumulate(ProjectVariables.EXPENDDATE, (AppUtil.getExpEndDate() == null) ? currentdate : AppUtil.getExpEndDate());
-                        obj.accumulate(ProjectVariables.ACTSDATE, AppUtil.getActStartDate());
+                        obj.accumulate(ProjectVariables.ACTSDATE, (AppUtil.getActStartDate() == null) ? currentdate : AppUtil.getActStartDate());
                         obj.accumulate(ProjectVariables.ACTENDDATE, AppUtil.getActEndDate());
                         obj.accumulate(ProjectVariables.TASKSTAT, AppUtil.getTaskStatus());
                         obj.accumulate(ProjectVariables.TASKHEAD, AppUtil.getTaskHeading());
@@ -195,14 +222,14 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
                         obj.accumulate("video", Video);
 
                     } catch (Exception e) {
-
                     }
-                    Log.e("Sending json is ", obj.toString());
-                    AsynHttpPost post = new AsynHttpPost(getActivity(), 0, 0, ProjectVariables.TASK_CREAT, listener, obj, "");
-                    post.execute();
-//                    } else {
-//                        Toast.makeText(getActivity(), "Please answer the all fields", Toast.LENGTH_LONG).show();
-//                    }
+                    if (AppUtil.isNetworkAvailable(getActivity())) {
+                        Log.e("Sending json is ", obj.toString());
+                        AsynHttpPost post = new AsynHttpPost(getActivity(), 0, 0, ProjectVariables.TASK_CREAT, listener, obj, "");
+                        post.execute();
+                    } else {
+                        ToastMessegNetwork();
+                    }
                 }
             }
         });
@@ -224,7 +251,17 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
                 }
             }
         });
+
         return view;
+    }
+
+    private void ToastMessegNetwork() {
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View toastlayout = inflater.inflate(R.layout.toast_network_connection, (ViewGroup) getActivity().findViewById(R.id.custom_toast_layout));
+        Toast toast = new Toast(getActivity());
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(toastlayout);
+        toast.show();
     }
 
     @Override
@@ -232,6 +269,7 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
         super.onResume();
         _ab.addVisible(true);
     }
+
     public void clearAputils() {
         AppUtil.setActEndDate("");
         AppUtil.setExpEndDate("");
@@ -243,6 +281,8 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
         AppUtil.setTaskHeading("");
         AppUtil.setTaskStatus("");
         AppUtil.setTaskToId("");
+        AppUtil.getStartFromTime();
+        AppUtil.getStartToTime();
     }
 
     @Override
@@ -250,20 +290,26 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
 
         if (status.equalsIgnoreCase("1")) {
             SharedPreferences sharedPreferences = getActivity().getSharedPreferences("CurrentVideo", Context.MODE_PRIVATE);
-
             SharedPreferences.Editor curentEdit = sharedPreferences.edit();
-
             curentEdit.putString("video", "novideo");
-
             curentEdit.commit();
-
-            Toast.makeText(getActivity(), "Task Created succesfully", Toast.LENGTH_LONG).show();
+            ToastMesseg();
             clearAputils();
+
 
         } else {
             Toast.makeText(getActivity(), s, Toast.LENGTH_LONG).show();
         }
 
+    }
+
+    private void ToastMesseg() {
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View toastlayout = inflater.inflate(R.layout.toast_task_cretion, (ViewGroup) getActivity().findViewById(R.id.custom_toast_layout));
+        Toast toast = new Toast(getActivity());
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(toastlayout);
+        toast.show();
     }
 
     private class UploadTask extends AsyncTask<Void, Void, String> {

@@ -6,7 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -139,7 +141,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         post.execute();
 
                     } else {
-                        Toast.makeText(LoginActivity.this, ProjectVariables.PLEASE_CHECK_YOUR_NETWORK_CONNECTION, Toast.LENGTH_LONG).show();
+                        ToastMesseg();
                     }
                 } catch (Exception e) {
                 }
@@ -148,6 +150,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             }
 
+    }
+    private void ToastMesseg() {
+        LayoutInflater inflater = getLayoutInflater();
+        View toastlayout = inflater.inflate(R.layout.toast_network_connection, (ViewGroup)findViewById(R.id.custom_toast_layout));
+        Toast toast = new Toast(this);
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(toastlayout);
+        toast.show();
     }
 
     @Override

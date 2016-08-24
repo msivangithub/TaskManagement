@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -47,6 +49,7 @@ import com.task.mytaskmanager.R;
 import com.task.mytaskmanager.activity.Tasks;
 import com.task.mytaskmanager.activity.TasksAdapter;
 import com.task.mytaskmanager.services.AsynHttpPost;
+import com.task.mytaskmanager.services.AsynHttpPost143;
 import com.task.mytaskmanager.services.RestfulListener;
 import com.task.mytaskmanager.util.AppUtil;
 import com.task.mytaskmanager.util.PreferenceUtil;
@@ -85,16 +88,14 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
     USERTaskDetailsAdapter adapter1 = null;
     static final String FTP_HOST = "myaccountsretail.com";
     ProgressDialog pd;
-    /*********
-     * FTP USERNAME
-     ***********/
     static final String FTP_USER = "myRetail";
-    /*********
-     * FTP PASSWORD
-     ***********/
+
     static final String FTP_PASS = "vKsj30!9";
     String ImageName = "";
     String imageURI = "";
+    SwipeRefreshLayout mSwipeRefreshLayout;
+    String employeeId;
+    JSONObject obj;
 
     public static TaskDetails newInstance() {
 
@@ -112,6 +113,7 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
         getActivity().setTitle("Task Details");
         setHasOptionsMenu(true);
         pdForVideoUpload = new ProgressDialog(getActivity());
+        pdForVideoUpload.setTitle("Please wait.......");
         users = new ArrayList<>();
         show_Details = (Button) view.findViewById(R.id.id_show);
         delete_Tasks = (Button) view.findViewById(R.id.id_delete);
@@ -125,24 +127,52 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
         selectedUsers = new ArrayList<>();
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
         employeename = (Spinner) view.findViewById(R.id.id_employeenames);
-       // status = (Spinner) view.findViewById(R.id.id_status);
+        // status = (Spinner) view.findViewById(R.id.id_status);
         statusAdapter = new TasksAdapter(getActivity(), android.R.layout.simple_spinner_item, mytasks);
-       // status.setAdapter(statusAdapter);
 
-        employeename.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        /*PullRefersh in TaskDetails */
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swifeRefresh);
+        mSwipeRefreshLayout.setColorSchemeColors(Color.RED, Color.GREEN, Color.BLUE, Color.CYAN);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                String employeeId = users.get(position).getUid();
-                PreferenceUtil.getInstance().saveString(getActivity(), "currentUser", employeeId);
-                JSONObject obj = new JSONObject();
+            public void onRefresh() {
+                obj = new JSONObject();
                 try {
                     obj.accumulate(ProjectVariables.UID, employeeId);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                AsynHttpPost post = new AsynHttpPost(getActivity(), 0, 123, ProjectVariables.getTasksByUserId, listener, obj, "");
-                post.execute();
+
+                if (AppUtil.isNetworkAvailable(getActivity())) {
+                    AsynHttpPost143 posts = new AsynHttpPost143(getActivity(), 0, 123, ProjectVariables.getTasksByUserId, listener, obj, "");
+                    posts.execute();
+                } else {
+                    ToastMessegNetwork();
+                }
+            }
+        });
+
+        employeename.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                employeeId = users.get(position).getUid();
+                PreferenceUtil.getInstance().saveString(getActivity(), "currentUser", employeeId);
+                obj = new JSONObject();
+                try {
+                    obj.accumulate(ProjectVariables.UID, employeeId);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                if (AppUtil.isNetworkAvailable(getActivity())) {
+
+                    AsynHttpPost post1 = new AsynHttpPost(getActivity(), 0, 123, ProjectVariables.getTasksByUserId, listener, obj, "");
+                    post1.execute();
+
+                } else {
+                    ToastMessegNetwork();
+                }
             }
 
             @Override
@@ -154,6 +184,15 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
         AsynHttpPost post = new AsynHttpPost(getActivity(), 0, 0, ProjectVariables.USERS, this, null, "");
         post.execute();
         return view;
+    }
+
+    private void ToastMessegNetwork() {
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View toastlayout = inflater.inflate(R.layout.toast_network_connection, (ViewGroup) getActivity().findViewById(R.id.custom_toast_layout));
+        Toast toast = new Toast(getActivity());
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(toastlayout);
+        toast.show();
     }
 
     public ArrayList<Tasks> TaskList() {
@@ -183,7 +222,6 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
                 JSONObject obj = array.getJSONObject(0);
 
                 String result = obj.getString("Result");
-
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences("CurrentVideo", Context.MODE_PRIVATE);
                 SharedPreferences.Editor curentEdit = sharedPreferences.edit();
                 curentEdit.putString("video", ProjectVariables.NOVIDEO);
@@ -246,6 +284,8 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
                     String tstat = obj.getString(ProjectVariables.TASKSTAT);
                     String ttoid = obj.getString(ProjectVariables.TASKOID);
                     String prty = obj.getString(ProjectVariables.PRIORITY);
+                    String startTime = obj.getString(ProjectVariables.STARTTIME);
+                    String endTime = obj.getString(ProjectVariables.ENDTIME);
                     String video = obj.getString("video");
                     String comments = obj.getString("Comments");
                     String taskId = obj.getString("Cid");
@@ -264,6 +304,8 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
                     t.setTaskToId(ttoid);
                     t.setPriority(prty);
                     t.setVideo(video);
+                    t.setStartTime(startTime);
+                    t.setEndTime(endTime);
                     TaskList.add(t);
 
                 }
@@ -271,11 +313,12 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
                 e.printStackTrace();
                 Toast.makeText(getActivity(), e.getMessage().toString(), Toast.LENGTH_LONG).show();
             }
+
+            mSwipeRefreshLayout.setRefreshing(false);
             adapter1 = new USERTaskDetailsAdapter(getActivity(), TaskDetails.this, R.layout.task_row, TaskList, "add");
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             recyclerView.setItemAnimator(new DefaultItemAnimator());
             recyclerView.setHasFixedSize(true);
-
             recyclerView.setAdapter(adapter1);
 
         } else if (rType == 0) {
@@ -358,8 +401,7 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
                     e.printStackTrace();
                 }
 
-            }
-            else {
+            } else {
                 super.onActivityResult(requestCode, resultCode, data);
 
 

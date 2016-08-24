@@ -1,18 +1,14 @@
 package com.task.mytaskmanager.services;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-
 
 import com.task.mytaskmanager.util.AppUtil;
 import com.task.mytaskmanager.util.ProjectVariables;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -30,7 +26,7 @@ import java.io.InputStreamReader;
 /**
  * Created by GhanaShyam on 7/13/2016.
  */
-public class AsynHttpPost extends AsyncTask<Void, Void, String> {
+public class AsynHttpPost143 extends AsyncTask<Void, Void, String> {
     private ProgressDialog pd;
     private Context _con;
     private int _requestId;
@@ -41,7 +37,7 @@ public class AsynHttpPost extends AsyncTask<Void, Void, String> {
     private String serviceStatus;
 
 
-    public AsynHttpPost(Context con, int requestId, int requestType, String apiMethod, RestfulListener listener, JSONObject obj, String temp2) {
+    public AsynHttpPost143(Context con, int requestId, int requestType, String apiMethod, RestfulListener listener, JSONObject obj, String temp2) {
         _con = con;
         _requestId = requestId;
         _requestType = requestType;
@@ -158,7 +154,7 @@ public class AsynHttpPost extends AsyncTask<Void, Void, String> {
         super.onPreExecute();
         pd = new ProgressDialog(_con);
         pd.setTitle("Loading Please Wait....");
-        pd.show();
+       // pd.show();
     }
 
     private static String convertInputStreamToString(InputStream inputStream) throws IOException {

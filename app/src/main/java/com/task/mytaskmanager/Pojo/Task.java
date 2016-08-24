@@ -18,10 +18,24 @@ public class Task {
     private String TaskHeading;
     private String TaskDes;
     private String priority;
+    private String StartTime;
+    private String EndTime;
 
+    public String getStartTime() {
+        return StartTime;
+    }
 
+    public void setStartTime(String startTime) {
+        StartTime = startTime;
+    }
 
+    public String getEndTime() {
+        return EndTime;
+    }
 
+    public void setEndTime(String endTime) {
+        EndTime = endTime;
+    }
     public String getVideo() {
         return video;
     }

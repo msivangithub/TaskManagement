@@ -467,7 +467,6 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
                         Toast.makeText(getActivity(), "User not created!", Toast.LENGTH_LONG).show();
                     }
 
-
                 } catch (Exception e) {
                     Toast.makeText(getContext(), e.getMessage().toString(), Toast.LENGTH_LONG).show();
                 }

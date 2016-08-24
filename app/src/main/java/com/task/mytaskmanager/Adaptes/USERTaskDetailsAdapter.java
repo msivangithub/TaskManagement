@@ -58,6 +58,7 @@ import java.util.Random;
  * Created by NEWSYSTEM1 on 6/9/2016.
  */
 public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetailsAdapter.MyViewHolder> implements RestfulListener {
+
     List<Task> billToBillArrayList;
     Context _context;
     String _type;
@@ -94,7 +95,7 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView task, task_header, icon_entry;
+        public TextView task, task_header, icon_entry ,mTaskDate,mTaskTime;
         public CheckBox check;
         public LinearLayout taskrow, deleteTask;
         public View itemView;
@@ -108,11 +109,259 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
             task = (TextView) convertView.findViewById(R.id.taskTitle);
             task_header = (TextView) convertView.findViewById(R.id.txt_taskheader);
             taskrow = (LinearLayout) convertView.findViewById(R.id.taskrow);
-
+            mTaskDate = (TextView)convertView.findViewById(R.id.taskDate);
+            mTaskTime = (TextView)convertView.findViewById(R.id.taskTime);
             //check = (CheckBox) convertView.findViewById(R.id.check);
             icon_entry = (TextView) itemView.findViewById(R.id.icon_entry);
             mImageMenu = (ImageButton) convertView.findViewById(R.id.Button_menu);
+            mImageMenu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showPopupMenu(mImageMenu, getAdapterPosition());
+                }
+            });
+
+            taskrow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.e("UserRole", UserRole);
+                    final Dialog d = new Dialog(_context);
+                    //d.setTitle("Task Details");
+
+                    d.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    d.setContentView(R.layout.show_task_detils_row);
+                    d.setContentView(R.layout.show_task_detils_row);
+                    WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                    lp.copyFrom(d.getWindow().getAttributes());
+                    lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                    lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+                    d.show();
+                    d.getWindow().setAttributes(lp);
+                    JSONObject obj = new JSONObject();
+                    try {
+                        obj.accumulate("Cid", billToBillArrayList.get(getAdapterPosition()).getTaskId() + "");
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    AsynHttpPost post = new AsynHttpPost(_context, 0, 999, ProjectVariables.TASK_COMMENTS, listener, obj, "");
+                    post.execute();
+
+                    final TextView task, taskHead, asignBy, start, end, status, startTime, endTime;
+                    final RecyclerView Comment;
+                    task = (TextView) d.findViewById(R.id.txt_show_desc);
+                    taskHead = (TextView) d.findViewById(R.id.txt_show_task_head);
+                    asignBy = (TextView) d.findViewById(R.id.txt_show_assignBy);
+                    start = (TextView) d.findViewById(R.id.txt_show_start);
+                    end = (TextView) d.findViewById(R.id.txt_show_endDate);
+                    startTime = (TextView) d.findViewById(R.id.startTime);
+                    endTime = (TextView) d.findViewById(R.id.endTime);
+                    status = (TextView) d.findViewById(R.id.TaskStatus);
+
+                    Button pComments = (Button) d.findViewById(R.id.previousComments);
+                    Comment = (RecyclerView) d.findViewById(R.id.TaskComment);
+                    //  Comment.setDivider(new ColorDrawable(Color.parseColor("#000000")));
+                    // Comment.setText(t.getTaskComment());
+                    pComments.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            ArrayList<Comments> currentPojo = new ArrayList<Comments>();
+                            currentPojo = AppUtil.getCurrentPojo();
+
+                            if (currentPojo.size() > 0) {
+                                CommentsAdapter cAdapter = new CommentsAdapter(currentPojo, _context);
+                                Comment.setLayoutManager(new LinearLayoutManager(_context));
+                                Comment.setItemAnimator(new DefaultItemAnimator());
+                                Comment.setHasFixedSize(true);
+                                Comment.setAdapter(cAdapter);
+                            }
+                        }
+                    });
+                    task.setText(billToBillArrayList.get(getAdapterPosition()).getTaskDes());
+                    taskHead.setText(billToBillArrayList.get(getAdapterPosition()).getTaskHeading());
+                    asignBy.setText(billToBillArrayList.get(getAdapterPosition()).getTaskFromId());
+                    start.setText(billToBillArrayList.get(getAdapterPosition()).getExpStartDate());
+                    end.setText(billToBillArrayList.get(getAdapterPosition()).getExpEndDate());
+                    status.setText(billToBillArrayList.get(getAdapterPosition()).getTaskStatus());
+                    startTime.setText(billToBillArrayList.get(getAdapterPosition()).getStartTime());
+                    endTime.setText(billToBillArrayList.get(getAdapterPosition()).getEndTime());
+
+                    Button mShowvideo = (Button) d.findViewById(R.id.showvideo);
+                    mShowvideo.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            Dialog showVideo = new Dialog(_context);
+                            showVideo.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            showVideo.setContentView(R.layout.showvideo);
+                            WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                            lp.copyFrom(showVideo.getWindow().getAttributes());
+                            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                            lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+                            showVideo.show();
+                            VideoView videoview = (VideoView) showVideo.findViewById(R.id.videoPreview);
+                            MediaController mediaController = new MediaController(_context);
+                            mediaController.setAnchorView(videoview);
+                            String MainUrl = "http://makeindiakart.com/taskfiles/";
+                            MainUrl = MainUrl + billToBillArrayList.get(getAdapterPosition()).getVideo();
+                            Uri video = Uri.parse(MainUrl);
+                            videoview.setMediaController(mediaController);
+                            videoview.setVideoURI(video);
+                            videoview.start();
+
+                        }
+                    });
+                    ImageButton button = (ImageButton) d.findViewById(R.id.show_close);
+
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            d.dismiss();
+                        }
+                    });
+                    Button task_edt = (Button) d.findViewById(R.id.id_task_edt);
+
+                    task_edt.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            d.dismiss();
+                            final String[] status = {""};
+                            final Dialog updateDialog = new Dialog(_context);
+                            updateDialog.setTitle("Task Replay");
+                            updateDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            updateDialog.setContentView(R.layout.task_editor);
+                            WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                            lp.copyFrom(updateDialog.getWindow().getAttributes());
+                            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                            lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+
+                            updateDialog.getWindow().setAttributes(lp);
+                            updateDialog.show();
+
+                            ImageButton edt_close = (ImageButton) updateDialog.findViewById(R.id.edt_close);
+
+                            edt_close.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    updateDialog.dismiss();
+                                }
+                            });
+                            final EditText comment = (EditText) updateDialog.findViewById(R.id.taskComments);
+                            Spinner statusSpinner = (Spinner) updateDialog.findViewById(R.id.taskSpinner);
+                            Button submit = (Button) updateDialog.findViewById(R.id.task_submit);
+
+
+                            Button record = (Button) updateDialog.findViewById(R.id.record);
+
+                            /**
+                             *Click the Capture Video and Capture Image Using Alear Dialog
+                             */
+                            record.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    final Dialog d = new Dialog(_context);
+                                    d.setContentView(R.layout.image_video);
+                                    d.setTitle("Select video or Image.....!");
+                                    d.show();
+                                    mImage = (LinearLayout) d.findViewById(R.id.getImage);
+                                    mVideo = (LinearLayout) d.findViewById(R.id.getVideo);
+                                    Button CAncel = (Button) d.findViewById(R.id.CAncel);
+                                    CAncel.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            d.dismiss();
+                                        }
+                                    });
+                                /*Click the AleartDialog video popsition*/
+                                    mVideo.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            d.dismiss();
+                                            Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+                                            takeVideoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 10);
+                                            //takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Environment.getExternalStorageDirectory().getPath()+"videocapture_example.mp4");
+                                            Activity act = (Activity) _context;
+                                            act.startActivityForResult(takeVideoIntent, 667);
+                                        }
+                                    });
+                                 /*Click the AleartDialog image popsition*/
+                                    mImage.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            d.dismiss();
+                                            Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                                            Activity act = (Activity) _context;
+                                            act.startActivityForResult(intent, 202);
+                                        }
+                                    });
+                                }
+                            });
+                        /*Spinner drop Down in task replay Adapter*/
+                            statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                    if (position == 0)
+                                        status[0] = "Pending";
+                                    if (position == 1)
+                                        status[0] = "Progress";
+                                    if (position == 2)
+                                        status[0] = "Compleated";
+                                }
+
+                                @Override
+                                public void onNothingSelected(AdapterView<?> parent) {
+
+                                }
+                            });
+                        /*task replay Adapter Screen get the comments , status and capture image or video then click SUBMIT Button*/
+                            submit.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                    SharedPreferences sharedPreferences = _context.getSharedPreferences("CurrentVideo", Context.MODE_PRIVATE);
+                                    String video = sharedPreferences.getString("video", "novideo");
+                                    SharedPreferences sharedPreferences1 = _context.getSharedPreferences("CurrentImage", Context.MODE_PRIVATE);
+                                    String image = sharedPreferences1.getString("Image", "noimage");
+                                    String task_comment = comment.getText().toString();
+                                    if (!(task_comment.equalsIgnoreCase("") && task_comment.isEmpty()) && !(status[0].equalsIgnoreCase("") && status[0].isEmpty())) {
+                                        JSONObject obj = new JSONObject();
+                                        try {
+                                            obj.accumulate("Cid", billToBillArrayList.get(getAdapterPosition()).getTaskId() + "");
+                                            obj.accumulate("TaskStatus", status[0]);
+                                            obj.accumulate("Comments", task_comment);
+
+                                            if (!video.equalsIgnoreCase(ProjectVariables.NOVIDEO))
+                                                obj.accumulate("video", video);
+
+                                            if (!video.equalsIgnoreCase(ProjectVariables.NOIMAGE))
+                                                obj.accumulate("Image", image);
+
+                                            obj.accumulate("TaskToId", PreferenceUtil.getInstance().getString(_context, "currentUser", "000"));
+                                            obj.accumulate("TaskFromId", PreferenceUtil.getInstance().getString(_context, "Uid", "c001"));
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                        AsynHttpPost post = new AsynHttpPost(_context, 0, 888, ProjectVariables.TASK_UPDATE, listener, obj, "");
+                                        post.execute();
+                                        updateDialog.dismiss();
+
+                                    } else {
+                                        Toast.makeText(_context, "Please enter comment about your task", Toast.LENGTH_LONG).show();
+                                    }
+
+                                }
+                            });
+
+
+                        }
+                    });
+                    d.show();
+
+                }
+            });
         }
+
+
     }
 
     @Override
@@ -121,261 +370,28 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
         t = billToBillArrayList.get(position);
         viewHolder.task.setText(t.getTaskDes());
         viewHolder.task_header.setText(t.getTaskHeading());
-        viewHolder.icon_entry.setText("" + billToBillArrayList.get(position).getTaskHeading().charAt(0));
+        viewHolder.mTaskDate.setText(t.getActStartDate());
+        viewHolder.mTaskTime.setText(t.getStartTime());
+        Log.e("Task Head", t.getTaskHeading());
+        if (billToBillArrayList.get(position).getTaskHeading().length() > 0)
+            viewHolder.icon_entry.setText("" + billToBillArrayList.get(position).getTaskHeading().charAt(0));
+
         setAnimation(viewHolder.itemView, position);
-        viewHolder.mImageMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showPopupMenu(viewHolder.mImageMenu, position);
-            }
-        });
 
         Log.e("UserRole", UserRole);
         if (UserRole.equalsIgnoreCase("3")) {
             viewHolder.mImageMenu.setVisibility(View.GONE);
         }
-      /*  if (position % 2 == 0) {
-            viewHolder.itemView.setBackgroundColor(Color.parseColor("#AFB42B"));
+        if (UserRole.equalsIgnoreCase("4")){
+            viewHolder.mTaskDate.setVisibility(View.GONE);
+            viewHolder.mTaskTime.setVisibility(View.GONE);
+        }
+        if (position % 2 == 0) {
+            viewHolder.itemView.setBackgroundColor(Color.parseColor("#ffffff"));
         } else {
-            viewHolder.itemView.setBackgroundColor(Color.parseColor("#AFB42B"));
-        }*/
+            viewHolder.itemView.setBackgroundColor(Color.parseColor("#ffffff"));
+        }
 
-        viewHolder.taskrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.e("UserRole", UserRole);
-                final Dialog d = new Dialog(_context);
-                //d.setTitle("Task Details");
-
-                d.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                d.setContentView(R.layout.show_task_detils_row);
-                d.setContentView(R.layout.show_task_detils_row);
-                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                lp.copyFrom(d.getWindow().getAttributes());
-                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-                d.show();
-                d.getWindow().setAttributes(lp);
-                JSONObject obj = new JSONObject();
-                try {
-                    obj.accumulate("Cid", t.getTaskId() + "");
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                AsynHttpPost post = new AsynHttpPost(_context, 0, 999, ProjectVariables.TASK_COMMENTS, listener, obj, "");
-                post.execute();
-
-                final TextView task, taskHead, asignBy, start, end, status, startTime, endTime;
-                final RecyclerView Comment;
-                task = (TextView) d.findViewById(R.id.txt_show_desc);
-                taskHead = (TextView) d.findViewById(R.id.txt_show_task_head);
-                asignBy = (TextView) d.findViewById(R.id.txt_show_assignBy);
-                start = (TextView) d.findViewById(R.id.txt_show_start);
-                end = (TextView) d.findViewById(R.id.txt_show_endDate);
-                startTime = (TextView) d.findViewById(R.id.startTime);
-                endTime = (TextView) d.findViewById(R.id.endTime);
-                status = (TextView) d.findViewById(R.id.TaskStatus);
-
-                Button pComments = (Button) d.findViewById(R.id.previousComments);
-                Comment = (RecyclerView) d.findViewById(R.id.TaskComment);
-                //  Comment.setDivider(new ColorDrawable(Color.parseColor("#000000")));
-                // Comment.setText(t.getTaskComment());
-                pComments.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        ArrayList<Comments> currentPojo = new ArrayList<Comments>();
-                        currentPojo = AppUtil.getCurrentPojo();
-
-                        if (currentPojo.size() > 0) {
-                            CommentsAdapter cAdapter = new CommentsAdapter(currentPojo, _context);
-                            Comment.setLayoutManager(new LinearLayoutManager(_context));
-                            Comment.setItemAnimator(new DefaultItemAnimator());
-                            Comment.setHasFixedSize(true);
-                            Comment.setAdapter(cAdapter);
-                        }
-                    }
-                });
-                task.setText(t.getTaskDes());
-                taskHead.setText(t.getTaskHeading());
-                asignBy.setText(t.getTaskFromId());
-                start.setText(t.getExpStartDate());
-                end.setText(t.getExpEndDate());
-                status.setText(t.getTaskStatus());
-
-                Button mShowvideo = (Button) d.findViewById(R.id.showvideo);
-                mShowvideo.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        Dialog showVideo = new Dialog(_context);
-                        showVideo.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        showVideo.setContentView(R.layout.showvideo);
-                        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                        lp.copyFrom(showVideo.getWindow().getAttributes());
-                        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-                        showVideo.show();
-                        VideoView videoview = (VideoView) showVideo.findViewById(R.id.videoPreview);
-                        MediaController mediaController = new MediaController(_context);
-                        mediaController.setAnchorView(videoview);
-                        String MainUrl = "http://makeindiakart.com/taskfiles/";
-                        MainUrl = MainUrl + billToBillArrayList.get(position).getVideo();
-                        Uri video = Uri.parse(MainUrl);
-                        videoview.setMediaController(mediaController);
-                        videoview.setVideoURI(video);
-                        videoview.start();
-
-                    }
-                });
-                ImageButton button = (ImageButton) d.findViewById(R.id.show_close);
-
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        d.dismiss();
-                    }
-                });
-                Button task_edt = (Button) d.findViewById(R.id.id_task_edt);
-
-                task_edt.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        d.dismiss();
-                        final String[] status = {""};
-                        final Dialog updateDialog = new Dialog(_context);
-                        updateDialog.setTitle("Task Replay");
-                        updateDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        updateDialog.setContentView(R.layout.task_editor);
-                        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                        lp.copyFrom(updateDialog.getWindow().getAttributes());
-                        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-
-                        updateDialog.getWindow().setAttributes(lp);
-                        updateDialog.show();
-
-                        ImageButton edt_close = (ImageButton) updateDialog.findViewById(R.id.edt_close);
-
-                        edt_close.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                updateDialog.dismiss();
-                            }
-                        });
-                        final EditText comment = (EditText) updateDialog.findViewById(R.id.taskComments);
-                        Spinner statusSpinner = (Spinner) updateDialog.findViewById(R.id.taskSpinner);
-                        Button submit = (Button) updateDialog.findViewById(R.id.task_submit);
-
-
-                        Button record = (Button) updateDialog.findViewById(R.id.record);
-
-                        /**
-                         *Click the Capture Video and Capture Image Using Alear Dialog
-                         */
-                        record.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                final Dialog d = new Dialog(_context);
-                                d.setContentView(R.layout.image_video);
-                                d.setTitle("Select video or Image.....!");
-                                d.show();
-                                mImage = (LinearLayout) d.findViewById(R.id.getImage);
-                                mVideo = (LinearLayout) d.findViewById(R.id.getVideo);
-                                Button CAncel = (Button) d.findViewById(R.id.CAncel);
-                                CAncel.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        d.dismiss();
-                                    }
-                                });
-                                /*Click the AleartDialog video popsition*/
-                                mVideo.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        d.dismiss();
-                                        Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-                                        takeVideoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 10);
-                                        //takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Environment.getExternalStorageDirectory().getPath()+"videocapture_example.mp4");
-                                        Activity act = (Activity) _context;
-                                        act.startActivityForResult(takeVideoIntent, 667);
-                                    }
-                                });
-                                 /*Click the AleartDialog image popsition*/
-                                mImage.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        d.dismiss();
-                                        Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                                        Activity act = (Activity) _context;
-                                        act.startActivityForResult(intent, 202);
-                                    }
-                                });
-                            }
-                        });
-                        /*Spinner drop Down in task replay Adapter*/
-                        statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                if (position == 0)
-                                    status[0] = "Pending";
-                                if (position == 1)
-                                    status[0] = "Progress";
-                                if (position == 2)
-                                    status[0] = "Compleated";
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-
-                            }
-                        });
-                        /*task replay Adapter Screen get the comments , status and capture image or video then click SUBMIT Button*/
-                        submit.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-
-                                SharedPreferences sharedPreferences = _context.getSharedPreferences("CurrentVideo", Context.MODE_PRIVATE);
-                                String video = sharedPreferences.getString("video", "novideo");
-                                SharedPreferences sharedPreferences1 = _context.getSharedPreferences("CurrentImage", Context.MODE_PRIVATE);
-                                String image = sharedPreferences1.getString("Image", "noimage");
-                                String task_comment = comment.getText().toString();
-                                if (!(task_comment.equalsIgnoreCase("") && task_comment.isEmpty()) && !(status[0].equalsIgnoreCase("") && status[0].isEmpty())) {
-                                    JSONObject obj = new JSONObject();
-                                    try {
-                                        obj.accumulate("Cid", t.getTaskId() + "");
-                                        obj.accumulate("TaskStatus", status[0]);
-                                        obj.accumulate("Comments", task_comment);
-
-                                        if (!video.equalsIgnoreCase(ProjectVariables.NOVIDEO))
-                                            obj.accumulate("video", video);
-
-                                        if (!video.equalsIgnoreCase(ProjectVariables.NOIMAGE))
-                                            obj.accumulate("Image", image);
-
-                                        obj.accumulate("TaskToId", PreferenceUtil.getInstance().getString(_context, "currentUser", "000"));
-                                        obj.accumulate("TaskFromId", PreferenceUtil.getInstance().getString(_context, "Uid", "c001"));
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                    AsynHttpPost post = new AsynHttpPost(_context, 0, 888, ProjectVariables.TASK_UPDATE, listener, obj, "");
-                                    post.execute();
-                                    updateDialog.dismiss();
-
-                                } else {
-                                    Toast.makeText(_context, "Please enter comment about your task", Toast.LENGTH_LONG).show();
-                                }
-
-                            }
-                        });
-
-
-                    }
-                });
-                d.show();
-
-            }
-        });
 
     }
 
@@ -425,8 +441,8 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
                         public void onClick(DialogInterface dialogInterface, int i) {
                             JSONObject obj = new JSONObject();
                             try {
-                                obj.accumulate("Cid", t.getTaskId() + "");
-                                Log.e("Delete taskId :" ,t.getTaskToId());
+                                obj.accumulate("Cid", billToBillArrayList.get(position).getTaskId() + "");
+                                Log.e("Delete taskId :", billToBillArrayList.get(position).getTaskToId());
                                 billToBillArrayList.remove(position);
                                 notifyDataSetChanged();
                             } catch (JSONException e) {
