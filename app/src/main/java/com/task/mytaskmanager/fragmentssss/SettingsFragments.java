@@ -34,7 +34,7 @@ public class SettingsFragments extends Fragment {
         return fragment;
     }
 
-    TextView user, Mail;
+    TextView user, Mail, phone, branchname, city;
     ImageView image;
 
     @Nullable
@@ -45,11 +45,18 @@ public class SettingsFragments extends Fragment {
         user = (TextView) v.findViewById(R.id.txt_UserName);
         Mail = (TextView) v.findViewById(R.id.txt_Mail);
         image = (ImageView) v.findViewById(R.id.profiles_imageView);
+        phone = (TextView) v.findViewById(R.id.phoneNo);
+        branchname = (TextView) v.findViewById(R.id.branchname);
+        city = (TextView) v.findViewById(R.id.city);
 
         ProfileImageFromURL loadImage = new ProfileImageFromURL();
         loadImage.execute();
+
         user.setText(PreferenceUtil.getInstance().getString(getActivity(), "FirstName", "User"));
         Mail.setText(PreferenceUtil.getInstance().getString(getActivity(), "MailID", "user@mail.com"));
+        phone.setText(PreferenceUtil.getInstance().getString(getActivity(), "PhoneNo", "phoneno"));
+        branchname.setText(PreferenceUtil.getInstance().getString(getActivity(), "BranchName", "branch"));
+        city.setText(PreferenceUtil.getInstance().getString(getActivity(), "City", "city"));
 
         return v;
     }

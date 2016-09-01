@@ -1,14 +1,22 @@
 package com.task.mytaskmanager.Adaptes;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.view.menu.MenuPopupHelper;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -24,11 +32,17 @@ import android.widget.ZoomControls;
 
 import com.task.mytaskmanager.Pojo.Comments;
 import com.task.mytaskmanager.R;
+import com.task.mytaskmanager.services.AsynHttpPost;
 import com.task.mytaskmanager.services.RestfulListener;
 import com.task.mytaskmanager.util.PreferenceUtil;
+import com.task.mytaskmanager.util.ProjectVariables;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -44,6 +58,8 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
     ProgressDialog pdDialog;
     private ImageView image;
     private ZoomControls zoom;
+
+
     public CommentsAdapter(ArrayList<Comments> commentsList, Context context) {
         this.commentsList = commentsList;
         this.context = context;
@@ -66,7 +82,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView comment, roles;
         ImageButton play, image;
-
+        public ImageButton mImageMenu;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -74,27 +90,35 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
             roles = (TextView) itemView.findViewById(R.id.user_roles);
             play = (ImageButton) itemView.findViewById(R.id.playVideo);
             image = (ImageButton) itemView.findViewById(R.id.image);
+            mImageMenu = (ImageButton) itemView.findViewById(R.id.Button_menu);
+            mImageMenu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showPopupMenu(mImageMenu, getAdapterPosition());
+                }
+            });
+
         }
     }
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        final Comments comments = commentsList.get(position);
+       final Comments comments = commentsList.get(position);
         holder.comment.setText(comments.getComments());
         holder.roles.setText(comments.getUserRole());
 
-        if (comments.getImage().isEmpty() || comments.getImage().equalsIgnoreCase("") || comments.getImage().length() == 0 || comments.getImage().equalsIgnoreCase("noimage")) {
+       /* if (comments.getImage().isEmpty() || comments.getImage().equalsIgnoreCase("") || comments.getImage().length() == 0 || comments.getImage().equalsIgnoreCase("noimage")) {
             holder.image.setVisibility(View.GONE);
         }
         if (comments.getVideo().isEmpty() || comments.getVideo().equalsIgnoreCase("") || comments.getVideo().length() == 0 || comments.getVideo().equalsIgnoreCase("novideo")) {
             holder.play.setVisibility(View.GONE);
-        }
-        holder.play.setOnClickListener(new View.OnClickListener() {
+        }*/
+
+       /* holder.play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (comments.getVideo().isEmpty() || comments.getVideo().equalsIgnoreCase("") || comments.getVideo().length() == 0 || comments.getVideo().equalsIgnoreCase("novideo")) {
                     Toast.makeText(context, "No video available for this comment", Toast.LENGTH_SHORT).show();
-
                 } else {
                     Dialog showVideo = new Dialog(context);
                     showVideo.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -116,8 +140,8 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
 
                 }
             }
-        });
-        holder.image.setOnClickListener(new View.OnClickListener() {
+        });*/
+     /*   holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (comments.getImage().isEmpty() || comments.getImage().equalsIgnoreCase("") || comments.getImage().length() == 0) {
@@ -127,7 +151,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
                     loadImage.execute(comments.getImage());
                 }
             }
-        });
+        });*/
     }
 
 
@@ -139,7 +163,9 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
                 String MainUrl = "http://makeindiakart.com/taskfiles/";
                 URL url = new URL(MainUrl + params[0]);
                 InputStream is = url.openConnection().getInputStream();
-                Bitmap bitMap = BitmapFactory.decodeStream(is);
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 8;
+                Bitmap bitMap = BitmapFactory.decodeStream(is, null, options);
                 return bitMap;
 
             } catch (MalformedURLException e) {
@@ -202,4 +228,76 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
 
         }
     }
+
+
+    private void showPopupMenu(View view, int position) {
+        PopupMenu popup = new PopupMenu(view.getContext(), view);
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.comments_menu, popup.getMenu());
+        popup.setOnMenuItemClickListener(new MyMenuItemClickListener(position));
+        try {
+            Field mFieldPopup = popup.getClass().getDeclaredField("mPopup");
+            mFieldPopup.setAccessible(true);
+            MenuPopupHelper mPopup = (MenuPopupHelper) mFieldPopup.get(popup);
+            mPopup.setForceShowIcon(true);
+        } catch (Exception e) {
+
+        }
+        popup.show();
+    }
+
+    private class MyMenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
+        private int position;
+
+        public MyMenuItemClickListener(int positon) {
+            this.position = positon;
+        }
+
+        @Override
+        public boolean onMenuItemClick(MenuItem menuItem) {
+            switch (menuItem.getItemId()) {
+                case R.id.capture_video:
+                    if (commentsList.get(position).getVideo().isEmpty() || commentsList.get(position).getVideo().equalsIgnoreCase("") || commentsList.get(position).getVideo().length() == 0 || commentsList.get(position).getVideo().equalsIgnoreCase("novideo")) {
+                        Toast.makeText(context, "No video available for this comment", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Dialog showVideo = new Dialog(context);
+                        showVideo.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        showVideo.setContentView(R.layout.showvideo);
+                        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                        lp.copyFrom(showVideo.getWindow().getAttributes());
+                        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+                        showVideo.show();
+                        VideoView videoview = (VideoView) showVideo.findViewById(R.id.videoPreview);
+                        MediaController mediaController = new MediaController(context);
+                        mediaController.setAnchorView(videoview);
+                        String MainUrl = "http://makeindiakart.com/taskfiles/";
+                        MainUrl = MainUrl + commentsList.get(position).getVideo();
+                        Uri video = Uri.parse(MainUrl);
+                        videoview.setMediaController(mediaController);
+                        videoview.setVideoURI(video);
+                        videoview.start();
+
+                    }
+                    break;
+                case R.id.capture_image:
+                    if (commentsList.get(position).getImage().isEmpty() || commentsList.get(position).getImage().equalsIgnoreCase("") || commentsList.get(position).getImage().length() == 0) {
+                        Toast.makeText(context, "No image available for this comment", Toast.LENGTH_SHORT).show();
+                    } else {
+                        LoadImageFromURL loadImage = new LoadImageFromURL();
+                        loadImage.execute(commentsList.get(position).getImage());
+
+                    }
+                    break;
+                default:
+            }
+            return false;
+        }
+    }
+
+    private void playVideo() {
+
+
+    }
+
 }

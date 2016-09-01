@@ -34,6 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.adeel.library.easyFTP;
+import com.task.mytaskmanager.Adaptes.CommentsAdapter;
 import com.task.mytaskmanager.Adaptes.ShowDetailsAdapter;
 import com.task.mytaskmanager.Adaptes.TaskDetailsAdapter;
 import com.task.mytaskmanager.Adaptes.USERTaskDetailsAdapter;
@@ -71,6 +72,7 @@ import java.util.Random;
  * Created by GhanaShyam on 7/18/2016.
  */
 public class TaskDetails extends Fragment implements View.OnClickListener, RestfulListener {
+
     ArrayList<TaskUser> users;
     ArrayList<Tasks> mytasks;
     ArrayList<Task> TaskList;
@@ -136,19 +138,25 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                obj = new JSONObject();
-                try {
-                    obj.accumulate(ProjectVariables.UID, employeeId);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                if (AppUtil.isNetworkAvailable(getActivity())) {
-                    AsynHttpPost143 posts = new AsynHttpPost143(getActivity(), 0, 123, ProjectVariables.getTasksByUserId, listener, obj, "");
-                    posts.execute();
-                } else {
-                    ToastMessegNetwork();
-                }
+                mSwipeRefreshLayout.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                        obj = new JSONObject();
+                        try {
+                            obj.accumulate(ProjectVariables.UID, employeeId);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        mSwipeRefreshLayout.setRefreshing(false);
+                        if (AppUtil.isNetworkAvailable(getActivity())) {
+                            AsynHttpPost143 posts = new AsynHttpPost143(getActivity(), 0, 123, ProjectVariables.getTasksByUserId, listener, obj, "");
+                            posts.execute();
+                        } else {
+                            ToastMessegNetwork();
+                        }
+                    }
+                }, 1000);
             }
         });
 
@@ -181,7 +189,7 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
             }
         });
 
-        AsynHttpPost post = new AsynHttpPost(getActivity(), 0, 0, ProjectVariables.USERS, this, null, "");
+        AsynHttpPost post = new AsynHttpPost(getActivity(), 0, 11, ProjectVariables.USERS + PreferenceUtil.getInstance().getString(getActivity(), "UserRole", "user") + "," + PreferenceUtil.getInstance().getString(getActivity(), "Compname", "companyname"), this, null, "");
         post.execute();
         return view;
     }
@@ -216,6 +224,7 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
         selectedUsers = new ArrayList<>();
         TaskList = new ArrayList<>();
         /**/
+
         if (rType == 888) {
             try {
                 JSONArray array = new JSONArray(s);
@@ -235,6 +244,7 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
                 Toast.makeText(getActivity(), result, Toast.LENGTH_LONG).show();
             } catch (JSONException e) {
                 e.printStackTrace();
+                mSwipeRefreshLayout.setRefreshing(false);
             }
         }
 
@@ -311,8 +321,10 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
-                Toast.makeText(getActivity(), e.getMessage().toString(), Toast.LENGTH_LONG).show();
+
+                Toast.makeText(getActivity(), s.toString(), Toast.LENGTH_LONG).show();
             }
+
 
             mSwipeRefreshLayout.setRefreshing(false);
             adapter1 = new USERTaskDetailsAdapter(getActivity(), TaskDetails.this, R.layout.task_row, TaskList, "add");
@@ -321,7 +333,7 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
             recyclerView.setHasFixedSize(true);
             recyclerView.setAdapter(adapter1);
 
-        } else if (rType == 0) {
+        } else if (rType == 11) {
 
             users = new ArrayList<>();
             try {
@@ -390,7 +402,7 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
                 Toast.makeText(getActivity(), "Video Recorded " + convertedImage, Toast.LENGTH_LONG).show();
 
                 pdForVideoUpload.show();
-                pdForVideoUpload.setTitle("Video uploading...");
+                pdForVideoUpload.setTitle("Video uploading....");
 
                 UploadTask uploadTask = null;
 
@@ -403,7 +415,6 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
 
             } else {
                 super.onActivityResult(requestCode, resultCode, data);
-
 
             }
         }

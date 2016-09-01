@@ -94,7 +94,7 @@ public class TaskFragment1 extends Fragment implements RestfulListener {
         Log.e("Values", AppUtil.getActStartDate());
         Log.e("Values", AppUtil.getActEndDate());
 
-        AsynHttpPost post = new AsynHttpPost(getActivity(), 0, 0, ProjectVariables.USERS, this, null, "");
+        AsynHttpPost post = new AsynHttpPost(getActivity(), 0, 0, ProjectVariables.USERS+PreferenceUtil.getInstance().getString(getActivity(),"UserRole","user")+","+PreferenceUtil.getInstance().getString(getActivity(),"Compname","companyname"), this, null, "");
         post.execute();
         dateFormat();
         timeFormat();

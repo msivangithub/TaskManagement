@@ -3,8 +3,8 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:elevation="3dp"
     android:orientation="vertical"
+    android:layout_gravity="center"
     android:padding="2dp">
 
     <android.support.v7.widget.CardView
@@ -16,6 +16,7 @@
         android:clickable="true"
         android:elevation="4dp"
         android:focusable="true"
+        android:background="@drawable/btn_feed_action"
         android:foreground="?android:attr/selectableItemBackground"
         android:stateListAnimator="@anim/lift_on_touch"
         card_view:cardCornerRadius="5dp"
@@ -39,7 +40,7 @@
                     android:background="@drawable/circular_textview"
                     android:fontFamily="sans-serif-thin"
                     android:gravity="center"
-                    android:text="SA"
+                    android:text="TM"
                     android:textAllCaps="true"
                     android:textColor="#FFF"
                     android:textSize="@dimen/taskRow_textSize" />
@@ -64,7 +65,8 @@
                             android:text="Task heading "
                             android:textColor="@color/grey_900"
                             android:textSize="@dimen/taskRow_header_textSize"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:singleLine="true" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -73,10 +75,11 @@
 
                             <TextView
                                 android:id="@+id/taskTitle"
-                                android:layout_width="0dp"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Task Description" />
+                                android:textSize="@dimen/taskRow_header_textSize"
+                                android:text="Task Description"
+                                android:singleLine="true" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -91,16 +94,19 @@
 
                     <ImageButton
                         android:id="@+id/Button_menu"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:background="@null"
-                        android:src="@drawable/card_menu" />
-                    <!--android:src="@android:drawable/ic_delete"
-                    android:src="@drawable/ic_more_grey"-->
+                        android:background="@drawable/btn_feed_action"
+                        android:src="@drawable/ic_more_grey" />
+
                 </LinearLayout>
             </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#cfcece" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -116,7 +122,7 @@
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:background="#afadad" />
+                    android:background="#cfcece" />
                 <TextView
                     android:id="@+id/taskTime"
                     android:layout_width="0dp"

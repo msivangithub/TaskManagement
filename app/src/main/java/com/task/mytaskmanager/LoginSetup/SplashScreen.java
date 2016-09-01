@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.task.mytaskmanager.R;
-import com.task.mytaskmanager.fragmentssss.MainActivity;
+import com.task.mytaskmanager.activity.MainActivity;
 import com.task.mytaskmanager.util.PreferenceUtil;
 import com.task.mytaskmanager.util.ProjectVariables;
 

@@ -1,4 +1,4 @@
-package com.task.mytaskmanager.fragmentssss;
+package com.task.mytaskmanager.activity;
 
 import android.Manifest;
 import android.app.Activity;
@@ -12,8 +12,8 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -39,14 +39,16 @@ import com.task.mytaskmanager.Pojo.Task;
 import com.task.mytaskmanager.Pojo.TaskUser;
 import com.task.mytaskmanager.R;
 import com.task.mytaskmanager.fragment.AddUserFragment;
+import com.task.mytaskmanager.fragment.AllUsersFragement;
 import com.task.mytaskmanager.fragment.TaskcreationFragment;
+import com.task.mytaskmanager.fragmentssss.SettingsFragments;
+import com.task.mytaskmanager.fragmentssss.TaskDetails;
+import com.task.mytaskmanager.fragmentssss.UserTaskDetails;
 import com.task.mytaskmanager.util.AlertUtil;
 import com.task.mytaskmanager.util.AppUtil;
 import com.task.mytaskmanager.util.PreferenceUtil;
 import com.task.mytaskmanager.util.ProjectVariables;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -102,7 +104,7 @@ public class MainActivity extends AppCompatActivity
         loadImage.execute();
         user.setText(PreferenceUtil.getInstance().getString(MainActivity.this, "FirstName", "User"));
         Mail.setText(PreferenceUtil.getInstance().getString(MainActivity.this, "MailID", "user@mail.com"));
-
+//user
         if (UserRole.equalsIgnoreCase("3")) {
             Menu m = navigationView.getMenu();
 
@@ -112,16 +114,27 @@ public class MainActivity extends AppCompatActivity
             MenuItem creatItem = m.findItem(R.id.nav_taxCreation);
             creatItem.setVisible(false);
 
-        } else if (UserRole.equalsIgnoreCase("5")) {
+            MenuItem alluser = m.findItem(R.id.nav_allusers);
+            alluser.setVisible(false);
+
+        } else if (UserRole.equalsIgnoreCase("5") || (UserRole.equalsIgnoreCase("6"))) {//manager
             Menu m = navigationView.getMenu();
 
             MenuItem addItem = m.findItem(R.id.nav_addUser);
             addItem.setVisible(false);
+            MenuItem alluser = m.findItem(R.id.nav_allusers);
+            alluser.setVisible(false);
+        }
 
+        if (UserRole.equalsIgnoreCase("4")) {
+
+            Menu m = navigationView.getMenu();
+            MenuItem alluser = m.findItem(R.id.nav_allusers);
+            alluser.setVisible(false);
         }
         if (savedInstanceState == null) {
 
-            if (UserRole.equalsIgnoreCase("4")) {
+            if (UserRole.equalsIgnoreCase("4") || UserRole.equalsIgnoreCase("1")) {//admin
                 Fragment f = TaskDetails.newInstance();
                 FragmentManager fm = getSupportFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
@@ -224,6 +237,12 @@ public class MainActivity extends AppCompatActivity
             FragmentTransaction ft = fm.beginTransaction();
             ft.replace(R.id.container, f);
             ft.commit();
+        } else if (id == R.id.nav_allusers) {
+            Fragment f = AllUsersFragement.newInstance();
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.replace(R.id.container, f);
+            ft.commit();
 
         } else if (id == R.id.nav_taxDetails) {
 
@@ -285,6 +304,18 @@ public class MainActivity extends AppCompatActivity
         } else
             return null;
     }
+    public String getAbsolutePath(Uri uri) {
+        String[] projection = { MediaStore.MediaColumns.DATA };
+        @SuppressWarnings("deprecation")
+        Cursor cursor = managedQuery(uri, projection, null, null, null);
+        if (cursor != null) {
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } else
+            return null;
+    }
+
     public void clearAputils() {
         AppUtil.setActEndDate("");
         AppUtil.setExpEndDate("");
@@ -299,6 +330,7 @@ public class MainActivity extends AppCompatActivity
         AppUtil.setStartFromTime("");
         AppUtil.setStartToTime("");
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -307,7 +339,7 @@ public class MainActivity extends AppCompatActivity
             //  Toast.makeText(getApplicationContext(), "Main activity result1"+requestCode, Toast.LENGTH_LONG).show();
             if (requestCode == 667) {
                 Uri selectedimg = data.getData();
-                String origanImage = getPath(selectedimg);
+                String origanImage = getAbsolutePath(selectedimg);
                 String[] imageArray = origanImage.split("/");
 
                 int length = imageArray.length;
@@ -332,7 +364,8 @@ public class MainActivity extends AppCompatActivity
             } else if (requestCode == 202) {
 
                 Uri selectedimg = data.getData();
-                imageURI = getPath(selectedimg);
+                imageURI = getAbsolutePath(selectedimg);
+
                 String[] imageArray = imageURI.split("/");
 
                 int length = imageArray.length;
@@ -350,9 +383,6 @@ public class MainActivity extends AppCompatActivity
                 } catch (FileNotFoundException e) {
 
                 }
-            } else {
-
-                Toast.makeText(getApplicationContext(), "failure", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -366,7 +396,7 @@ public class MainActivity extends AppCompatActivity
         protected void onPreExecute() {
             pdForVideoUpload = new ProgressDialog(MainActivity.this);
             pdForVideoUpload.show();
-            pdForVideoUpload.setTitle("Video Uploading....");
+            pdForVideoUpload.setTitle("Uploading....");
         }
 
         public UploadTask(InputStream file, String videoName) {
@@ -487,5 +517,23 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case 1:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    Toast.makeText(getApplicationContext(), "Permission granted", Toast.LENGTH_SHORT).show();
+                } else {
 
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(getApplicationContext(), "Permission denied", Toast.LENGTH_SHORT).show();
+                }
+                return;
+
+        }
+    }
 }

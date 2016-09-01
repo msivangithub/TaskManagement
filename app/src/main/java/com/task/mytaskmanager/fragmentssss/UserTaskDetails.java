@@ -113,7 +113,7 @@ public class UserTaskDetails extends Fragment implements View.OnClickListener, R
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
+                mSwipeRefreshLayout.setRefreshing(false);
                 if (AppUtil.isNetworkAvailable(getActivity())) {
 
                     AsynHttpPost143 post = new AsynHttpPost143(getActivity(), 0, 123, ProjectVariables.getTasksByUserId, listener, obj, "");
@@ -287,6 +287,7 @@ public class UserTaskDetails extends Fragment implements View.OnClickListener, R
                 Toast.makeText(getActivity(), result, Toast.LENGTH_LONG).show();
             } catch (JSONException e) {
                 e.printStackTrace();
+
             }
 
         }
@@ -368,8 +369,10 @@ public class UserTaskDetails extends Fragment implements View.OnClickListener, R
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
-                Toast.makeText(getActivity(), e.getMessage().toString(), Toast.LENGTH_LONG).show();
+
+                Toast.makeText(getActivity(), s.toString(), Toast.LENGTH_LONG).show();
             }
+
             mSwipeRefreshLayout.setRefreshing(false);
             adapter1 = new TaskDetailsAdapter(getActivity(), UserTaskDetails.this, R.layout.task_row, TaskList, "add");
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

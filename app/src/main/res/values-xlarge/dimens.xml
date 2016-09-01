@@ -18,11 +18,11 @@
 
 
     <!--Task_Row-->
-    <dimen name="taskRow_layout_width">70dp</dimen>
-    <dimen name="taskRow_layout_height">70dp</dimen>
-    <dimen name="taskRow_layout_margin">10dp</dimen>
-    <dimen name="taskRow_textSize">32sp</dimen>
-    <dimen name="taskRow_padding">15dp</dimen>
-    <dimen name="taskRow_header_textSize">20sp</dimen>
+    <dimen name="taskRow_layout_width">60dp</dimen>
+    <dimen name="taskRow_layout_height">60dp</dimen>
+    <dimen name="taskRow_layout_margin">8dp</dimen>
+    <dimen name="taskRow_textSize">25sp</dimen>
+    <dimen name="taskRow_padding">10dp</dimen>
+    <dimen name="taskRow_header_textSize">15sp</dimen>
 
 </resources>

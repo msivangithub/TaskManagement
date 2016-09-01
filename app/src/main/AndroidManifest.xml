@@ -6,7 +6,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.CAMERA" />
 
@@ -28,28 +27,29 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".fragmentssss.MainActivity"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation">>
-        </activity>
-        <activity
-            android:name=".activity.AddUserActivity"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation">>
+            android:name=".activity.MainActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation">
+            >
         </activity>
         <activity
             android:name=".LoginSetup.ForgotPasswordActivity"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation">>
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation">
+            >
         </activity>
         <activity
             android:name=".LoginSetup.LoginActivity"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation">>
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation">
+            >
         </activity>
         <activity
             android:name=".LoginSetup.OtpConfirmationActivity"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"></activity>
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" />
         <activity
             android:name=".LoginSetup.RegistrationActivity"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation">>
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation">
+            >
         </activity>
+        <activity android:name=".fragment.AllUsersFragement"></activity>
     </application>
 
 </manifest>

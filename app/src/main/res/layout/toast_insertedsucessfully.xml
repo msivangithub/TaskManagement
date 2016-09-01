@@ -3,7 +3,7 @@
     android:id="@+id/custom_toast_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#f7e0e0"
+    android:background="#d4ffcd"
     android:gravity="center"
     android:orientation="horizontal"
     android:padding="15dp">
@@ -12,23 +12,23 @@
         android:id="@+id/imageView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:src="@drawable/network_error" />
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/success" />
 
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingLeft="10dp">
+        android:paddingLeft="15dp">
 
         <TextView
             android:id="@+id/textView1"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Please Check Your Network Connection"
-            android:textColor="#ca1a0d"
-            android:textSize="14dp" />
+            android:text="Inserted Successfully"
+            android:textColor="#54a846"
+            android:textSize="20dp" />
     </LinearLayout>
 
 </LinearLayout>

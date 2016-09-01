@@ -88,12 +88,12 @@
     <dimen name="FooterTotal_textsize">10sp</dimen>
     <dimen name="footerspacewidth">15dp</dimen>
     <dimen name="textsize">10sp</dimen>
-<!--Task_Row-->
-    <dimen name="taskRow_layout_width">50dp</dimen>
-    <dimen name="taskRow_layout_height">50dp</dimen>
+    <!--Task_Row-->
+    <dimen name="taskRow_layout_width">45dp</dimen>
+    <dimen name="taskRow_layout_height">45dp</dimen>
     <dimen name="taskRow_layout_margin">5dp</dimen>
     <dimen name="taskRow_textSize">22sp</dimen>
     <dimen name="taskRow_padding">10dp</dimen>
-    <dimen name="taskRow_header_textSize">15sp</dimen>
+    <dimen name="taskRow_header_textSize">12sp</dimen>
 
 </resources>

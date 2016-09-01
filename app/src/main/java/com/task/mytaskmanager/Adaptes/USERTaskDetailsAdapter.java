@@ -9,12 +9,13 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -46,10 +47,12 @@ import com.task.mytaskmanager.services.RestfulListener;
 import com.task.mytaskmanager.util.AppUtil;
 import com.task.mytaskmanager.util.PreferenceUtil;
 import com.task.mytaskmanager.util.ProjectVariables;
+import com.task.mytaskmanager.util.RefreshLisener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -68,6 +71,12 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
     String UserRole = "";
     private int lastPosition = -1;
     Task t;
+    SwipeRefreshLayout mSwipeRefreshLayout;
+    public static final String REFRESH_DELAY = "1";
+    RefreshLisener refreshLisener;
+    JSONObject jsonObject;
+    String video,image,task_comment;
+
 
     public USERTaskDetailsAdapter(Context context, RestfulListener rl, int taskId, List<Task> billToBillArrayList, String type) {
         this.billToBillArrayList = billToBillArrayList;
@@ -95,7 +104,7 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView task, task_header, icon_entry ,mTaskDate,mTaskTime;
+        public TextView task, task_header, icon_entry, mTaskDate, mTaskTime;
         public CheckBox check;
         public LinearLayout taskrow, deleteTask;
         public View itemView;
@@ -109,8 +118,8 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
             task = (TextView) convertView.findViewById(R.id.taskTitle);
             task_header = (TextView) convertView.findViewById(R.id.txt_taskheader);
             taskrow = (LinearLayout) convertView.findViewById(R.id.taskrow);
-            mTaskDate = (TextView)convertView.findViewById(R.id.taskDate);
-            mTaskTime = (TextView)convertView.findViewById(R.id.taskTime);
+            mTaskDate = (TextView) convertView.findViewById(R.id.taskDate);
+            mTaskTime = (TextView) convertView.findViewById(R.id.taskTime);
             //check = (CheckBox) convertView.findViewById(R.id.check);
             icon_entry = (TextView) itemView.findViewById(R.id.icon_entry);
             mImageMenu = (ImageButton) convertView.findViewById(R.id.Button_menu);
@@ -167,7 +176,6 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
                         public void onClick(View view) {
                             ArrayList<Comments> currentPojo = new ArrayList<Comments>();
                             currentPojo = AppUtil.getCurrentPojo();
-
                             if (currentPojo.size() > 0) {
                                 CommentsAdapter cAdapter = new CommentsAdapter(currentPojo, _context);
                                 Comment.setLayoutManager(new LinearLayoutManager(_context));
@@ -219,12 +227,16 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
                             d.dismiss();
                         }
                     });
-                    Button task_edt = (Button) d.findViewById(R.id.id_task_edt);
 
+                    /*
+                    Task Replay Button in Adapter
+                     */
+                    Button task_edt = (Button) d.findViewById(R.id.id_task_edt);
                     task_edt.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             d.dismiss();
+                            final RecyclerView Comments;
                             final String[] status = {""};
                             final Dialog updateDialog = new Dialog(_context);
                             updateDialog.setTitle("Task Replay");
@@ -234,11 +246,21 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
                             lp.copyFrom(updateDialog.getWindow().getAttributes());
                             lp.width = WindowManager.LayoutParams.MATCH_PARENT;
                             lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-
                             updateDialog.getWindow().setAttributes(lp);
                             updateDialog.show();
-
                             ImageButton edt_close = (ImageButton) updateDialog.findViewById(R.id.edt_close);
+
+                            Comments = (RecyclerView) updateDialog.findViewById(R.id.TaskComment);
+                            ArrayList<Comments> currentPojo = new ArrayList<Comments>();
+                            currentPojo = AppUtil.getCurrentPojo();
+                            if (currentPojo.size() > 0) {
+                                CommentsAdapter cAdapter = new CommentsAdapter(currentPojo, _context);
+                                Comments.setLayoutManager(new LinearLayoutManager(_context));
+                                Comments.setItemAnimator(new DefaultItemAnimator());
+                                Comments.setHasFixedSize(true);
+                                Comments.setAdapter(cAdapter);
+
+                            }
 
                             edt_close.setOnClickListener(new View.OnClickListener() {
                                 @Override
@@ -249,13 +271,10 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
                             final EditText comment = (EditText) updateDialog.findViewById(R.id.taskComments);
                             Spinner statusSpinner = (Spinner) updateDialog.findViewById(R.id.taskSpinner);
                             Button submit = (Button) updateDialog.findViewById(R.id.task_submit);
-
-
-                            Button record = (Button) updateDialog.findViewById(R.id.record);
-
                             /**
                              *Click the Capture Video and Capture Image Using Alear Dialog
                              */
+                            ImageButton record = (ImageButton) updateDialog.findViewById(R.id.record);
                             record.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -313,16 +332,31 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
 
                                 }
                             });
+
+
+                                 /*   mSwipeRefreshLayout.setRefreshing(false);
+                                    ArrayList<Comments> currentPojo = new ArrayList<Comments>();
+                                    currentPojo = AppUtil.getCurrentPojo();
+                                    if (currentPojo.size() > 0) {
+                                        CommentsAdapter cAdapter = new CommentsAdapter(currentPojo, _context);
+                                        Comments.setLayoutManager(new LinearLayoutManager(_context));
+                                        Comments.setItemAnimator(new DefaultItemAnimator());
+                                        Comments.setHasFixedSize(true);
+                                        Comments.setAdapter(cAdapter);
+                                    }
+                                }
+                            });*/
+
                         /*task replay Adapter Screen get the comments , status and capture image or video then click SUBMIT Button*/
                             submit.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
 
                                     SharedPreferences sharedPreferences = _context.getSharedPreferences("CurrentVideo", Context.MODE_PRIVATE);
-                                    String video = sharedPreferences.getString("video", "novideo");
+                                    video = sharedPreferences.getString("video", "novideo");
                                     SharedPreferences sharedPreferences1 = _context.getSharedPreferences("CurrentImage", Context.MODE_PRIVATE);
-                                    String image = sharedPreferences1.getString("Image", "noimage");
-                                    String task_comment = comment.getText().toString();
+                                    image = sharedPreferences1.getString("Image", "noimage");
+                                    task_comment = comment.getText().toString();
                                     if (!(task_comment.equalsIgnoreCase("") && task_comment.isEmpty()) && !(status[0].equalsIgnoreCase("") && status[0].isEmpty())) {
                                         JSONObject obj = new JSONObject();
                                         try {
@@ -338,9 +372,12 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
 
                                             obj.accumulate("TaskToId", PreferenceUtil.getInstance().getString(_context, "currentUser", "000"));
                                             obj.accumulate("TaskFromId", PreferenceUtil.getInstance().getString(_context, "Uid", "c001"));
+
+
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
+
                                         AsynHttpPost post = new AsynHttpPost(_context, 0, 888, ProjectVariables.TASK_UPDATE, listener, obj, "");
                                         post.execute();
                                         updateDialog.dismiss();
@@ -351,17 +388,12 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
 
                                 }
                             });
-
-
                         }
                     });
                     d.show();
-
                 }
             });
         }
-
-
     }
 
     @Override
@@ -381,10 +413,6 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
         Log.e("UserRole", UserRole);
         if (UserRole.equalsIgnoreCase("3")) {
             viewHolder.mImageMenu.setVisibility(View.GONE);
-        }
-        if (UserRole.equalsIgnoreCase("4")){
-            viewHolder.mTaskDate.setVisibility(View.GONE);
-            viewHolder.mTaskTime.setVisibility(View.GONE);
         }
         if (position % 2 == 0) {
             viewHolder.itemView.setBackgroundColor(Color.parseColor("#ffffff"));
@@ -418,6 +446,14 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.card_menu, popup.getMenu());
         popup.setOnMenuItemClickListener(new MyMenuItemClickListener(position));
+        try {
+            Field mFieldPopup=popup.getClass().getDeclaredField("mPopup");
+            mFieldPopup.setAccessible(true);
+            MenuPopupHelper mPopup = (MenuPopupHelper) mFieldPopup.get(popup);
+            mPopup.setForceShowIcon(true);
+        } catch (Exception e) {
+
+        }
         popup.show();
     }
 
@@ -433,8 +469,8 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
             switch (menuItem.getItemId()) {
                 case R.id.cardMenu_items:
                     final AlertDialog.Builder dialog = new AlertDialog.Builder(_context);
-                    dialog.setTitle("Confirm Delete...");
-                    dialog.setMessage("Are you sure you want delete this?");
+                    dialog.setTitle("Confirm Delete....!");
+                    dialog.setMessage("Are you sure you want delete this ?");
                     dialog.setIcon(android.R.drawable.ic_delete);
                     dialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         @Override

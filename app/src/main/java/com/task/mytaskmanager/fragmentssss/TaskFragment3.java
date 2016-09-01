@@ -1,6 +1,7 @@
 package com.task.mytaskmanager.fragmentssss;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -65,6 +67,8 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
      ***********/
     static final String FTP_PASS = "vKsj30!9";
     private Object currentdate;
+    LinearLayout mImage, mVideo;
+    String imageURI = "";
 
     public static TaskFragment3 newInstance(addbutton ab) {
         Bundle args = new Bundle();
@@ -86,34 +90,6 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
             return null;
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-
-            if (requestCode == 001) {
-                Uri selectedimg = data.getData();
-                String origanImage = getPath(selectedimg);
-                String[] imageArray = origanImage.split("/");
-                int length = imageArray.length;
-
-                String convertedImage = imageArray[length - 1];
-                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("CurrentVideo", Context.MODE_PRIVATE);
-                SharedPreferences.Editor curentEdit = sharedPreferences.edit();
-                curentEdit.putString("video", convertedImage);
-                curentEdit.commit();
-                Toast.makeText(getActivity(), "Video Recorded " + convertedImage, Toast.LENGTH_LONG).show();
-                UploadTask u = null;
-                try {
-                    u = new UploadTask(getActivity().getContentResolver().openInputStream(selectedimg), convertedImage);
-                    u.execute();
-                } catch (FileNotFoundException e) {
-
-                }
-
-            }
-        }
-    }
 
     @Nullable
     @Override
@@ -147,20 +123,50 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
         recordVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-                takeVideoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 20);
-                // takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Environment.getExternalStorageDirectory().getPath()+"videocapture_example.mp4");
-
-                startActivityForResult(takeVideoIntent, 001);
-
+                final Dialog d = new Dialog(getActivity());
+                d.setContentView(R.layout.image_video);
+                d.setTitle("Select video or Image.....!");
+                d.show();
+                mImage = (LinearLayout) d.findViewById(R.id.getImage);
+                mVideo = (LinearLayout) d.findViewById(R.id.getVideo);
+                Button CAncel = (Button) d.findViewById(R.id.CAncel);
+                CAncel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        d.dismiss();
+                    }
+                });
+                                /*Click the AleartDialog video popsition*/
+                mVideo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        d.dismiss();
+                        Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+                        takeVideoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 20);
+                        // takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Environment.getExternalStorageDirectory().getPath()+"videocapture_example.mp4");
+                        startActivityForResult(takeVideoIntent, 001);
+                    }
+                });
+                                 /*Click the AleartDialog image popsition*/
+                mImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        d.dismiss();
+                        Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, 003);
+                    }
+                });
             }
         });
+
         /*Task Creation Fragment using User Details and Submit The AddUser Button*/
         addUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences("CurrentVideo", Context.MODE_PRIVATE);
                 String Video = sharedPreferences.getString("video", "novideo");
+                SharedPreferences sharedPreferences1 = getActivity().getSharedPreferences("CurrentImage", Context.MODE_APPEND);
+                String images = sharedPreferences1.getString("Image", "noimage");
               /*  if (Video.equalsIgnoreCase("novideo")) {
                     Toast.makeText(getActivity(), "Please record the Video", Toast.LENGTH_LONG).show();
                     return;
@@ -220,6 +226,7 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
                         obj.accumulate(ProjectVariables.STARTTIME, (AppUtil.getStartFromTime() == null) ? time : AppUtil.getStartFromTime());
                         obj.accumulate(ProjectVariables.ENDTIME, (AppUtil.getStartToTime() == null) ? time : AppUtil.getStartToTime());
                         obj.accumulate("video", Video);
+                        obj.accumulate("Image", images);
 
                     } catch (Exception e) {
                     }
@@ -312,6 +319,57 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
         toast.show();
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+
+            if (requestCode == 001) {
+
+                Uri selectedimg = data.getData();
+                String origanImage = getPath(selectedimg);
+                String[] imageArray = origanImage.split("/");
+                int length = imageArray.length;
+
+                String convertedImage = imageArray[length - 1];
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("CurrentVideo", Context.MODE_PRIVATE);
+                SharedPreferences.Editor curentEdit = sharedPreferences.edit();
+                curentEdit.putString("video", convertedImage);
+                curentEdit.commit();
+                Toast.makeText(getActivity(), "Video Recorded " + convertedImage, Toast.LENGTH_LONG).show();
+                UploadTask u = null;
+                try {
+                    u = new UploadTask(getActivity().getContentResolver().openInputStream(selectedimg), convertedImage);
+                    u.execute();
+                } catch (FileNotFoundException e) {
+
+            }
+        } else if (requestCode == 003) {
+                Toast.makeText(getActivity(), "003 result" + requestCode, Toast.LENGTH_LONG).show();
+
+                Uri selectedimg = data.getData();
+                imageURI = getPath(selectedimg);
+                String[] imageArray = imageURI.split("/");
+
+                int length = imageArray.length;
+                String convertedImage = imageArray[length - 1];
+
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("CurrentImage", Context.MODE_PRIVATE);
+                SharedPreferences.Editor curentEdit = sharedPreferences.edit();
+                curentEdit.putString("Image", convertedImage);
+                curentEdit.commit();
+                UploadTask u = null;
+
+                try {
+                    u = new UploadTask(getActivity().getContentResolver().openInputStream(selectedimg), convertedImage);
+                    u.execute();
+                } catch (FileNotFoundException e) {
+
+                }
+            }
+        }
+    }
+
     private class UploadTask extends AsyncTask<Void, Void, String> {
         InputStream f;
         String v;
@@ -321,7 +379,7 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
         protected void onPreExecute() {
             pdForVideoUpload = new ProgressDialog(getActivity());
             pdForVideoUpload.show();
-            pdForVideoUpload.setTitle("Video Uploading....");
+            pdForVideoUpload.setTitle("Uploading....");
         }
 
         public UploadTask(InputStream file, String videoName) {
@@ -348,7 +406,6 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
                 String t = "Failure : " + e.getLocalizedMessage();
                 return t;
             }
-
         }
 
         @Override

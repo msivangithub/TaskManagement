@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -69,6 +70,10 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
     LinearLayout mImage, mVideo;
     private int lastPosition = -1;
     String UserRole = "";
+    Button pComments;
+    RecyclerView Comment;
+
+    JSONObject obj;
 
     public TaskDetailsAdapter(Context context, RestfulListener rl, int taskId, List<Task> billToBillArrayList, String type) {
         this.billToBillArrayList = billToBillArrayList;
@@ -96,7 +101,7 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView task, task_header, icon_entry,mTaskDate,mTaskTime;
+        public TextView task, task_header, icon_entry, mTaskDate, mTaskTime;
         public CheckBox check;
         public LinearLayout taskrow, deleteTask;
         public View itemView;
@@ -111,8 +116,9 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
             mImageMenu = (ImageButton) convertView.findViewById(R.id.Button_menu);
             //check = (CheckBox) convertView.findViewById(R.id.check);
             icon_entry = (TextView) itemView.findViewById(R.id.icon_entry);
-            mTaskDate = (TextView)convertView.findViewById(R.id.taskDate);
-            mTaskTime = (TextView)convertView.findViewById(R.id.taskTime);
+            mTaskDate = (TextView) convertView.findViewById(R.id.taskDate);
+            mTaskTime = (TextView) convertView.findViewById(R.id.taskTime);
+
         }
     }
 
@@ -126,6 +132,8 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
         viewHolder.mTaskDate.setText(t.getActStartDate());
         viewHolder.mTaskTime.setText(t.getStartTime());
         setAnimation(viewHolder.itemView, position);
+
+
         if (billToBillArrayList.get(position).getTaskHeading().length() > 0)
             viewHolder.icon_entry.setText("" + billToBillArrayList.get(position).getTaskHeading().charAt(0));
         if (UserRole.equalsIgnoreCase("3")) {
@@ -151,7 +159,7 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
                 lp.height = WindowManager.LayoutParams.MATCH_PARENT;
                 d.show();
                 d.getWindow().setAttributes(lp);
-                JSONObject obj = new JSONObject();
+                obj = new JSONObject();
                 try {
                     obj.accumulate("Cid", t.getTaskId() + "");
 
@@ -193,7 +201,7 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
                 startTime = (TextView) d.findViewById(R.id.startTime);
                 endTime = (TextView) d.findViewById(R.id.endTime);
 
-                Button pComments = (Button) d.findViewById(R.id.previousComments);
+                pComments = (Button) d.findViewById(R.id.previousComments);
                 Comment = (RecyclerView) d.findViewById(R.id.TaskComment);
                 //  Comment.setDivider(new ColorDrawable(Color.parseColor("#000000")));
                 // Comment.setText(t.getTaskComment());
@@ -202,7 +210,6 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
                     public void onClick(View view) {
                         ArrayList<Comments> currentPojo = new ArrayList<Comments>();
                         currentPojo = AppUtil.getCurrentPojo();
-
                         if (currentPojo.size() > 0) {
                             CommentsAdapter cAdapter = new CommentsAdapter(currentPojo, _context);
                             Comment.setLayoutManager(new LinearLayoutManager(_context));
@@ -243,7 +250,6 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
                         videoview.setVideoURI(video);
                         videoview.start();
 
-
                     }
                 });
 
@@ -253,31 +259,38 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
                     @Override
                     public void onClick(View v) {
                         d.dismiss();
+                        final RecyclerView Comments;
                         final String[] status = {""};
                         final Dialog updateDialog = new Dialog(_context);
                         updateDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         updateDialog.setContentView(R.layout.task_editor);
-
                         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
                         lp.copyFrom(updateDialog.getWindow().getAttributes());
                         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
                         lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-
                         updateDialog.getWindow().setAttributes(lp);
-
                         updateDialog.show();
-
+                        Comments = (RecyclerView) updateDialog.findViewById(R.id.TaskComment);
                         ImageButton edt_close = (ImageButton) updateDialog.findViewById(R.id.edt_close);
 
+                        ArrayList<Comments> currentPojo = new ArrayList<Comments>();
+                        currentPojo = AppUtil.getCurrentPojo();
+                        if (currentPojo.size() > 0) {
+                            CommentsAdapter cAdapter = new CommentsAdapter(currentPojo, _context);
+                            Comments.setLayoutManager(new LinearLayoutManager(_context));
+                            Comments.setItemAnimator(new DefaultItemAnimator());
+                            Comments.setHasFixedSize(true);
+                            Comments.setAdapter(cAdapter);
+
+                        }
                         edt_close.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 updateDialog.dismiss();
                             }
                         });
-
                         /*Record video in Task Replay  */
-                        Button record = (Button) updateDialog.findViewById(R.id.record);
+                        ImageButton record = (ImageButton) updateDialog.findViewById(R.id.record);
 
                         /**
                          *Click the Capture Video and Capture Image Using Alear Dialog
@@ -342,6 +355,7 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
 
                             }
                         });
+
                         submit.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -352,7 +366,7 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
                                 String images = sharedPreferences1.getString("Image", "noimages");
                                 String task_comment = comment.getText().toString();
                                 if (!(task_comment.equalsIgnoreCase("") && task_comment.isEmpty()) && !(status[0].equalsIgnoreCase("") && status[0].isEmpty())) {
-                                    JSONObject obj = new JSONObject();
+                                    obj = new JSONObject();
                                     try {
                                         obj.accumulate("Cid", t.getTaskId() + "");
                                         obj.accumulate("TaskStatus", status[0]);
@@ -369,19 +383,18 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
+
                                     AsynHttpPost post = new AsynHttpPost(_context, 0, 777, ProjectVariables.TASK_UPDATE, listener, obj, "");
                                     post.execute();
                                     updateDialog.dismiss();
-
                                 } else {
                                     Toast.makeText(_context, "Please enter comment about your task", Toast.LENGTH_LONG).show();
                                 }
-
                             }
                         });
-
                     }
                 });
+
                 d.show();
 
             }
@@ -392,7 +405,7 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
     private void setAnimation(View itemView, int position) {
         if (position > lastPosition) {
             ScaleAnimation anim = new ScaleAnimation(0.0f, 1.0f, 0.0f, 1.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-            anim.setDuration(new Random().nextInt(2000));//to make duration random number between [0,501)
+            anim.setDuration(new Random().nextInt(1500));//to make duration random number between [0,501)
             itemView.startAnimation(anim);
             lastPosition = position;
         }

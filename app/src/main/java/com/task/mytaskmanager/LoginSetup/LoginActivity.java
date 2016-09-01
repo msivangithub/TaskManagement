@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 import com.task.mytaskmanager.Pojo.UserRoles;
 import com.task.mytaskmanager.R;
-import com.task.mytaskmanager.fragmentssss.MainActivity;
+import com.task.mytaskmanager.activity.MainActivity;
 import com.task.mytaskmanager.services.AsynHttpPost;
 import com.task.mytaskmanager.services.RestfulListener;
 import com.task.mytaskmanager.util.AppUtil;
@@ -124,36 +124,37 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     public void getLogin() {
 
-      //  if (validation()) {
+       //  if (validation()) {
 
-            userText = username.getText().toString();
-            passText = password.getText().toString();
-            if ((!userText.isEmpty() && !userText.equalsIgnoreCase("")) && (!passText.isEmpty() && !passText.equalsIgnoreCase(""))) {
-                try {
+        userText = username.getText().toString();
+        passText = password.getText().toString();
+        if ((!userText.isEmpty() && !userText.equalsIgnoreCase("")) && (!passText.isEmpty() && !passText.equalsIgnoreCase(""))) {
+            try {
 
-                    JSONObject loginObject = new JSONObject();
-                    loginObject.accumulate(ProjectVariables.LOGIN_PHONE, userText);
-                    loginObject.accumulate(ProjectVariables.PASSWORD, passText);
+                JSONObject loginObject = new JSONObject();
+                loginObject.accumulate(ProjectVariables.LOGIN_PHONE, userText);
+                loginObject.accumulate(ProjectVariables.PASSWORD, passText);
 
-                    if (AppUtil.isNetworkAvailable(LoginActivity.this)) {
+                if (AppUtil.isNetworkAvailable(LoginActivity.this)) {
 
-                        AsynHttpPost post = new AsynHttpPost(LoginActivity.this, 1, 0, ProjectVariables.LOGIN, LoginActivity.this, loginObject, "");
-                        post.execute();
+                    AsynHttpPost post = new AsynHttpPost(LoginActivity.this, 1, 0, ProjectVariables.LOGIN, LoginActivity.this, loginObject, "");
+                    post.execute();
 
-                    } else {
-                        ToastMesseg();
-                    }
-                } catch (Exception e) {
+                } else {
+                    ToastMesseg();
                 }
-            } else {
-                Toast.makeText(LoginActivity.this, "Please enter username & password", Toast.LENGTH_LONG).show();
-
+            } catch (Exception e) {
             }
+        } else {
+            Toast.makeText(LoginActivity.this, "Please enter username & password", Toast.LENGTH_LONG).show();
+
+        }
 
     }
+
     private void ToastMesseg() {
         LayoutInflater inflater = getLayoutInflater();
-        View toastlayout = inflater.inflate(R.layout.toast_network_connection, (ViewGroup)findViewById(R.id.custom_toast_layout));
+        View toastlayout = inflater.inflate(R.layout.toast_network_connection, (ViewGroup) findViewById(R.id.custom_toast_layout));
         Toast toast = new Toast(this);
         toast.setDuration(Toast.LENGTH_LONG);
         toast.setView(toastlayout);
@@ -172,22 +173,34 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 String UserName = jsonObject.getString("FirstName");
                 String fromUid = jsonObject.getString("Uid");
                 String Image = jsonObject.getString("Image");
+                String city = jsonObject.getString("City");
+                String phone = jsonObject.getString("PhoneNo");
+                String Compname = jsonObject.getString("Compname");
+                String BranchName = jsonObject.getString("BranchName");
+                String uid = jsonObject.getString("Uid");
                 ProjectVariables.JRESULT = jsonObject.getString(ProjectVariables.RESULT);
                 ProjectVariables.JREMARKS = jsonObject.getString(ProjectVariables.REMARKS);
                 if (ProjectVariables.JRESULT.equals("Sucess")) {
                     util.saveString(LoginActivity.this, ProjectVariables.USERLOGINID, loginUserId);
                     util.saveString(LoginActivity.this, "MailID", mailId);
                     util.saveString(LoginActivity.this, "FirstName", UserName);
-                    util.saveString(LoginActivity.this, "Uid",fromUid);
+                    util.saveString(LoginActivity.this, "Uid", fromUid);
                     // Toast.makeText(getApplicationContext(), jsonObject.getString(ProjectVariables.USER_ROLE), Toast.LENGTH_LONG).show();
                     util.saveString(LoginActivity.this, ProjectVariables.USER_ROLE, jsonObject.getString(ProjectVariables.USER_ROLE));
                     util.saveString(LoginActivity.this, ProjectVariables.STATUS, ProjectVariables.LOGGED_IN);
                     util.saveString(LoginActivity.this, ProjectVariables.USERNAME, userText);
                     util.saveString(LoginActivity.this, "ProfileImage", Image);
+                    util.saveString(LoginActivity.this, "PhoneNo", phone);
+                    util.saveString(LoginActivity.this, "City", city);
+                    util.saveString(LoginActivity.this, ProjectVariables.COMPNAME, jsonObject.getString(ProjectVariables.COMPNAME));
+                    util.saveString(LoginActivity.this, "BranchName", BranchName);
+                    util.saveString(LoginActivity.this, "Uid", uid);
+
 
                     Intent mainActivity = new Intent(LoginActivity.this, MainActivity.class);
                     Toast.makeText(LoginActivity.this, ProjectVariables.JRESULT, Toast.LENGTH_LONG).show();
                     startActivity(mainActivity);
+                    finish();
                 } else {
                     Toast.makeText(LoginActivity.this, ProjectVariables.JREMARKS, Toast.LENGTH_LONG).show();
                 }

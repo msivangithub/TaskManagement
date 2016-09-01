@@ -14,6 +14,10 @@
             android:id="@+id/nav_taxDetails"
             android:icon="@drawable/task_details"
             android:title="Task Details" />
+        <item
+            android:id="@+id/nav_allusers"
+            android:icon="@drawable/users"
+            android:title="All Users" />
 
     </group>
 

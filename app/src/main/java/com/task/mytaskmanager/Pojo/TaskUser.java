@@ -6,8 +6,21 @@ package com.task.mytaskmanager.Pojo;
 public class TaskUser {
 
     private String FirstName;
-
     private String Uid;
+    private String UserLevel;
+    private String UserRole;
+    private String Image;
+
+    public String getImage() {
+        return Image;
+    }
+
+    public void setImage(String image) {
+        Image = image;
+    }
+
+
+
 
     public String getFirstName() {
         return FirstName;
@@ -23,5 +36,21 @@ public class TaskUser {
 
     public void setUid(String uid) {
         Uid = uid;
+    }
+
+    public String getUserLevel() {
+        return UserLevel;
+    }
+
+    public void setUserLevel(String userLevel) {
+        UserLevel = userLevel;
+    }
+
+    public String getUserRole() {
+        return UserRole;
+    }
+
+    public void setUserRole(String userRole) {
+        UserRole = userRole;
     }
 }

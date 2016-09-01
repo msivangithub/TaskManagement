@@ -1,5 +1,12 @@
 package com.task.mytaskmanager.util;
 
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
+
+import com.task.mytaskmanager.R;
+
 /**
  * Created by MANJU on 16-06-2016.
  */
@@ -16,13 +23,13 @@ public class ProjectVariables {
     public static final String PREFERENCES_NAME = "sampleprefs";
     public static final String USERNAME = "userName";
     public static final String PLEASE_CHECK_YOUR_NETWORK_CONNECTION = "please check your network connection";
-    public static final String URL = "http://makeindiakart.com/Master.svc/";
-
+    public static final String URL = "http://makeindiakart.com/TaskManger.svc/";
+//"http://makeindiakart.com/Master.svc/";
 
     //    public static final String LOGIN = "login";
     public static final String LOGIN = "Tasklogin_User";
     public static final String REGISTER = "MasterInsert";
-    public static final String USERS = "Users";
+    public static final String USERS = "Users/";
     public static final String TASK_CREAT = "Task_Creation";
     public static final String BRANCHES = "Branches/C001";
     public static final String USER_ROLES = "TaskUserRoles";
@@ -34,7 +41,7 @@ public class ProjectVariables {
     public static final int APK_WAIT_DATA_TIMEOUT = 30000;
     public static String DAILY_SALES_SUMMARY = "DailySalesSummary";
     public static String PARTYWISE_SALES = "PartywiseSales";
-
+    public static final String USER_DELETED="User_Deleted";
 
     public static String ADDRESS1 = "Address1";
     public static String ADDRESS2 = "Address2";
@@ -64,7 +71,7 @@ public class ProjectVariables {
     public static String RESULT = "Result";
     public static String FIRSTNAME = "FirstName";
     public static String LASTNAME = "LastName";
-    public static String COMPNAME = "Compname";
+
     public static String ImAGE = "Image";
     public static String PHONENO = "PhoneNo";
     public static String IMEID = "IMEID";
@@ -76,7 +83,11 @@ public class ProjectVariables {
 
     public static String FNAME = "FirstName";
     public static String UID = "Uid";
+    public static String USERLEVEL = "UserLevel";
+    public static String USERROLE = "UserRole";
+    public static String IMAGE_AllUSER = "Image";
 
+    public static String COMPNAME = "Compname";
     public static String BRANCHID = "BranchId";
     public static String BNAME = "BranchName";
     public static String TASKFROMID = "TaskFromId";
@@ -105,5 +116,7 @@ public class ProjectVariables {
     public static String STARTTIME = "StartTime";
     public static String ENDTIME = "EndTime";
 
+
     //  public static String STATUS="Status";
+
 }

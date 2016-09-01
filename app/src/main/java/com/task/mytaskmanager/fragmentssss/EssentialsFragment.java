@@ -3,7 +3,11 @@ package com.task.mytaskmanager.fragmentssss;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -47,6 +51,7 @@ import com.task.mytaskmanager.services.AsynHttpPost;
 import com.task.mytaskmanager.services.RestfulListener;
 import com.task.mytaskmanager.services.addbutton;
 import com.task.mytaskmanager.util.AppUtil;
+import com.task.mytaskmanager.util.PreferenceUtil;
 import com.task.mytaskmanager.util.ProjectVariables;
 
 import org.json.JSONArray;
@@ -71,11 +76,12 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
     private static final int PICK_IMAGE = 100;
     private static final int CAMERA_IMAGE = 200;
     ImageView image;
+    LinearLayout companyNames;
     String imageURI = "";
     String ImageName = "";
     int branchpos = 0;
     int userpos = 0;
-
+    String UserRole = "";
     private String directory;
     String selectedImage;
     TextView click, camera, sdCard;
@@ -84,6 +90,7 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
     String companyID = "";
     String cityname = "";
     String userRolesID = "";
+    String userRolesName = "";
     RestfulListener listener;
     Button mSubmit;
     private String KEY_IMAGE = "image";
@@ -129,6 +136,7 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
         getActivity().setTitle("Add User");
         setHasOptionsMenu(true);
         initPermissions();
+        companyNames = (LinearLayout) v.findViewById(R.id.companyNames);
         mMobileNo = (EditText) v.findViewById(R.id.Mobile);
         image = (ImageView) v.findViewById(R.id.display_image);
         mEmail = (EditText) v.findViewById(R.id.emailAndMobile);
@@ -142,9 +150,18 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
         listener = this;
         pd = new ProgressDialog(getActivity());
 
+        UserRole = PreferenceUtil.getInstance().getString(getActivity(), ProjectVariables.USER_ROLE, "1");
+        if (!UserRole.equalsIgnoreCase("1")) {
+            companyNames.setVisibility(View.GONE);
+            cityname = PreferenceUtil.getInstance().getString(getActivity(), "City", "1");
+            companyID = PreferenceUtil.getInstance().getString(getActivity(), "Compname", "1");
 
-        AsynHttpPost post = new AsynHttpPost(getActivity(), 2, 002, ProjectVariables.BRANCHES, listener, null, "");
-        post.execute();
+        } else {
+            AsynHttpPost post = new AsynHttpPost(getActivity(), 2, 002, ProjectVariables.BRANCHES, listener, null, "");
+            post.execute();
+        }
+
+
         essentialBranches.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -168,6 +185,7 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
                 userpos = position;
 
                 userRolesID = userRolesArrayList.get(position).getRoId();
+                userRolesName = userRolesArrayList.get(position).getRoleName();
             }
 
             @Override
@@ -225,48 +243,55 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
             @Override
             public void onClick(View v) {
                 if (validation1()) {
-                    //Here we can call listener for calling webservice
-                    String t6 = branches.get(branchpos).getBranchId();
 
-                    String t8 = userRolesArrayList.get(userpos).getRoId();
+                    JSONObject obj = new JSONObject();
+                    try {
+                        obj.accumulate("MailID", mEmail.getText().toString());
+                        obj.accumulate("FirstName", mfirstName.getText().toString());
+                        obj.accumulate("LastName", mlastName.getText().toString());
+                        obj.accumulate("Compname", companyID);
+                        obj.accumulate("Image", imageURI);
+                        obj.accumulate("PhoneNo", mMobileNo.getText().toString());
+                        obj.accumulate("Password", mPassword.getText().toString());
+                        obj.accumulate("IMEID", "1254788");
+                        obj.accumulate("Macid", "456789");
+                        obj.accumulate("android", "98445");
+                        obj.accumulate("UserRole", userRolesID);
+                        obj.accumulate("BranchName", cityname);
+                        obj.accumulate("AppName", "TaskManager");
+                        obj.accumulate("City", cityname);
+                        obj.accumulate("UserLevel", userRolesName);
+                        obj.accumulate("Desc1",PreferenceUtil.getInstance().getString(getActivity(),"Uid","Uid"));
+                        obj.accumulate("Desc2",PreferenceUtil.getInstance().getString(getActivity(),"FirstName","firstname"));
 
-                    if (!(t6.isEmpty() && t6.equalsIgnoreCase(""))
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if (AppUtil.isNetworkAvailable(getActivity())) {
 
-                            && !(t8.isEmpty() && t8.equalsIgnoreCase(""))) {
-                        JSONObject obj = new JSONObject();
-                        try {
-                            obj.accumulate("MailID", mEmail.getText().toString());
-                            obj.accumulate("FirstName", mfirstName.getText().toString());
-                            obj.accumulate("LastName", mlastName.getText().toString());
-                            obj.accumulate("Compname", companyID);
-                            obj.accumulate("Image", imageURI);
-                            obj.accumulate("PhoneNo", mMobileNo.getText().toString());
-                            obj.accumulate("Password", mPassword.getText().toString());
-                            obj.accumulate("IMEID", "1254788");
-                            obj.accumulate("Macid", "456789");
-                            obj.accumulate("android", "98445");
-                            obj.accumulate("UserRole", userRolesID);
-                            obj.accumulate("BranchName", cityname);
-                            obj.accumulate("AppName", "TaskManager");
-                            obj.accumulate("City", cityname);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        if (AppUtil.isNetworkAvailable(getActivity())) {
-
-                            AsynHttpPost post = new AsynHttpPost(getActivity(), 2, 001, ProjectVariables.USER_PROFILE, listener, obj, "");
-                            post.execute();
-                        } else {
-                            Toast.makeText(getActivity(), ProjectVariables.PLEASE_CHECK_YOUR_NETWORK_CONNECTION, Toast.LENGTH_LONG).show();
-                        }
+                        AsynHttpPost post = new AsynHttpPost(getActivity(), 2, 001, ProjectVariables.USER_PROFILE, listener, obj, "");
+                        post.execute();
+                    } else {
+                        ToastMessegNetwork();
                     }
                 }
+                //}
             }
         });
 
 
         return v;
     }
+
+    private void ToastMessegNetwork() {
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View toastlayout = inflater.inflate(R.layout.toast_network_connection, (ViewGroup) getActivity().findViewById(R.id.custom_toast_layout));
+        Toast toast = new Toast(getActivity());
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(toastlayout);
+        toast.show();
+    }
+
 
     private boolean validation1() {
         boolean valid = true;
@@ -445,6 +470,7 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
                     cityname = "";
                     imageURI = "";
                     userRolesID = "";
+                    userRolesName = "";
                     mMobileNo.setText("");
                     mPassword.setText("");
                     if (android.os.Build.VERSION.SDK_INT >= 21) {
@@ -460,8 +486,8 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
 
                     String result = loginResponse.getString("Result");
                     if (result.equalsIgnoreCase("inserted successfully")) {
-
-                        Toast.makeText(getActivity(), result, Toast.LENGTH_LONG).show();
+                        ToastMesseg();
+                        //Toast.makeText(getActivity(), result, Toast.LENGTH_LONG).show();
 
                     } else {
                         Toast.makeText(getActivity(), "User not created!", Toast.LENGTH_LONG).show();
@@ -534,6 +560,15 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
             }
 
         }
+    }
+
+    private void ToastMesseg() {
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View toastlayout = inflater.inflate(R.layout.toast_insertedsucessfully, (ViewGroup) getActivity().findViewById(R.id.custom_toast_layout));
+        Toast toast = new Toast(getActivity());
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(toastlayout);
+        toast.show();
     }
 
     private void initPermissions() {

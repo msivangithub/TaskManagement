@@ -22,6 +22,7 @@ import com.task.mytaskmanager.services.AsynHttpPost;
 import com.task.mytaskmanager.services.RestfulListener;
 import com.task.mytaskmanager.services.addbutton;
 import com.task.mytaskmanager.util.AppUtil;
+import com.task.mytaskmanager.util.PreferenceUtil;
 import com.task.mytaskmanager.util.ProjectVariables;
 
 import org.json.JSONArray;
@@ -56,7 +57,7 @@ public class TaskFragment2 extends Fragment implements RestfulListener {
         setHasOptionsMenu(true);
         branches_spinner = (Spinner) view.findViewById(R.id.branches);
 
-        AsynHttpPost post = new AsynHttpPost(getActivity(), 0, 0, ProjectVariables.USERS, this, null, "");
+        AsynHttpPost post = new AsynHttpPost(getActivity(), 0, 0, ProjectVariables.USERS+ PreferenceUtil.getInstance().getString(getActivity(),"UserRole","user")+","+PreferenceUtil.getInstance().getString(getActivity(),"Compname","companyname"), this, null, "");
         post.execute();
 
         branches_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
