@@ -269,7 +269,6 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
                         Toast.makeText(context, "No audio available for this comment", Toast.LENGTH_SHORT).show();
                     } else {
 
-
                         File file = new File(Environment.getExternalStorageDirectory().getPath() ,audioName);
                         // Check if the Music file already exists
                         if (file.exists()) {
