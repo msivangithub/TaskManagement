@@ -269,9 +269,8 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
                         Toast.makeText(context, "No audio available for this comment", Toast.LENGTH_SHORT).show();
                     } else {
 
-                        playMusic();
 
-                       /* File file = new File(Environment.getExternalStorageDirectory().getPath() ,audioName);
+                        File file = new File(Environment.getExternalStorageDirectory().getPath() ,audioName);
                         // Check if the Music file already exists
                         if (file.exists()) {
                             Toast.makeText(context, "File already exist under SD card, playing Music", Toast.LENGTH_LONG).show();
@@ -282,7 +281,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
                             Toast.makeText(context, "File doesn't exist under SD Card, downloading Mp3 from Internet", Toast.LENGTH_LONG).show();
                             // Trigger Async Task (onPreExecute method)
                             new DownloadMusicfromInternet().execute(file_url+commentsList.get(position).getAudio());
-                        }*/
+                        }
                     }
                     break;
                 default:
