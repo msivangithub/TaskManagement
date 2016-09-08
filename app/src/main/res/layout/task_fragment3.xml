@@ -78,6 +78,12 @@
             android:layout_height="wrap_content"
             android:text="Record Video" />
 
+        <Button
+            android:id="@+id/recordAudio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Record Audio" />
+
 
     </LinearLayout>
 

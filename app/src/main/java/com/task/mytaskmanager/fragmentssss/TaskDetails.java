@@ -98,7 +98,7 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
     SwipeRefreshLayout mSwipeRefreshLayout;
     String employeeId;
     JSONObject obj;
-
+    String audioURI = "";
     public static TaskDetails newInstance() {
 
         Bundle args = new Bundle();
@@ -156,7 +156,7 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
                             ToastMessegNetwork();
                         }
                     }
-                }, 1000);
+                }, 1500);
             }
         });
 
@@ -241,6 +241,12 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
                 curentEdit1.putString("Image", ProjectVariables.NOIMAGE);
                 curentEdit1.commit();
 
+
+                SharedPreferences sharedPrefer = getActivity().getSharedPreferences("CurrentAudio", Context.MODE_PRIVATE);
+                SharedPreferences.Editor curentE = sharedPrefer.edit();
+                curentE.putString("Audio", ProjectVariables.NOAUDIO);
+                curentE.commit();
+
                 Toast.makeText(getActivity(), result, Toast.LENGTH_LONG).show();
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -251,7 +257,7 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
         if (rType == 999) {
             ArrayList<Comments> current = new ArrayList<>();
             try {
-                String comm, userroles, videoPlay, image;
+                String comm, userroles, videoPlay, image, audio;
 
                 JSONArray array = new JSONArray(s);
                 for (int c = 0; c < array.length(); c++) {
@@ -261,10 +267,12 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
                     userroles = obj.getString("UserRole");
                     videoPlay = obj.getString("video");
                     image = obj.getString("image");
+                    audio = obj.getString("Audio");
                     c1.setComments(comm);
                     c1.setUserRole(userroles);
                     c1.setVideo(videoPlay);
                     c1.setImage(image);
+                    c1.setAudio(audio);
                     current.add(c1);
                 }
                 //if (array.length() > 0)
@@ -415,6 +423,27 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
 
             } else {
                 super.onActivityResult(requestCode, resultCode, data);
+
+            }
+        } else if (requestCode == 97) {
+            Uri selectedimg = data.getData();
+            audioURI = getPath(selectedimg);
+            String[] imageArray = audioURI.split("/");
+
+            int length = imageArray.length;
+            String convertedImage = imageArray[length - 1];
+
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("CurrentAudio", Context.MODE_PRIVATE);
+            SharedPreferences.Editor curentEdit = sharedPreferences.edit();
+            curentEdit.putString("Audio", convertedImage);
+            curentEdit.commit();
+            UploadTask u = null;
+
+            try {
+
+                u = new UploadTask(getActivity().getContentResolver().openInputStream(selectedimg), convertedImage);
+                u.execute();
+            } catch (FileNotFoundException e) {
 
             }
         }

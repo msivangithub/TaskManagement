@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -75,7 +76,7 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
     public static final String REFRESH_DELAY = "1";
     RefreshLisener refreshLisener;
     JSONObject jsonObject;
-    String video,image,task_comment;
+    String video, image, task_comment, audio;
 
 
     public USERTaskDetailsAdapter(Context context, RestfulListener rl, int taskId, List<Task> billToBillArrayList, String type) {
@@ -275,6 +276,16 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
                              *Click the Capture Video and Capture Image Using Alear Dialog
                              */
                             ImageButton record = (ImageButton) updateDialog.findViewById(R.id.record);
+                            ImageButton recordAudio = (ImageButton) updateDialog.findViewById(R.id.recordAudio);
+                            recordAudio.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent intent = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
+                                    Activity act = (Activity) _context;
+                                    act.startActivityForResult(intent, 97);
+                                }
+                            });
+
                             record.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -356,6 +367,8 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
                                     video = sharedPreferences.getString("video", "novideo");
                                     SharedPreferences sharedPreferences1 = _context.getSharedPreferences("CurrentImage", Context.MODE_PRIVATE);
                                     image = sharedPreferences1.getString("Image", "noimage");
+                                    SharedPreferences sharedPreferen = _context.getSharedPreferences("CurrentAudio", Context.MODE_PRIVATE);
+                                    audio = sharedPreferen.getString("Audio", "noaudio");
                                     task_comment = comment.getText().toString();
                                     if (!(task_comment.equalsIgnoreCase("") && task_comment.isEmpty()) && !(status[0].equalsIgnoreCase("") && status[0].isEmpty())) {
                                         JSONObject obj = new JSONObject();
@@ -367,8 +380,11 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
                                             if (!video.equalsIgnoreCase(ProjectVariables.NOVIDEO))
                                                 obj.accumulate("video", video);
 
-                                            if (!video.equalsIgnoreCase(ProjectVariables.NOIMAGE))
+                                            if (!image.equalsIgnoreCase(ProjectVariables.NOIMAGE))
                                                 obj.accumulate("Image", image);
+
+                                            if (!audio.equalsIgnoreCase(ProjectVariables.NOAUDIO))
+                                                obj.accumulate("Audio", audio);
 
                                             obj.accumulate("TaskToId", PreferenceUtil.getInstance().getString(_context, "currentUser", "000"));
                                             obj.accumulate("TaskFromId", PreferenceUtil.getInstance().getString(_context, "Uid", "c001"));
@@ -447,7 +463,7 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
         inflater.inflate(R.menu.card_menu, popup.getMenu());
         popup.setOnMenuItemClickListener(new MyMenuItemClickListener(position));
         try {
-            Field mFieldPopup=popup.getClass().getDeclaredField("mPopup");
+            Field mFieldPopup = popup.getClass().getDeclaredField("mPopup");
             mFieldPopup.setAccessible(true);
             MenuPopupHelper mPopup = (MenuPopupHelper) mFieldPopup.get(popup);
             mPopup.setForceShowIcon(true);

@@ -72,7 +72,7 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
     String UserRole = "";
     Button pComments;
     RecyclerView Comment;
-
+    String video ,audio ,images;
     JSONObject obj;
 
     public TaskDetailsAdapter(Context context, RestfulListener rl, int taskId, List<Task> billToBillArrayList, String type) {
@@ -291,7 +291,15 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
                         });
                         /*Record video in Task Replay  */
                         ImageButton record = (ImageButton) updateDialog.findViewById(R.id.record);
-
+                        ImageButton recordAudio = (ImageButton) updateDialog.findViewById(R.id.recordAudio);
+                        recordAudio.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
+                                Activity act = (Activity) _context;
+                                act.startActivityForResult(intent, 97);
+                            }
+                        });
                         /**
                          *Click the Capture Video and Capture Image Using Alear Dialog
                          */
@@ -361,9 +369,11 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
                             public void onClick(View v) {
 
                                 SharedPreferences sharedPreferences = _context.getSharedPreferences("CurrentVideo", Context.MODE_PRIVATE);
-                                String video = sharedPreferences.getString("video", "novideo");
+                                video = sharedPreferences.getString("video", "novideo");
                                 SharedPreferences sharedPreferences1 = _context.getSharedPreferences("CurrentImage", Context.MODE_PRIVATE);
-                                String images = sharedPreferences1.getString("Image", "noimages");
+                                images = sharedPreferences1.getString("Image", "noimages");
+                                SharedPreferences sharedPreferen = _context.getSharedPreferences("CurrentAudio", Context.MODE_PRIVATE);
+                                audio = sharedPreferen.getString("Audio", "noaudio");
                                 String task_comment = comment.getText().toString();
                                 if (!(task_comment.equalsIgnoreCase("") && task_comment.isEmpty()) && !(status[0].equalsIgnoreCase("") && status[0].isEmpty())) {
                                     obj = new JSONObject();
@@ -374,8 +384,12 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
 
                                         if (!video.equalsIgnoreCase(ProjectVariables.NOVIDEO))
                                             obj.accumulate("video", video);
+
                                         if (!images.equalsIgnoreCase(ProjectVariables.NOIMAGE))
                                             obj.accumulate("Image", images);
+
+                                        if (!audio.equalsIgnoreCase(ProjectVariables.NOAUDIO))
+                                            obj.accumulate("Audio", audio);
 
                                         obj.accumulate("TaskToId", PreferenceUtil.getInstance().getString(_context, "currentUser", "000"));
                                         obj.accumulate("TaskFromId", PreferenceUtil.getInstance().getString(_context, "Uid", "c001"));

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 
 import com.task.mytaskmanager.util.AppUtil;
@@ -132,6 +133,7 @@ public class AsynHttpPost extends AsyncTask<Void, Void, String> {
                 e.printStackTrace();
                 serviceStatus = "0";
                 Log.e("Exception Occured ", e.getMessage().toString());
+                Toast.makeText(_con, e.getMessage().toString(),Toast.LENGTH_LONG).show();
                 pd.dismiss();
                 return e.getMessage().toString();
             }

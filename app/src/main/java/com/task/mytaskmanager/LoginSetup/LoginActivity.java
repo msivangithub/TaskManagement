@@ -34,10 +34,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private static TextView forgotPassword;
     private static CheckBox show_hide_password;
-    private EditText username, password;
+    private EditText phoneNo, password;
     private Button loginButton, signUp;
     TextView newusersignup;
-    String userText, passText;
+    String userPhone, passText;
     PreferenceUtil util;
     UserRoles roles = new UserRoles();
 
@@ -62,9 +62,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         String defaultUserName = "";
         PreferenceUtil util = PreferenceUtil.getInstance();
         defaultUserName = util.getString(LoginActivity.this, ProjectVariables.USERNAME, "0");
-        username = (EditText) findViewById(R.id.login_emailid);
+        phoneNo = (EditText) findViewById(R.id.login_emailid);
         if (!defaultUserName.equalsIgnoreCase("0")) {
-            username.setText(defaultUserName);
+            phoneNo.setText(defaultUserName);
         }
         password = (EditText) findViewById(R.id.login_password);
         loginButton = (Button) findViewById(R.id.loginBtn);
@@ -124,31 +124,31 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     public void getLogin() {
 
-       //  if (validation()) {
+       // if (validation()) {
 
-        userText = username.getText().toString();
+        userPhone = phoneNo.getText().toString();
         passText = password.getText().toString();
-        if ((!userText.isEmpty() && !userText.equalsIgnoreCase("")) && (!passText.isEmpty() && !passText.equalsIgnoreCase(""))) {
-            try {
+            if ((!userPhone.isEmpty() && !userPhone.equalsIgnoreCase("")) && (!passText.isEmpty() && !passText.equalsIgnoreCase(""))) {
+                try {
 
-                JSONObject loginObject = new JSONObject();
-                loginObject.accumulate(ProjectVariables.LOGIN_PHONE, userText);
-                loginObject.accumulate(ProjectVariables.PASSWORD, passText);
+                    JSONObject loginObject = new JSONObject();
+                    loginObject.accumulate(ProjectVariables.LOGIN_PHONE, userPhone);
+                    loginObject.accumulate(ProjectVariables.PASSWORD, passText);
 
-                if (AppUtil.isNetworkAvailable(LoginActivity.this)) {
+                    if (AppUtil.isNetworkAvailable(LoginActivity.this)) {
 
-                    AsynHttpPost post = new AsynHttpPost(LoginActivity.this, 1, 0, ProjectVariables.LOGIN, LoginActivity.this, loginObject, "");
-                    post.execute();
+                        AsynHttpPost post = new AsynHttpPost(LoginActivity.this, 1, 0, ProjectVariables.LOGIN, LoginActivity.this, loginObject, "");
+                        post.execute();
 
-                } else {
-                    ToastMesseg();
+                    } else {
+                        ToastMesseg();
+                    }
+                } catch (Exception e) {
                 }
-            } catch (Exception e) {
-            }
-        } else {
-            Toast.makeText(LoginActivity.this, "Please enter username & password", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(LoginActivity.this, "Please enter username & password", Toast.LENGTH_LONG).show();
 
-        }
+            }
 
     }
 
@@ -188,7 +188,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     // Toast.makeText(getApplicationContext(), jsonObject.getString(ProjectVariables.USER_ROLE), Toast.LENGTH_LONG).show();
                     util.saveString(LoginActivity.this, ProjectVariables.USER_ROLE, jsonObject.getString(ProjectVariables.USER_ROLE));
                     util.saveString(LoginActivity.this, ProjectVariables.STATUS, ProjectVariables.LOGGED_IN);
-                    util.saveString(LoginActivity.this, ProjectVariables.USERNAME, userText);
+                    util.saveString(LoginActivity.this, ProjectVariables.USERNAME, userPhone);
                     util.saveString(LoginActivity.this, "ProfileImage", Image);
                     util.saveString(LoginActivity.this, "PhoneNo", phone);
                     util.saveString(LoginActivity.this, "City", city);
@@ -216,27 +216,35 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private boolean validation() {
-        boolean result = false;
+        boolean valid = true;
+        boolean result = true;
         boolean validEmailIdFlag = false;
         boolean emailFlag = false;
         boolean passFlag = false;
-        username = (EditText) findViewById(R.id.login_emailid);
+        phoneNo = (EditText) findViewById(R.id.login_emailid);
 
         passText = password.getText().toString();
-        userText = username.getText().toString();
+        userPhone = phoneNo.getText().toString();
 
-        if (userText != null) {
+        if (userPhone.isEmpty() || userPhone.length() < 10) {
+            phoneNo.setError("Enter valid Phone Number");
+            result = false;
+        } else {
+            phoneNo.setError(null);
+        }
+
+        /*if (userText != null) {
             if (userText.trim().equalsIgnoreCase("")) {
-                username.setError("Email  is empty");
+                phoneNo.setError("Email  is empty");
                 emailFlag = false;
             } else {
-                username.setError(null);
+                phoneNo.setError(null);
                 emailFlag = true;
             }
         } else {
-            username.setError("Email  is empty");
+            phoneNo.setError("Email  is empty");
             emailFlag = false;
-        }
+        }*/
         if (passText != null) {
             if (passText.trim().equalsIgnoreCase("")) {
                 password.setError("Password  is empty");
@@ -249,18 +257,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             password.setError("Password  is empty");
             passFlag = false;
         }
-        if (userText != null) {
+      /*  if (userText != null) {
             if (!isValidMail(userText)) {
-                username.setError("Enter valid email Id");
+                phoneNo.setError("Enter valid email Id");
                 validEmailIdFlag = false;
             } else {
-                username.setError(null);
+                phoneNo.setError(null);
                 validEmailIdFlag = true;
             }
         } else {
-            username.setError(" email is empty");
+            phoneNo.setError(" email is empty");
             validEmailIdFlag = false;
-        }
+        }*/
         if (validEmailIdFlag && validEmailIdFlag) {
             result = true;
         } else {

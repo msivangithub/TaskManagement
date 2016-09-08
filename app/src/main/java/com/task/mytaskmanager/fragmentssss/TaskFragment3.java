@@ -2,6 +2,7 @@ package com.task.mytaskmanager.fragmentssss;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -11,10 +12,12 @@ import android.net.Network;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -54,7 +57,7 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
     private String priority = "";
     private RestfulListener listener;
     String android_id;
-    Button recordVideo;
+    Button recordVideo, recordAudio;
     static final String FTP_HOST = "myaccountsretail.com";
     private int month, day, year;
     private int seconds, minutes, hour;
@@ -69,6 +72,11 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
     private Object currentdate;
     LinearLayout mImage, mVideo;
     String imageURI = "";
+    String audioURI = "";
+    private static final int MAX_PROGRESS = 100;
+    private int progressStatus = 0;
+    private Handler handler = new Handler();
+    private boolean isCanceled;
 
     public static TaskFragment3 newInstance(addbutton ab) {
         Bundle args = new Bundle();
@@ -105,6 +113,7 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
         low = (RadioButton) view.findViewById(R.id.low);
         Medium = (RadioButton) view.findViewById(R.id.Medium);
         High = (RadioButton) view.findViewById(R.id.High);
+        recordAudio = (Button) view.findViewById(R.id.recordAudio);
         /*Time Format*/
         final Calendar calander = Calendar.getInstance();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a");
@@ -120,6 +129,16 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
         day = c.get(Calendar.DAY_OF_MONTH);
         final String currentdate = ss.format(date);
         /*Record Video Button*/
+        recordAudio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(
+                        MediaStore.Audio.Media.RECORD_SOUND_ACTION);
+                startActivityForResult(intent, 92);
+
+            }
+        });
+
         recordVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -167,6 +186,8 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
                 String Video = sharedPreferences.getString("video", "novideo");
                 SharedPreferences sharedPreferences1 = getActivity().getSharedPreferences("CurrentImage", Context.MODE_APPEND);
                 String images = sharedPreferences1.getString("Image", "noimage");
+                SharedPreferences sharedPrefer = getActivity().getSharedPreferences("CurrentAudio", Context.MODE_APPEND);
+                String audio = sharedPrefer.getString("Audio", "noaudio");
               /*  if (Video.equalsIgnoreCase("novideo")) {
                     Toast.makeText(getActivity(), "Please record the Video", Toast.LENGTH_LONG).show();
                     return;
@@ -208,6 +229,7 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
 //                            && !(AppUtil.getExpStartDate().isEmpty() && AppUtil.getExpStartDate().equalsIgnoreCase("")) && !(AppUtil.getExpEndDate().isEmpty() && AppUtil.getExpEndDate().equalsIgnoreCase(""))
 //                            && !(AppUtil.getActStartDate().isEmpty() && AppUtil.getActStartDate().equalsIgnoreCase("")) && !!(AppUtil.getActEndDate().isEmpty() && AppUtil.getActEndDate().equalsIgnoreCase(""))
 //                            && !(AppUtil.getPriority().isEmpty() && AppUtil.getPriority().equalsIgnoreCase(""))) {
+
                     JSONObject obj = null;
 
                     try {
@@ -227,6 +249,7 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
                         obj.accumulate(ProjectVariables.ENDTIME, (AppUtil.getStartToTime() == null) ? time : AppUtil.getStartToTime());
                         obj.accumulate("video", Video);
                         obj.accumulate("Image", images);
+                        obj.accumulate("Audio", audio);
 
                     } catch (Exception e) {
                     }
@@ -343,8 +366,8 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
                     u.execute();
                 } catch (FileNotFoundException e) {
 
-            }
-        } else if (requestCode == 003) {
+                }
+            } else if (requestCode == 003) {
                 Toast.makeText(getActivity(), "003 result" + requestCode, Toast.LENGTH_LONG).show();
 
                 Uri selectedimg = data.getData();
@@ -366,7 +389,29 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
                 } catch (FileNotFoundException e) {
 
                 }
+            } else if (requestCode == 92) {
+
+                Uri selectedimg = data.getData();
+                audioURI = getPath(selectedimg);
+                String[] imageArray = audioURI.split("/");
+
+                int length = imageArray.length;
+                String convertedImage = imageArray[length - 1];
+
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("CurrentAudio", Context.MODE_PRIVATE);
+                SharedPreferences.Editor curentEdit = sharedPreferences.edit();
+                curentEdit.putString("Audio", convertedImage);
+                curentEdit.commit();
+                UploadTask u = null;
+
+                try {
+                    u = new UploadTask(getActivity().getContentResolver().openInputStream(selectedimg), convertedImage);
+                    u.execute();
+                } catch (FileNotFoundException e) {
+
+                }
             }
+
         }
     }
 
@@ -375,9 +420,11 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
         String v;
         ProgressDialog pdForVideoUpload;
 
+
         @Override
         protected void onPreExecute() {
             pdForVideoUpload = new ProgressDialog(getActivity());
+            pdForVideoUpload.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             pdForVideoUpload.show();
             pdForVideoUpload.setTitle("Uploading....");
         }
@@ -413,6 +460,4 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
             Toast.makeText(getActivity(), s, Toast.LENGTH_LONG).show();
         }
     }
-
-
-}
+}// Start the operation

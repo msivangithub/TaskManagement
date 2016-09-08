@@ -123,6 +123,7 @@ public class UserTaskDetails extends Fragment implements View.OnClickListener, R
                     ToastMessegNetwork();
                 }
             }
+
         });
         employeename.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -278,11 +279,16 @@ public class UserTaskDetails extends Fragment implements View.OnClickListener, R
                 SharedPreferences.Editor curentEdit = sharedPreferences.edit();
                 curentEdit.putString("video", ProjectVariables.NOVIDEO);
                 curentEdit.commit();
+
                 SharedPreferences sharedPreferences1 = getActivity().getSharedPreferences("CurrentImage", Context.MODE_PRIVATE);
                 SharedPreferences.Editor curentEdit1 = sharedPreferences1.edit();
                 curentEdit1.putString("Image", ProjectVariables.NOIMAGE);
                 curentEdit1.commit();
 
+                SharedPreferences sharedPrefer = getActivity().getSharedPreferences("CurrentAudio", Context.MODE_PRIVATE);
+                SharedPreferences.Editor curentE = sharedPrefer.edit();
+                curentE.putString("Audio", ProjectVariables.NOAUDIO);
+                curentE.commit();
 
                 Toast.makeText(getActivity(), result, Toast.LENGTH_LONG).show();
             } catch (JSONException e) {
@@ -295,7 +301,7 @@ public class UserTaskDetails extends Fragment implements View.OnClickListener, R
         if (rType == 999) {
             ArrayList<Comments> current = new ArrayList<>();
             try {
-                String comm, userroles, videoPlay, image;
+                String comm, userroles, videoPlay, image ,audio;
 
                 JSONArray array = new JSONArray(s);
                 for (int c = 0; c < array.length(); c++) {
@@ -305,10 +311,12 @@ public class UserTaskDetails extends Fragment implements View.OnClickListener, R
                     userroles = obj.getString("UserRole");
                     videoPlay = obj.getString("video");
                     image = obj.getString("image");
+                    audio = obj.getString("Audio");
                     c1.setComments(comm);
                     c1.setUserRole(userroles);
                     c1.setVideo(videoPlay);
                     c1.setImage(image);
+                    c1.setAudio(audio);
                     current.add(c1);
 
                 }

@@ -7,8 +7,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.PopupMenu;
@@ -34,17 +37,23 @@ import com.task.mytaskmanager.Pojo.Comments;
 import com.task.mytaskmanager.R;
 import com.task.mytaskmanager.services.AsynHttpPost;
 import com.task.mytaskmanager.services.RestfulListener;
+import com.task.mytaskmanager.util.DateUtil;
 import com.task.mytaskmanager.util.PreferenceUtil;
 import com.task.mytaskmanager.util.ProjectVariables;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +67,17 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
     ProgressDialog pdDialog;
     private ImageView image;
     private ZoomControls zoom;
-
+    static MediaPlayer mPlayer;
+    Comments comments;
+    private boolean intialStage = true;
+    private boolean playPause;
+    private MediaPlayer mediaPlayer;
+    private ProgressDialog progress;
+    private static String file_url = "http://makeindiakart.com/taskfiles/";
+    public static final int progress_bar_type = 0;
+    private ProgressDialog prgDialog;
+    String audioName = "";
+    private Activity activity;
 
     public CommentsAdapter(ArrayList<Comments> commentsList, Context context) {
         this.commentsList = commentsList;
@@ -78,10 +97,9 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
         return commentsList.size();
     }
 
-
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView comment, roles;
-        ImageButton play, image;
+        ImageButton play, image, audio;
         public ImageButton mImageMenu;
 
         public MyViewHolder(View itemView) {
@@ -89,6 +107,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
             comment = (TextView) itemView.findViewById(R.id.insidecomment);
             roles = (TextView) itemView.findViewById(R.id.user_roles);
             play = (ImageButton) itemView.findViewById(R.id.playVideo);
+            audio = (ImageButton) itemView.findViewById(R.id.play_Audio);
             image = (ImageButton) itemView.findViewById(R.id.image);
             mImageMenu = (ImageButton) itemView.findViewById(R.id.Button_menu);
             mImageMenu.setOnClickListener(new View.OnClickListener() {
@@ -103,55 +122,11 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-       final Comments comments = commentsList.get(position);
+        comments = commentsList.get(position);
         holder.comment.setText(comments.getComments());
         holder.roles.setText(comments.getUserRole());
 
-       /* if (comments.getImage().isEmpty() || comments.getImage().equalsIgnoreCase("") || comments.getImage().length() == 0 || comments.getImage().equalsIgnoreCase("noimage")) {
-            holder.image.setVisibility(View.GONE);
-        }
-        if (comments.getVideo().isEmpty() || comments.getVideo().equalsIgnoreCase("") || comments.getVideo().length() == 0 || comments.getVideo().equalsIgnoreCase("novideo")) {
-            holder.play.setVisibility(View.GONE);
-        }*/
 
-       /* holder.play.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (comments.getVideo().isEmpty() || comments.getVideo().equalsIgnoreCase("") || comments.getVideo().length() == 0 || comments.getVideo().equalsIgnoreCase("novideo")) {
-                    Toast.makeText(context, "No video available for this comment", Toast.LENGTH_SHORT).show();
-                } else {
-                    Dialog showVideo = new Dialog(context);
-                    showVideo.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    showVideo.setContentView(R.layout.showvideo);
-                    WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                    lp.copyFrom(showVideo.getWindow().getAttributes());
-                    lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                    lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-                    showVideo.show();
-                    VideoView videoview = (VideoView) showVideo.findViewById(R.id.videoPreview);
-                    MediaController mediaController = new MediaController(context);
-                    mediaController.setAnchorView(videoview);
-                    String MainUrl = "http://makeindiakart.com/taskfiles/";
-                    MainUrl = MainUrl + comments.getVideo();
-                    Uri video = Uri.parse(MainUrl);
-                    videoview.setMediaController(mediaController);
-                    videoview.setVideoURI(video);
-                    videoview.start();
-
-                }
-            }
-        });*/
-     /*   holder.image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (comments.getImage().isEmpty() || comments.getImage().equalsIgnoreCase("") || comments.getImage().length() == 0) {
-                    Toast.makeText(context, "No image available for this comment", Toast.LENGTH_SHORT).show();
-                } else {
-                    LoadImageFromURL loadImage = new LoadImageFromURL();
-                    loadImage.execute(comments.getImage());
-                }
-            }
-        });*/
     }
 
 
@@ -289,15 +264,172 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
 
                     }
                     break;
+                case R.id.play_Audio:
+                    if (commentsList.get(position).getAudio().isEmpty() || commentsList.get(position).getAudio().equalsIgnoreCase("") || commentsList.get(position).getAudio().length() == 0) {
+                        Toast.makeText(context, "No audio available for this comment", Toast.LENGTH_SHORT).show();
+                    } else {
+
+                        playMusic();
+
+                       /* File file = new File(Environment.getExternalStorageDirectory().getPath() ,audioName);
+                        // Check if the Music file already exists
+                        if (file.exists()) {
+                            Toast.makeText(context, "File already exist under SD card, playing Music", Toast.LENGTH_LONG).show();
+                            // Play Music
+                            playMusic();
+                            // If the Music File doesn't exist in SD card (Not yet downloaded)
+                        } else {
+                            Toast.makeText(context, "File doesn't exist under SD Card, downloading Mp3 from Internet", Toast.LENGTH_LONG).show();
+                            // Trigger Async Task (onPreExecute method)
+                            new DownloadMusicfromInternet().execute(file_url+commentsList.get(position).getAudio());
+                        }*/
+                    }
+                    break;
                 default:
             }
             return false;
         }
     }
 
-    private void playVideo() {
 
+    private class DownloadMusicfromInternet extends AsyncTask<String, String, String> {
+        @Override
+        protected String doInBackground(String... f_url) {
+            int count;
+            try {
+                URL url = new URL(f_url[0]);
+                URLConnection conection = url.openConnection();
+                conection.connect();
+                // Get Music file length
+                int lenghtOfFile = conection.getContentLength();
+                // input stream to read file - with 8k buffer
+                InputStream input = new BufferedInputStream(url.openStream(), 10 * 1024);
+                // Output stream to write file in SD card
+                //audioName = "Audio_" + DateUtil.getRandomNumberInRange(1, 10000) + ".mp3";
+                OutputStream output = new FileOutputStream(Environment.getExternalStorageDirectory().getPath() + audioName);
+                byte data[] = new byte[1024];
+                long total = 0;
+                while ((count = input.read(data)) != -1) {
+                    total += count;
+                    // Publish the progress which triggers onProgressUpdate method
+                    publishProgress("" + (int) ((total * 100) / lenghtOfFile));
+                    // Write data to file
+                    output.write(data, 0, count);
+                }
+                // Flush output
+                output.flush();
+                // Close streams
+                output.close();
+                input.close();
+            } catch (Exception e) {
+                Log.e("Error: ", e.getMessage());
+            }
+            return null;
+        }
 
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            prgDialog = new ProgressDialog(context);
+            prgDialog.setMessage("Downloading Audio file. Please wait...");
+           /* prgDialog.setIndeterminate(false);
+            prgDialog.setMax(100);
+            prgDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);*/
+            prgDialog.setCancelable(false);
+            prgDialog.show();
+
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            if (prgDialog.isShowing()) {
+                prgDialog.dismiss();
+            }
+            Toast.makeText(context, "Download complete, playing Music", Toast.LENGTH_LONG).show();
+            // Play the music
+            playMusic();
+        }
+
+        @Override
+        protected void onProgressUpdate(String... progress) {
+
+            prgDialog.setProgress(Integer.parseInt(progress[0]));
+        }
     }
 
+    // Play Music
+    protected void playMusic() {
+        // Read Mp3 file present under SD card
+        Uri myUri1 = Uri.parse("file:///sdcard/" + audioName);
+        mPlayer = new MediaPlayer();
+        mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        try {
+            mPlayer.setDataSource(context, myUri1);
+            mPlayer.prepare();
+            // Start playing the Music file
+            mPlayer.start();
+            mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                public void onCompletion(MediaPlayer mp) {
+                    // TODO Auto-generated method stub
+                    // Once Music is completed playing, enable the button
+                    Toast.makeText(context, "Music completed playing", Toast.LENGTH_LONG).show();
+                }
+            });
+        } catch (IllegalArgumentException e) {
+            Toast.makeText(context, "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
+        } catch (SecurityException e) {
+            Toast.makeText(context, "URI cannot be accessed, permissed needed", Toast.LENGTH_LONG).show();
+        } catch (IllegalStateException e) {
+            Toast.makeText(context, "Media Player is not in correct state", Toast.LENGTH_LONG).show();
+        } catch (IOException e) {
+            Toast.makeText(context, "IO Error occured", Toast.LENGTH_LONG).show();
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*  String url = "http://makeindiakart.com/taskfiles/";
+                        url = url + commentsList.get(position).getAudio();
+                        mPlayer = new MediaPlayer();
+                        mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                        try {
+                            mPlayer.setDataSource(url);
+                        } catch (IllegalArgumentException e) {
+                            Toast.makeText(context, "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
+                        } catch (SecurityException e) {
+                            Toast.makeText(context, "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
+                        } catch (IllegalStateException e) {
+                            Toast.makeText(context, "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            mPlayer.prepare();
+                        } catch (IllegalStateException e) {
+                            Toast.makeText(context, "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
+                        } catch (IOException e) {
+                            Toast.makeText(context, "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
+                        }
+                        mPlayer.start();
+                    }*/
+

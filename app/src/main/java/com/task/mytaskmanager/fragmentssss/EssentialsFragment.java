@@ -466,11 +466,6 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
                     mEmail.setText("");
                     mfirstName.setText("");
                     mlastName.setText("");
-                    companyID = "";
-                    cityname = "";
-                    imageURI = "";
-                    userRolesID = "";
-                    userRolesName = "";
                     mMobileNo.setText("");
                     mPassword.setText("");
                     if (android.os.Build.VERSION.SDK_INT >= 21) {

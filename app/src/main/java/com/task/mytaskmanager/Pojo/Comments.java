@@ -15,6 +15,19 @@ public class Comments {
     private String UserRole;
     private String video;
     private String Image;
+    private String Audio;
+
+
+
+    public String getAudio() {
+        return Audio;
+    }
+
+    public void setAudio(String audio) {
+        Audio = audio;
+    }
+
+
 
     public String getImage() {
         return Image;

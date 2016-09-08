@@ -13,8 +13,9 @@ import com.task.mytaskmanager.R;
 
 public class ProjectVariables {
 
-    public static final String NOVIDEO="novideo";
-    public static final String NOIMAGE="noimage";
+    public static final String NOVIDEO = "novideo";
+    public static final String NOIMAGE = "noimage";
+    public static final String NOAUDIO = "noaudio";
 
     public static final String LOGIN_STATUS = "loginstatus";
     public static final String LOGGED_IN = "loggedin";
@@ -23,25 +24,32 @@ public class ProjectVariables {
     public static final String PREFERENCES_NAME = "sampleprefs";
     public static final String USERNAME = "userName";
     public static final String PLEASE_CHECK_YOUR_NETWORK_CONNECTION = "please check your network connection";
-    public static final String URL = "http://makeindiakart.com/TaskManger.svc/";
-//"http://makeindiakart.com/Master.svc/";
+    // public static final String URL = "http://makeindiakart.com/Master.svc/";
 
-    //    public static final String LOGIN = "login";
+    /*Project Base URL*/
+    // public static final String URL = "http://makeindiakart.com/TaskManger.svc/";
+
+    /*Demo Base Url*/
+    public static final String URL = "http://myaccountsonline.co.in/taskmanager/TaskManger.svc/";
+    //http://myaccountsonline.co.in/taskmanager/Master.svc/
+
+
+    //public static final String LOGIN = "login";
     public static final String LOGIN = "Tasklogin_User";
     public static final String REGISTER = "MasterInsert";
     public static final String USERS = "Users/";
     public static final String TASK_CREAT = "Task_Creation";
     public static final String BRANCHES = "Branches/C001";
     public static final String USER_ROLES = "TaskUserRoles";
-    public static final String TASK_UPDATE="Task_Update";
-    public static final String TASK_DELETED="Task_Deleted";
-    public static final String TASK_COMMENTS="TaskComments";
+    public static final String TASK_UPDATE = "Task_Update";
+    public static final String TASK_DELETED = "Task_Deleted";
+    public static final String TASK_COMMENTS = "TaskComments";
     public static final String getTasksByUserId = "TaskUserTasksById";
     public static final int APK_CONNECTION_TIMEOUT = 15000;
     public static final int APK_WAIT_DATA_TIMEOUT = 30000;
     public static String DAILY_SALES_SUMMARY = "DailySalesSummary";
     public static String PARTYWISE_SALES = "PartywiseSales";
-    public static final String USER_DELETED="User_Deleted";
+    public static final String USER_DELETED = "User_Deleted";
 
     public static String ADDRESS1 = "Address1";
     public static String ADDRESS2 = "Address2";
@@ -100,19 +108,19 @@ public class ProjectVariables {
     public static String TASKHEAD = "TaskHeading";
     public static String TASKDES = "TaskDes";
     public static String PRIORITY = "priority";
-    public static String LOGIN_PHONE="Phone";
-    public static String USER_ROLE="UserRole";
-    public static String CITY="City";
-    public static String COUNTRY="Country";
-    public static String  CREATEDDATE="CreatedDate";
-    public static String ENDDATE="EndDate";
-    public static String FLAG="Flag";
-    public static String IMAGE="IMage";
-    public static String ID="Id";
-    public static String TASK_id="Cid";
-    public static String USERLOGINID="uuid";
+    public static String LOGIN_PHONE = "Phone";
+    public static String USER_ROLE = "UserRole";
+    public static String CITY = "City";
+    public static String COUNTRY = "Country";
+    public static String CREATEDDATE = "CreatedDate";
+    public static String ENDDATE = "EndDate";
+    public static String FLAG = "Flag";
+    public static String IMAGE = "IMage";
+    public static String ID = "Id";
+    public static String TASK_id = "Cid";
+    public static String USERLOGINID = "uuid";
     public static String ROLENAME = "RoleName";
-    public static String ROID ="RoId";
+    public static String ROID = "RoId";
     public static String STARTTIME = "StartTime";
     public static String ENDTIME = "EndTime";
 

@@ -14,4 +14,10 @@
          android:title="Image"
          android:icon="@drawable/image"
          app:showAsAction="never" />
+     <item
+         android:id="@+id/play_Audio"
+         android:orderInCategory="100"
+         android:title="Audio"
+         android:icon="@drawable/play_audio"
+         app:showAsAction="never" />
 </menu>

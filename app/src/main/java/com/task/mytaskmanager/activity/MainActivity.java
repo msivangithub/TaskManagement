@@ -3,6 +3,7 @@ package com.task.mytaskmanager.activity;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -65,6 +66,7 @@ public class MainActivity extends AppCompatActivity
     Bitmap bitmap;
     String ImageName = "";
     String imageURI = "";
+    String audioURI = "";
     ProjectVariables variables = new ProjectVariables();
     static final String FTP_HOST = "myaccountsretail.com";
     ProgressDialog pd;
@@ -116,7 +118,7 @@ public class MainActivity extends AppCompatActivity
 
             MenuItem alluser = m.findItem(R.id.nav_allusers);
             alluser.setVisible(false);
-
+//ggyddgfyfyfyf
         } else if (UserRole.equalsIgnoreCase("5") || (UserRole.equalsIgnoreCase("6"))) {//manager
             Menu m = navigationView.getMenu();
 
@@ -383,6 +385,27 @@ public class MainActivity extends AppCompatActivity
                 } catch (FileNotFoundException e) {
 
                 }
+            }else if (requestCode == 97) {
+                Uri selectedimg = data.getData();
+                audioURI = getPath(selectedimg);
+                String[] imageArray = audioURI.split("/");
+
+                int length = imageArray.length;
+                String convertedImage = imageArray[length - 1];
+
+                SharedPreferences sharedPreferences = getSharedPreferences("CurrentAudio", Context.MODE_PRIVATE);
+                SharedPreferences.Editor curentEdit = sharedPreferences.edit();
+                curentEdit.putString("Audio", convertedImage);
+                curentEdit.commit();
+
+                UploadTask u = null;
+
+                try {
+                    u = new UploadTask(getContentResolver().openInputStream(selectedimg), convertedImage);
+                    u.execute();
+                } catch (FileNotFoundException e) {
+
+                }
             }
         }
     }
@@ -515,6 +538,26 @@ public class MainActivity extends AppCompatActivity
                 // result of the request.
             }
         }
+        if (ContextCompat.checkSelfPermission(MainActivity.this,
+                Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
+                    Manifest.permission.RECORD_AUDIO)) {
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(MainActivity.this,
+                        new String[]{Manifest.permission.RECORD_AUDIO},
+                        5);
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
     }
 
     @Override
@@ -527,7 +570,6 @@ public class MainActivity extends AppCompatActivity
                     // contacts-related task you need to do.
                     Toast.makeText(getApplicationContext(), "Permission granted", Toast.LENGTH_SHORT).show();
                 } else {
-
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                     Toast.makeText(getApplicationContext(), "Permission denied", Toast.LENGTH_SHORT).show();
