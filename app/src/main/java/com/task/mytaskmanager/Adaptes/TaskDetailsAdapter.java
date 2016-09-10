@@ -291,15 +291,7 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
                         });
                         /*Record video in Task Replay  */
                         ImageButton record = (ImageButton) updateDialog.findViewById(R.id.record);
-                        ImageButton recordAudio = (ImageButton) updateDialog.findViewById(R.id.recordAudio);
-                        recordAudio.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Intent intent = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
-                                Activity act = (Activity) _context;
-                                act.startActivityForResult(intent, 97);
-                            }
-                        });
+
                         /**
                          *Click the Capture Video and Capture Image Using Alear Dialog
                          */
@@ -308,11 +300,12 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
                             public void onClick(View view) {
                                 final Dialog d = new Dialog(_context);
                                 d.setContentView(R.layout.image_video);
-                                d.setTitle("Select video or Image.....!");
+                                d.setTitle("Select Video,Image & Audio !");
                                 d.show();
                                 mImage = (LinearLayout) d.findViewById(R.id.getImage);
                                 mVideo = (LinearLayout) d.findViewById(R.id.getVideo);
                                 Button CAncel = (Button) d.findViewById(R.id.CAncel);
+                                LinearLayout recordAudio = (LinearLayout) d.findViewById(R.id.getAudio);
                                 CAncel.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
@@ -320,6 +313,16 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
                                     }
                                 });
                                 /*Click the AleartDialog video popsition*/
+
+                                recordAudio.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        d.dismiss();
+                                        Intent intent = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
+                                        Activity act = (Activity) _context;
+                                        act.startActivityForResult(intent, 97);
+                                    }
+                                });
                                 mVideo.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {

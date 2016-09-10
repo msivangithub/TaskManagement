@@ -107,14 +107,7 @@
 
 
         </LinearLayout>
-        <ImageButton
-            android:id="@+id/recordAudio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/recording"
-            android:padding="10dp"
-            android:background="#fff"
-            android:text="Record Audio" />
+
     </LinearLayout>
 
 
@@ -156,7 +149,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="#fff"
-                android:src="@drawable/ic_menu_camera" />
+                android:src="@drawable/photo_camera" />
 
             <Button
                 android:id="@+id/task_submit"

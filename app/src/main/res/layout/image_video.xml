@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/ic_menu_gallery" />
+            android:src="@drawable/gallery" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/ic_menu_camera" />
+            android:src="@drawable/photo_camera" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -52,6 +52,33 @@
             android:textColor="#000000"
             android:textSize="20dp" />
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/hader2"
+        android:background="#aca6a6" />
+
+    <LinearLayout
+        android:id="@+id/getAudio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/recording" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="Record Audio"
+            android:textColor="#000000"
+            android:textSize="20dp" />
+    </LinearLayout>
+
 
     <Button
         android:id="@+id/CAncel"

@@ -41,6 +41,7 @@ import com.task.mytaskmanager.Pojo.TaskUser;
 import com.task.mytaskmanager.R;
 import com.task.mytaskmanager.fragment.AddUserFragment;
 import com.task.mytaskmanager.fragment.AllUsersFragement;
+import com.task.mytaskmanager.fragment.ReportsFragment;
 import com.task.mytaskmanager.fragment.TaskcreationFragment;
 import com.task.mytaskmanager.fragmentssss.SettingsFragments;
 import com.task.mytaskmanager.fragmentssss.TaskDetails;
@@ -118,21 +119,29 @@ public class MainActivity extends AppCompatActivity
 
             MenuItem alluser = m.findItem(R.id.nav_allusers);
             alluser.setVisible(false);
+
+            MenuItem reports = m.findItem(R.id.nav_allReports);
+            reports.setVisible(false);
 //ggyddgfyfyfyf
         } else if (UserRole.equalsIgnoreCase("5") || (UserRole.equalsIgnoreCase("6"))) {//manager
             Menu m = navigationView.getMenu();
 
             MenuItem addItem = m.findItem(R.id.nav_addUser);
             addItem.setVisible(false);
+
             MenuItem alluser = m.findItem(R.id.nav_allusers);
             alluser.setVisible(false);
+
         }
 
         if (UserRole.equalsIgnoreCase("4")) {
-
             Menu m = navigationView.getMenu();
+
             MenuItem alluser = m.findItem(R.id.nav_allusers);
             alluser.setVisible(false);
+
+            MenuItem reports = m.findItem(R.id.nav_allReports);
+            reports.setVisible(false);
         }
         if (savedInstanceState == null) {
 
@@ -245,6 +254,12 @@ public class MainActivity extends AppCompatActivity
             FragmentTransaction ft = fm.beginTransaction();
             ft.replace(R.id.container, f);
             ft.commit();
+        } else if (id == R.id.nav_allReports) {
+            ReportsFragment f = ReportsFragment.newInstance();
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.replace(R.id.container, f);
+            ft.commit();
 
         } else if (id == R.id.nav_taxDetails) {
 
@@ -306,8 +321,9 @@ public class MainActivity extends AppCompatActivity
         } else
             return null;
     }
+
     public String getAbsolutePath(Uri uri) {
-        String[] projection = { MediaStore.MediaColumns.DATA };
+        String[] projection = {MediaStore.MediaColumns.DATA};
         @SuppressWarnings("deprecation")
         Cursor cursor = managedQuery(uri, projection, null, null, null);
         if (cursor != null) {
@@ -385,7 +401,7 @@ public class MainActivity extends AppCompatActivity
                 } catch (FileNotFoundException e) {
 
                 }
-            }else if (requestCode == 97) {
+            } else if (requestCode == 97) {
                 Uri selectedimg = data.getData();
                 audioURI = getPath(selectedimg);
                 String[] imageArray = audioURI.split("/");
@@ -562,7 +578,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode){
+        switch (requestCode) {
             case 1:
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {

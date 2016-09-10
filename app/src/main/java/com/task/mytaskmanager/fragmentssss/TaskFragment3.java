@@ -57,7 +57,7 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
     private String priority = "";
     private RestfulListener listener;
     String android_id;
-    Button recordVideo, recordAudio;
+    Button recordVideo;
     static final String FTP_HOST = "myaccountsretail.com";
     private int month, day, year;
     private int seconds, minutes, hour;
@@ -70,7 +70,7 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
      ***********/
     static final String FTP_PASS = "vKsj30!9";
     private Object currentdate;
-    LinearLayout mImage, mVideo;
+    LinearLayout mImage, mVideo,recordAudio;
     String imageURI = "";
     String audioURI = "";
     private static final int MAX_PROGRESS = 100;
@@ -113,7 +113,7 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
         low = (RadioButton) view.findViewById(R.id.low);
         Medium = (RadioButton) view.findViewById(R.id.Medium);
         High = (RadioButton) view.findViewById(R.id.High);
-        recordAudio = (Button) view.findViewById(R.id.recordAudio);
+
         /*Time Format*/
         final Calendar calander = Calendar.getInstance();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a");
@@ -129,15 +129,7 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
         day = c.get(Calendar.DAY_OF_MONTH);
         final String currentdate = ss.format(date);
         /*Record Video Button*/
-        recordAudio.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(
-                        MediaStore.Audio.Media.RECORD_SOUND_ACTION);
-                startActivityForResult(intent, 92);
 
-            }
-        });
 
         recordVideo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,6 +141,7 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
                 mImage = (LinearLayout) d.findViewById(R.id.getImage);
                 mVideo = (LinearLayout) d.findViewById(R.id.getVideo);
                 Button CAncel = (Button) d.findViewById(R.id.CAncel);
+                recordAudio = (LinearLayout) d.findViewById(R.id.getAudio);
                 CAncel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -156,6 +149,16 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
                     }
                 });
                                 /*Click the AleartDialog video popsition*/
+                recordAudio.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        d.dismiss();
+                        Intent intent = new Intent(
+                                MediaStore.Audio.Media.RECORD_SOUND_ACTION);
+                        startActivityForResult(intent, 92);
+
+                    }
+                });
                 mVideo.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

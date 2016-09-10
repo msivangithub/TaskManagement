@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#fff"
     android:padding="5sp">
 
     <TextView
@@ -76,15 +77,7 @@
             android:id="@+id/record"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Record Video" />
-
-        <Button
-            android:id="@+id/recordAudio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Record Audio" />
-
-
+            android:text="Select Media" />
     </LinearLayout>
 
     <Button

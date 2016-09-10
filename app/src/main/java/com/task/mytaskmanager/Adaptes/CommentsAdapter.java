@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -216,8 +217,9 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
             MenuPopupHelper mPopup = (MenuPopupHelper) mFieldPopup.get(popup);
             mPopup.setForceShowIcon(true);
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
+
         popup.show();
     }
 
@@ -269,7 +271,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
                         Toast.makeText(context, "No audio available for this comment", Toast.LENGTH_SHORT).show();
                     } else {
 
-                        File file = new File(Environment.getExternalStorageDirectory().getPath() ,audioName);
+                        File file = new File(Environment.getExternalStorageDirectory().getPath(), audioName);
                         // Check if the Music file already exists
                         if (file.exists()) {
                             Toast.makeText(context, "File already exist under SD card, playing Music", Toast.LENGTH_LONG).show();
@@ -279,7 +281,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
                         } else {
                             Toast.makeText(context, "File doesn't exist under SD Card, downloading Mp3 from Internet", Toast.LENGTH_LONG).show();
                             // Trigger Async Task (onPreExecute method)
-                            new DownloadMusicfromInternet().execute(file_url+commentsList.get(position).getAudio());
+                            new DownloadMusicfromInternet().execute(file_url + commentsList.get(position).getAudio());
                         }
                     }
                     break;
@@ -358,9 +360,8 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
     // Play Music
     protected void playMusic() {
         // Read Mp3 file present under SD card
-        Uri myUri1 = Uri.parse("file:///sdcard/" + audioName);
+        Uri myUri1 = Uri.parse("file:///sdcard/Voice 008.m4a");
         mPlayer = new MediaPlayer();
-        mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         try {
             mPlayer.setDataSource(context, myUri1);
             mPlayer.prepare();
@@ -371,6 +372,10 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
                     // TODO Auto-generated method stub
                     // Once Music is completed playing, enable the button
                     Toast.makeText(context, "Music completed playing", Toast.LENGTH_LONG).show();
+                    if (mPlayer != null) {
+                        mPlayer.stop();
+                        mPlayer.release();
+                    }
                 }
             });
         } catch (IllegalArgumentException e) {

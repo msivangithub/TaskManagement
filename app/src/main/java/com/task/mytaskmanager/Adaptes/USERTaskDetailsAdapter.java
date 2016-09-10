@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -276,15 +277,7 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
                              *Click the Capture Video and Capture Image Using Alear Dialog
                              */
                             ImageButton record = (ImageButton) updateDialog.findViewById(R.id.record);
-                            ImageButton recordAudio = (ImageButton) updateDialog.findViewById(R.id.recordAudio);
-                            recordAudio.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    Intent intent = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
-                                    Activity act = (Activity) _context;
-                                    act.startActivityForResult(intent, 97);
-                                }
-                            });
+
 
                             record.setOnClickListener(new View.OnClickListener() {
                                 @Override
@@ -295,11 +288,22 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
                                     d.show();
                                     mImage = (LinearLayout) d.findViewById(R.id.getImage);
                                     mVideo = (LinearLayout) d.findViewById(R.id.getVideo);
+                                    LinearLayout recordAudio = (LinearLayout) d.findViewById(R.id.getAudio);
                                     Button CAncel = (Button) d.findViewById(R.id.CAncel);
                                     CAncel.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
                                             d.dismiss();
+                                        }
+                                    });
+
+                                    recordAudio.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            d.dismiss();
+                                            Intent intent = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
+                                            Activity act = (Activity) _context;
+                                            act.startActivityForResult(intent, 97);
                                         }
                                     });
                                 /*Click the AleartDialog video popsition*/
@@ -442,7 +446,7 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
     private void setAnimation(View itemView, int position) {
         if (position > lastPosition) {
             ScaleAnimation anim = new ScaleAnimation(0.0f, 1.0f, 0.0f, 1.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-            anim.setDuration(new Random().nextInt(2000));//to make duration random number between [0,501)
+            anim.setDuration(new Random().nextInt(1500));//to make duration random number between [0,501)
             itemView.startAnimation(anim);
             lastPosition = position;
         }
@@ -487,7 +491,7 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
                     final AlertDialog.Builder dialog = new AlertDialog.Builder(_context);
                     dialog.setTitle("Confirm Delete....!");
                     dialog.setMessage("Are you sure you want delete this ?");
-                    dialog.setIcon(android.R.drawable.ic_delete);
+                    dialog.setIcon(R.drawable.delete_button);
                     dialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {

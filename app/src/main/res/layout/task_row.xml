@@ -63,7 +63,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Task heading "
-                            android:textColor="@color/grey_900"
+                            android:textColor="@color/pink_900"
                             android:textSize="@dimen/taskRow_header_textSize"
                             android:textStyle="bold"
                             android:singleLine="true" />
@@ -88,8 +88,9 @@
                     android:id="@+id/deleteTask"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_weight="1.6"
                     android:clickable="true"
+                    android:orientation="vertical"
                     android:gravity="center">
 
                     <ImageButton
@@ -103,10 +104,10 @@
 
                 </LinearLayout>
             </LinearLayout>
-            <View
+           <!-- <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#cfcece" />
+                android:background="#cfcece" />-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -118,16 +119,18 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
+                    android:textColor="@color/light_green_600"
                     android:text="Date" />
-                <View
+               <!-- <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:background="#cfcece" />
+                    android:background="#cfcece" />-->
                 <TextView
                     android:id="@+id/taskTime"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:textColor="@color/light_green_600"
                     android:gravity="center"
                     android:text="Time" />
             </LinearLayout>

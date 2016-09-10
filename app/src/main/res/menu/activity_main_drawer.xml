@@ -19,6 +19,11 @@
             android:icon="@drawable/users"
             android:title="All Users" />
 
+        <item
+            android:id="@+id/nav_allReports"
+            android:icon="@drawable/task_details"
+            android:title="Reports" />
+
     </group>
 
     <item android:title="Communicate">
