@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -43,10 +44,12 @@ import android.widget.VideoView;
 import com.task.mytaskmanager.Pojo.Comments;
 import com.task.mytaskmanager.Pojo.Task;
 import com.task.mytaskmanager.R;
+import com.task.mytaskmanager.activity.RecordAudioActivity;
 import com.task.mytaskmanager.activity.Tasks;
 import com.task.mytaskmanager.services.AsynHttpPost;
 import com.task.mytaskmanager.services.RestfulListener;
 import com.task.mytaskmanager.util.AppUtil;
+import com.task.mytaskmanager.util.DateUtil;
 import com.task.mytaskmanager.util.PreferenceUtil;
 import com.task.mytaskmanager.util.ProjectVariables;
 import com.task.mytaskmanager.util.RefreshLisener;
@@ -54,6 +57,7 @@ import com.task.mytaskmanager.util.RefreshLisener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -78,7 +82,7 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
     RefreshLisener refreshLisener;
     JSONObject jsonObject;
     String video, image, task_comment, audio;
-
+    String ImageName = "";
 
     public USERTaskDetailsAdapter(Context context, RestfulListener rl, int taskId, List<Task> billToBillArrayList, String type) {
         this.billToBillArrayList = billToBillArrayList;
@@ -301,9 +305,15 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
                                         @Override
                                         public void onClick(View view) {
                                             d.dismiss();
-                                            Intent intent = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
-                                            Activity act = (Activity) _context;
-                                            act.startActivityForResult(intent, 97);
+                                            _context.startActivity(new Intent(_context, RecordAudioActivity.class));
+//
+//                                            ImageName = "Audio_" + DateUtil.getRandomNumberInRange(1, 10000) + ".mp3";
+//                                            File f = new File(Environment.getExternalStorageDirectory(), ImageName);
+//                                            Uri u = Uri.fromFile(f);
+//                                            Intent intent = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
+//                                            Activity act = (Activity) _context;
+//                                            intent.putExtra(MediaStore.EXTRA_OUTPUT, u);
+//                                            act.startActivityForResult(intent, 97);
                                         }
                                     });
                                 /*Click the AleartDialog video popsition*/
@@ -339,7 +349,7 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
                                     if (position == 1)
                                         status[0] = "Progress";
                                     if (position == 2)
-                                        status[0] = "Compleated";
+                                        status[0] = "Completed";
                                 }
 
                                 @Override
@@ -516,7 +526,9 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
                         }
                     });
                     dialog.show();
-                    return true;
+                   break;
+                case R.id.cardMenu_resend:
+                    break;
                 default:
             }
             return false;

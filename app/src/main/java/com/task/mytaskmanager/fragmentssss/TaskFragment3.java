@@ -219,6 +219,14 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
                     Toast.makeText(getActivity(), "Please select end date", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if (AppUtil.getStartFromTime().isEmpty() || AppUtil.getStartFromTime().length() == 0) {
+                    Toast.makeText(getActivity(), "Please select from time", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (AppUtil.getStartToTime().isEmpty() || AppUtil.getStartToTime().length() == 0) {
+                    Toast.makeText(getActivity(), "Please select to time", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (priority.equalsIgnoreCase("") && priority.isEmpty()) {
                     Toast.makeText(getActivity(), "Please select priority of task", Toast.LENGTH_LONG).show();
                 } else {
@@ -304,18 +312,18 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
     }
 
     public void clearAputils() {
-        AppUtil.setActEndDate("");
-        AppUtil.setExpEndDate("");
-        AppUtil.setExpStartDate("");
-        AppUtil.setActStartDate("");
+       // AppUtil.setActEndDate("");
+       // AppUtil.setExpEndDate("");
+       // AppUtil.setExpStartDate("");
+      //  AppUtil.setActStartDate("");
         AppUtil.setPriority("");
         AppUtil.setTaskDes("");
         AppUtil.setTaskFromId("");
         AppUtil.setTaskHeading("");
-        AppUtil.setTaskStatus("");
+      //  AppUtil.setTaskStatus("");
         AppUtil.setTaskToId("");
-        AppUtil.getStartFromTime();
-        AppUtil.getStartToTime();
+     //   AppUtil.getStartFromTime();
+    //    AppUtil.getStartToTime();
     }
 
     @Override

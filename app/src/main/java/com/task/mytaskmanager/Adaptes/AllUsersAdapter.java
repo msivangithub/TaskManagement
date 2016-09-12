@@ -119,7 +119,7 @@ public class AllUsersAdapter extends RecyclerView.Adapter<AllUsersAdapter.MyView
     private void showPopupMenu(View view, int position) {
         PopupMenu popup = new PopupMenu(view.getContext(), view);
         MenuInflater inflater = popup.getMenuInflater();
-        inflater.inflate(R.menu.card_menu, popup.getMenu());
+        inflater.inflate(R.menu.alluser_menu, popup.getMenu());
         popup.setOnMenuItemClickListener(new MyMenuItemClickListener(position));
         try {
             Field mFieldPopup = popup.getClass().getDeclaredField("mPopup");
@@ -142,7 +142,7 @@ public class AllUsersAdapter extends RecyclerView.Adapter<AllUsersAdapter.MyView
         @Override
         public boolean onMenuItemClick(MenuItem menuItem) {
             switch (menuItem.getItemId()) {
-                case R.id.cardMenu_items:
+                case R.id.delete_items:
                     final AlertDialog.Builder dialog = new AlertDialog.Builder(context);
                     dialog.setTitle("Confirm Delete....!");
                     dialog.setMessage("Are you sure you want delete this ?");

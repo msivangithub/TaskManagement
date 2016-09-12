@@ -7,6 +7,12 @@
         android:title="Delete"
         android:icon="@drawable/delete_button"
         android:showAsAction="never" />
+    <item
+        android:id="@+id/cardMenu_resend"
+        android:orderInCategory="1"
+        android:title="Resend"
+        android:icon="@drawable/logout"
+        android:showAsAction="never" />
    <!-- <item
         android:orderInCategory="100"
         android:title="Update"

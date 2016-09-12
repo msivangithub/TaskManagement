@@ -4,16 +4,13 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -25,7 +22,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.MediaController;
@@ -36,27 +32,20 @@ import android.widget.ZoomControls;
 
 import com.task.mytaskmanager.Pojo.Comments;
 import com.task.mytaskmanager.R;
-import com.task.mytaskmanager.services.AsynHttpPost;
-import com.task.mytaskmanager.services.RestfulListener;
 import com.task.mytaskmanager.util.DateUtil;
-import com.task.mytaskmanager.util.PreferenceUtil;
-import com.task.mytaskmanager.util.ProjectVariables;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by GhanaShyam on 8/16/2016.
@@ -77,7 +66,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
     private static String file_url = "http://makeindiakart.com/taskfiles/";
     public static final int progress_bar_type = 0;
     private ProgressDialog prgDialog;
-    String audioName = "";
+    String audioName = "sample.mp3";
     private Activity activity;
 
     public CommentsAdapter(ArrayList<Comments> commentsList, Context context) {
@@ -271,7 +260,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
                         Toast.makeText(context, "No audio available for this comment", Toast.LENGTH_SHORT).show();
                     } else {
 
-                        File file = new File(Environment.getExternalStorageDirectory().getPath(), audioName);
+                        File file = new File(Environment.getExternalStorageDirectory().getPath() +"/"+ audioName);
                         // Check if the Music file already exists
                         if (file.exists()) {
                             Toast.makeText(context, "File already exist under SD card, playing Music", Toast.LENGTH_LONG).show();
@@ -279,9 +268,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
                             playMusic();
                             // If the Music File doesn't exist in SD card (Not yet downloaded)
                         } else {
-                            Toast.makeText(context, "File doesn't exist under SD Card, downloading Mp3 from Internet", Toast.LENGTH_LONG).show();
-                            // Trigger Async Task (onPreExecute method)
-                            new DownloadMusicfromInternet().execute(file_url + commentsList.get(position).getAudio());
+                            new DownloadMusicfromInternet().execute(commentsList.get(position).getAudio());
                         }
                     }
                     break;
@@ -292,21 +279,28 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
     }
 
 
-    private class DownloadMusicfromInternet extends AsyncTask<String, String, String> {
+    private class DownloadMusicfromInternet extends AsyncTask<String, String, Void> {
         @Override
-        protected String doInBackground(String... f_url) {
+        protected Void doInBackground(String... params) {
             int count;
             try {
-                URL url = new URL(f_url[0]);
-                URLConnection conection = url.openConnection();
-                conection.connect();
+                String MainUrl = "http://makeindiakart.com/taskfiles/";
+                URL url = new URL(MainUrl + params[0]);
+                Log.d("DownloadManager", "download url:" + url);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                connection.setDoInput(true);
+                connection.setDoOutput(true);
+                connection.connect();
+
                 // Get Music file length
-                int lenghtOfFile = conection.getContentLength();
+                int lenghtOfFile = connection.getContentLength();
                 // input stream to read file - with 8k buffer
-                InputStream input = new BufferedInputStream(url.openStream(), 10 * 1024);
+                InputStream input = new BufferedInputStream(url.openStream());
                 // Output stream to write file in SD card
-                //audioName = "Audio_" + DateUtil.getRandomNumberInRange(1, 10000) + ".mp3";
-                OutputStream output = new FileOutputStream(Environment.getExternalStorageDirectory().getPath() + audioName);
+                audioName = params[0];
+                File f = new File(Environment.getExternalStorageDirectory(), audioName);
+                OutputStream output = new FileOutputStream(f);
                 byte data[] = new byte[1024];
                 long total = 0;
                 while ((count = input.read(data)) != -1) {
@@ -332,16 +326,12 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
             super.onPreExecute();
             prgDialog = new ProgressDialog(context);
             prgDialog.setMessage("Downloading Audio file. Please wait...");
-           /* prgDialog.setIndeterminate(false);
-            prgDialog.setMax(100);
-            prgDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);*/
-            prgDialog.setCancelable(false);
             prgDialog.show();
 
         }
 
         @Override
-        protected void onPostExecute(String s) {
+        protected void onPostExecute(Void s) {
             if (prgDialog.isShowing()) {
                 prgDialog.dismiss();
             }
@@ -350,18 +340,14 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
             playMusic();
         }
 
-        @Override
-        protected void onProgressUpdate(String... progress) {
-
-            prgDialog.setProgress(Integer.parseInt(progress[0]));
-        }
     }
 
     // Play Music
     protected void playMusic() {
         // Read Mp3 file present under SD card
-        Uri myUri1 = Uri.parse("file:///sdcard/Voice 008.m4a");
+        Uri myUri1 = Uri.parse(Environment.getExternalStorageDirectory().getPath() +"/"+ audioName);
         mPlayer = new MediaPlayer();
+        mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         try {
             mPlayer.setDataSource(context, myUri1);
             mPlayer.prepare();
@@ -372,10 +358,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
                     // TODO Auto-generated method stub
                     // Once Music is completed playing, enable the button
                     Toast.makeText(context, "Music completed playing", Toast.LENGTH_LONG).show();
-                    if (mPlayer != null) {
-                        mPlayer.stop();
-                        mPlayer.release();
-                    }
+
                 }
             });
         } catch (IllegalArgumentException e) {

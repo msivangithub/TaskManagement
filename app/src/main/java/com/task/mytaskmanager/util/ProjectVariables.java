@@ -38,6 +38,7 @@ public class ProjectVariables {
     public static final String LOGIN = "Tasklogin_User";
     public static final String REGISTER = "MasterInsert";
     public static final String USERS = "Users/";
+    public static final String TASKREPORT = "TaskReport";
     public static final String TASK_CREAT = "Task_Creation";
     public static final String BRANCHES = "Branches/C001";
     public static final String USER_ROLES = "TaskUserRoles";
@@ -123,6 +124,14 @@ public class ProjectVariables {
     public static String ROID = "RoId";
     public static String STARTTIME = "StartTime";
     public static String ENDTIME = "EndTime";
+
+    public static String _ACTENDDATE ="ActEndDate";
+    public static String _ACTSTARTDATE ="ActStartDate";
+    public static String _TASKHEADING ="TaskHeading";
+    public static String _TASKSTATUS ="TaskStatus";
+    public static String _CID ="cid";
+
+
 
 
     //  public static String STATUS="Status";

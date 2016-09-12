@@ -401,27 +401,6 @@ public class MainActivity extends AppCompatActivity
                 } catch (FileNotFoundException e) {
 
                 }
-            } else if (requestCode == 97) {
-                Uri selectedimg = data.getData();
-                audioURI = getPath(selectedimg);
-                String[] imageArray = audioURI.split("/");
-
-                int length = imageArray.length;
-                String convertedImage = imageArray[length - 1];
-
-                SharedPreferences sharedPreferences = getSharedPreferences("CurrentAudio", Context.MODE_PRIVATE);
-                SharedPreferences.Editor curentEdit = sharedPreferences.edit();
-                curentEdit.putString("Audio", convertedImage);
-                curentEdit.commit();
-
-                UploadTask u = null;
-
-                try {
-                    u = new UploadTask(getContentResolver().openInputStream(selectedimg), convertedImage);
-                    u.execute();
-                } catch (FileNotFoundException e) {
-
-                }
             }
         }
     }
@@ -553,26 +532,7 @@ public class MainActivity extends AppCompatActivity
                 // app-defined int constant. The callback method gets the
                 // result of the request.
             }
-        }
-        if (ContextCompat.checkSelfPermission(MainActivity.this,
-                Manifest.permission.RECORD_AUDIO)
-                != PackageManager.PERMISSION_GRANTED) {
 
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
-                    Manifest.permission.RECORD_AUDIO)) {
-                // Show an expanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-            } else {
-                // No explanation needed, we can request the permission.
-                ActivityCompat.requestPermissions(MainActivity.this,
-                        new String[]{Manifest.permission.RECORD_AUDIO},
-                        5);
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }
         }
     }
 

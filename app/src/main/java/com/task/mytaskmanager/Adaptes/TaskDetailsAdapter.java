@@ -42,6 +42,7 @@ import com.task.mytaskmanager.Pojo.Comments;
 import com.task.mytaskmanager.Pojo.Task;
 import com.task.mytaskmanager.Pojo.TaskUser;
 import com.task.mytaskmanager.R;
+import com.task.mytaskmanager.activity.RecordAudioActivity;
 import com.task.mytaskmanager.activity.Tasks;
 import com.task.mytaskmanager.activity.TasksAdapter;
 import com.task.mytaskmanager.services.AsynHttpPost;
@@ -318,9 +319,7 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
                                     @Override
                                     public void onClick(View view) {
                                         d.dismiss();
-                                        Intent intent = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
-                                        Activity act = (Activity) _context;
-                                        act.startActivityForResult(intent, 97);
+                                        _context.startActivity(new Intent(_context, RecordAudioActivity.class));
                                     }
                                 });
                                 mVideo.setOnClickListener(new View.OnClickListener() {
@@ -358,7 +357,7 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
                                 if (position == 1)
                                     status[0] = "Progress";
                                 if (position == 2)
-                                    status[0] = "Compleated";
+                                    status[0] = "Completed";
                             }
 
                             @Override
