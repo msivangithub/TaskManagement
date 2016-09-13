@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import com.adeel.library.easyFTP;
 import com.task.mytaskmanager.R;
+import com.task.mytaskmanager.activity.RecordAudioActivity;
 import com.task.mytaskmanager.services.AsynHttpPost;
 import com.task.mytaskmanager.services.RestfulListener;
 import com.task.mytaskmanager.services.addbutton;
@@ -153,9 +154,7 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
                     @Override
                     public void onClick(View view) {
                         d.dismiss();
-                        Intent intent = new Intent(
-                                MediaStore.Audio.Media.RECORD_SOUND_ACTION);
-                        startActivityForResult(intent, 92);
+                       startActivity(new Intent(getActivity(), RecordAudioActivity.class));
 
                     }
                 });

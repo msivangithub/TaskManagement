@@ -112,7 +112,7 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView task, task_header, icon_entry, mTaskDate, mTaskTime;
         public CheckBox check;
-        public LinearLayout taskrow, deleteTask;
+        public LinearLayout taskrow;
         public View itemView;
         public ImageButton mImageMenu;
 
@@ -323,7 +323,6 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
                                             d.dismiss();
                                             Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
                                             takeVideoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 10);
-                                            //takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Environment.getExternalStorageDirectory().getPath()+"videocapture_example.mp4");
                                             Activity act = (Activity) _context;
                                             act.startActivityForResult(takeVideoIntent, 667);
                                         }
@@ -514,7 +513,7 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                            AsynHttpPost post = new AsynHttpPost(_context, 0, 143, ProjectVariables.TASK_DELETED, listener, obj, "");
+                            AsynHttpPost post = new AsynHttpPost(_context, 0,  143, ProjectVariables.TASK_DELETED, listener, obj, "");
                             post.execute();
 
                         }

@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.task.mytaskmanager.util.AppUtil;
 import com.task.mytaskmanager.util.ProjectVariables;
@@ -85,7 +86,7 @@ public class AsynHttpPost143 extends AsyncTask<Void, Void, String> {
                     post.setHeader("Content-type", "application/json");
                 }
                     res = httpClient.execute(post);
-
+               
 
                 // for (int attempt = 0; attempt < 3; attempt++) {
 
@@ -94,7 +95,6 @@ public class AsynHttpPost143 extends AsyncTask<Void, Void, String> {
                     inputStream = res.getEntity().getContent();
 
                     if (inputStream != null) {
-
 
                         result = convertInputStreamToString(inputStream);
                         pd.dismiss();

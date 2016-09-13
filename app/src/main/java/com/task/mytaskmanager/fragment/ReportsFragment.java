@@ -60,6 +60,7 @@ public class ReportsFragment extends Fragment implements RestfulListener {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_reports, container, false);
         getActivity().setTitle("Reports");
+        getActivity().setTitleColor(R.color.white);
         setHasOptionsMenu(true);
         listener = this;
         users = new ArrayList<>();
@@ -68,7 +69,8 @@ public class ReportsFragment extends Fragment implements RestfulListener {
         employeename = (Spinner) view.findViewById(R.id.id_employeenames);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_reports);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swifeRefresh);
-        mSwipeRefreshLayout.setColorSchemeColors(Color.RED, Color.GREEN, Color.BLUE, Color.CYAN);
+        mSwipeRefreshLayout.setColorSchemeColors(Color.RED, Color.GREEN, Color.BLUE, Color.CYAN, Color.BLACK);
+
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -81,6 +83,7 @@ public class ReportsFragment extends Fragment implements RestfulListener {
                             obj.accumulate("Uid", employeeId);
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            Toast.makeText(getActivity(), e.toString(), Toast.LENGTH_LONG).show();
                         }
                         mSwipeRefreshLayout.setRefreshing(false);
                         if (AppUtil.isNetworkAvailable(getActivity())) {
@@ -105,6 +108,7 @@ public class ReportsFragment extends Fragment implements RestfulListener {
                     obj.accumulate("Uid", employeeId);
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Toast.makeText(getActivity(), e.toString(), Toast.LENGTH_LONG).show();
                 }
 
                 if (AppUtil.isNetworkAvailable(getActivity())) {

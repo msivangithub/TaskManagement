@@ -9,6 +9,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 
+import com.task.mytaskmanager.R;
 import com.task.mytaskmanager.util.AppUtil;
 import com.task.mytaskmanager.util.ProjectVariables;
 
@@ -58,7 +59,7 @@ public class AsynHttpPost extends AsyncTask<Void, Void, String> {
         String MainUrl = ProjectVariables.BASE_URL + _apiMethod;
         String result = null;
         HttpPost post = null;
-        HttpResponse res;
+        HttpResponse res = null;
         InputStream inputStream = null;
         if (AppUtil.isNetworkAvailable(_con)) {
             try {
@@ -133,7 +134,6 @@ public class AsynHttpPost extends AsyncTask<Void, Void, String> {
                 e.printStackTrace();
                 serviceStatus = "0";
                 Log.e("Exception Occured ", e.getMessage().toString());
-                Toast.makeText(_con, e.getMessage().toString(),Toast.LENGTH_LONG).show();
                 pd.dismiss();
                 return e.getMessage().toString();
             }
@@ -159,7 +159,7 @@ public class AsynHttpPost extends AsyncTask<Void, Void, String> {
     protected void onPreExecute() {
         super.onPreExecute();
         pd = new ProgressDialog(_con);
-        pd.setTitle("Loading Please Wait....");
+        pd.setMessage("Loading Please Wait....");
         pd.show();
     }
 

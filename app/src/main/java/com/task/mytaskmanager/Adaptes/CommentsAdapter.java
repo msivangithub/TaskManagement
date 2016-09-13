@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.v7.view.menu.MenuPopupHelper;
+import android.support.v7.widget.ButtonBarLayout;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -22,8 +23,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -91,6 +94,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
         TextView comment, roles;
         ImageButton play, image, audio;
         public ImageButton mImageMenu;
+        public LinearLayout cardView;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -99,15 +103,41 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
             play = (ImageButton) itemView.findViewById(R.id.playVideo);
             audio = (ImageButton) itemView.findViewById(R.id.play_Audio);
             image = (ImageButton) itemView.findViewById(R.id.image);
+            cardView = (LinearLayout) itemView.findViewById(R.id.cardView_comments);
             mImageMenu = (ImageButton) itemView.findViewById(R.id.Button_menu);
+            cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final Dialog dialog = new Dialog(context);
+                    dialog.setCancelable(false);
+                    dialog.setContentView(R.layout.comments_details);
+                    dialog.setTitle("Comments Details...!");
+                    WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                    lp.copyFrom(dialog.getWindow().getAttributes());
+                    lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                    lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+                    dialog.getWindow().setAttributes(lp);
+                    dialog.show();
+                    final TextView commet = (TextView) dialog.findViewById(R.id.comment_heading);
+                    final Button button = (Button) dialog.findViewById(R.id.ok);
+                    commet.setText(commentsList.get(getAdapterPosition()).getComments());
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog.dismiss();
+                        }
+                    });
+                }
+            });
             mImageMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
                     showPopupMenu(mImageMenu, getAdapterPosition());
                 }
             });
-
         }
+
     }
 
     @Override
@@ -115,7 +145,6 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
         comments = commentsList.get(position);
         holder.comment.setText(comments.getComments());
         holder.roles.setText(comments.getUserRole());
-
 
     }
 
@@ -196,6 +225,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
 
 
     private void showPopupMenu(View view, int position) {
+
         PopupMenu popup = new PopupMenu(view.getContext(), view);
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.comments_menu, popup.getMenu());
@@ -259,17 +289,16 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
                     if (commentsList.get(position).getAudio().isEmpty() || commentsList.get(position).getAudio().equalsIgnoreCase("") || commentsList.get(position).getAudio().length() == 0) {
                         Toast.makeText(context, "No audio available for this comment", Toast.LENGTH_SHORT).show();
                     } else {
-
-                        File file = new File(Environment.getExternalStorageDirectory().getPath() +"/"+ audioName);
+                      /*  File file = new File(Environment.getExternalStorageDirectory().getPath() + "/" + audioName);
                         // Check if the Music file already exists
                         if (file.exists()) {
                             Toast.makeText(context, "File already exist under SD card, playing Music", Toast.LENGTH_LONG).show();
                             // Play Music
                             playMusic();
                             // If the Music File doesn't exist in SD card (Not yet downloaded)
-                        } else {
-                            new DownloadMusicfromInternet().execute(commentsList.get(position).getAudio());
-                        }
+                        } else {*/
+                        new DownloadMusicfromInternet().execute(commentsList.get(position).getAudio());
+                        //  }
                     }
                     break;
                 default:
@@ -345,7 +374,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
     // Play Music
     protected void playMusic() {
         // Read Mp3 file present under SD card
-        Uri myUri1 = Uri.parse(Environment.getExternalStorageDirectory().getPath() +"/"+ audioName);
+        Uri myUri1 = Uri.parse(Environment.getExternalStorageDirectory().getPath() + "/" + audioName);
         mPlayer = new MediaPlayer();
         mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         try {
@@ -372,50 +401,4 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*  String url = "http://makeindiakart.com/taskfiles/";
-                        url = url + commentsList.get(position).getAudio();
-                        mPlayer = new MediaPlayer();
-                        mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                        try {
-                            mPlayer.setDataSource(url);
-                        } catch (IllegalArgumentException e) {
-                            Toast.makeText(context, "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
-                        } catch (SecurityException e) {
-                            Toast.makeText(context, "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
-                        } catch (IllegalStateException e) {
-                            Toast.makeText(context, "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        try {
-                            mPlayer.prepare();
-                        } catch (IllegalStateException e) {
-                            Toast.makeText(context, "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
-                        } catch (IOException e) {
-                            Toast.makeText(context, "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
-                        }
-                        mPlayer.start();
-                    }*/
 

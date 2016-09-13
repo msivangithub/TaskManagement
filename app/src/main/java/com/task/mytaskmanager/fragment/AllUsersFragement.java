@@ -97,21 +97,4 @@ public class AllUsersFragement extends Fragment implements RestfulListener {
             }
         }
     }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-
-        // TODO Add your menu entries here
-        inflater.inflate(R.menu.alluser_menu, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-
-        }
-        return true;
-
-    }
 }

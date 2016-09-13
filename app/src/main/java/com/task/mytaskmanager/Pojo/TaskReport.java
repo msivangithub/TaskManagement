@@ -4,6 +4,7 @@ package com.task.mytaskmanager.Pojo;
  * Created by GhanaShyam on 9/12/2016.
  */
 public class TaskReport {
+
     private String ActEndDate;
     private String ActStartDate;
     private String TaskHeading;

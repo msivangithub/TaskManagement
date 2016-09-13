@@ -1,6 +1,7 @@
 package com.task.mytaskmanager.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -16,6 +17,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -29,7 +31,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class RecordAudioActivity extends AppCompatActivity {
+public class RecordAudioActivity extends Activity {
     Button play, stop, record, upload, download;
     private MediaRecorder myAudioRecorder;
     private String outputFile = null;
@@ -50,6 +52,7 @@ public class RecordAudioActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.recordaudio);
         initPermissions();
 

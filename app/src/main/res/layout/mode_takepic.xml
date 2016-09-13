@@ -62,7 +62,7 @@
         android:elevation="10dp"
         android:text="CANCEL"
         android:background="@drawable/button_background"
-        android:textColor="@color/colorAccent" />
+        android:textColor="@color/white" />
 
 </LinearLayout>
 

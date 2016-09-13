@@ -22,6 +22,7 @@ import com.task.mytaskmanager.R;
 import com.task.mytaskmanager.activity.MainActivity;
 import com.task.mytaskmanager.services.AsynHttpPost;
 import com.task.mytaskmanager.services.RestfulListener;
+import com.task.mytaskmanager.util.AlertDialogManager;
 import com.task.mytaskmanager.util.AppUtil;
 import com.task.mytaskmanager.util.PreferenceUtil;
 import com.task.mytaskmanager.util.ProjectVariables;
@@ -40,7 +41,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     String userPhone, passText;
     PreferenceUtil util;
     UserRoles roles = new UserRoles();
-
+AlertDialogManager dialogManager = new AlertDialogManager();
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -211,7 +212,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
         } else {
-            Toast.makeText(LoginActivity.this, "Response from server " + s, Toast.LENGTH_LONG).show();
+            dialogManager.showAlertDialog(LoginActivity.this,"Error Connection....!","Unable to Response from server",false);
+            //Toast.makeText(LoginActivity.this, "Unable to Response from server ", Toast.LENGTH_LONG).show();
         }
     }
 

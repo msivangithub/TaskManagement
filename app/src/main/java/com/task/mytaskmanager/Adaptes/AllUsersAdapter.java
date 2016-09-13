@@ -19,9 +19,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ZoomControls;
@@ -87,6 +89,7 @@ public class AllUsersAdapter extends RecyclerView.Adapter<AllUsersAdapter.MyView
         TextView user, roles;
         public ImageButton mImageMenu;
         public ImageView imageView;
+        public LinearLayout user_details;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -94,6 +97,40 @@ public class AllUsersAdapter extends RecyclerView.Adapter<AllUsersAdapter.MyView
             roles = (TextView) itemView.findViewById(R.id.userlevel);
             mImageMenu = (ImageButton) itemView.findViewById(R.id.Button_menu);
             imageView = (ImageView) itemView.findViewById(R.id.profiles_imageView);
+            user_details = (LinearLayout) itemView.findViewById(R.id.user_details);
+            user_details.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final ImageView imageView ,mImageMenu;
+                    final TextView mName;
+                    final Dialog dialog = new Dialog(context);
+                    dialog.setContentView(R.layout.demo);
+                    WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                    lp.copyFrom(dialog.getWindow().getAttributes());
+                    lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                    lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+                    dialog.getWindow().setAttributes(lp);
+                    dialog.show();
+                    imageView = (ImageView) dialog.findViewById(R.id.profiles_imageView);
+                    mName = (TextView) dialog.findViewById(R.id.txt_UserName);
+                    mImageMenu = (ImageButton) dialog.findViewById(R.id.Button_menu);
+                    Picasso.with(context)
+                            .load("http://makeindiakart.com/taskfiles/" + taskUserArrayList.get(getAdapterPosition()).getImage())
+                            .placeholder(R.drawable.imge_placeholder)   // optional
+                            .error(R.drawable.imge_placeholder)      // optional
+                            .resize(300, 300)
+                            .into(imageView);
+                    mName.setText(taskUserArrayList.get(getAdapterPosition()).getFirstName());
+                    mImageMenu.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            showPopupMenu(mImageMenu, getAdapterPosition());
+                        }
+                    });
+
+                }
+            });
+
             mImageMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -109,10 +146,10 @@ public class AllUsersAdapter extends RecyclerView.Adapter<AllUsersAdapter.MyView
         holder.user.setText(taskUser.getFirstName());
         holder.roles.setText(taskUser.getUserLevel());
         Picasso.with(context)
-                .load("http://makeindiakart.com/taskfiles/"+taskUser.getImage())
-                .placeholder(R.drawable.all_user)   // optional
-                .error(R.drawable.all_user)      // optional
-                .resize(300,300)                        // optional
+                .load("http://makeindiakart.com/taskfiles/" + taskUser.getImage())
+                .placeholder(R.drawable.imge_placeholder)   // optional
+                .error(R.drawable.imge_placeholder)      // optional
+                .resize(300, 300)
                 .into(holder.imageView);
     }
 
