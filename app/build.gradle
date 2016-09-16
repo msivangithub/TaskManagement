@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.3"
 
     defaultConfig {
-        applicationId "com.task.mytaskmanager"
+        applicationId "com.task.taskmanager"
         minSdkVersion 15
         targetSdkVersion 23
         versionCode 1
