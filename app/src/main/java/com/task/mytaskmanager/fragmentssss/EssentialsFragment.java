@@ -41,6 +41,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.adeel.library.easyFTP;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.task.mytaskmanager.Databases.PostsDatabaseHelper;
 import com.task.mytaskmanager.Pojo.Post;
 import com.task.mytaskmanager.Pojo.TaskBranches;
@@ -102,7 +103,7 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
     String email, firstname, secondname, phonenumber, password;
     JSONArray jsonArray;
     JSONObject jsonObject;
-
+    private static final String TAG = "EssentialsFragment";
     static final String FTP_HOST = "myaccountsretail.com";
     ProgressDialog pd;
     /*  FTP USERNAME*/
@@ -136,6 +137,8 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
         getActivity().setTitle("Add User");
         setHasOptionsMenu(true);
         initPermissions();
+
+
         companyNames = (LinearLayout) v.findViewById(R.id.companyNames);
         mMobileNo = (EditText) v.findViewById(R.id.Mobile);
         image = (ImageView) v.findViewById(R.id.display_image);

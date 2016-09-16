@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.task.mytaskmanager.Pojo.UserRoles;
 import com.task.mytaskmanager.R;
 import com.task.mytaskmanager.activity.MainActivity;
@@ -32,7 +34,7 @@ import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener, RestfulListener {
 
-
+    private static final String TAG = "LoginActivity";
     private static TextView forgotPassword;
     private static CheckBox show_hide_password;
     private EditText phoneNo, password;
@@ -47,6 +49,15 @@ AlertDialogManager dialogManager = new AlertDialogManager();
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        if (getIntent().getExtras() != null) {
+            for (String key : getIntent().getExtras().keySet()) {
+                String value = getIntent().getExtras().getString(key);
+                Log.d(TAG, "Key: " + key + " Value: " + value);
+            }
+        }
+
+
         util = PreferenceUtil.getInstance();
         initViews();
         setListeners();
@@ -126,6 +137,13 @@ AlertDialogManager dialogManager = new AlertDialogManager();
     public void getLogin() {
 
        // if (validation()) {
+        FirebaseMessaging.getInstance().subscribeToTopic("news");
+        // [END subscribe_topics]
+        // Log and toast
+        String msg = getString(R.string.registered_emailid);
+        Log.d(TAG, msg);
+        Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
+
 
         userPhone = phoneNo.getText().toString();
         passText = password.getText().toString();

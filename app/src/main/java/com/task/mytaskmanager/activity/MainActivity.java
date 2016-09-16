@@ -15,6 +15,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -30,11 +32,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.adeel.library.easyFTP;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.task.mytaskmanager.LoginSetup.LoginActivity;
 import com.task.mytaskmanager.Pojo.Task;
 import com.task.mytaskmanager.Pojo.TaskUser;
@@ -79,11 +84,18 @@ public class MainActivity extends AppCompatActivity
      * FTP PASSWORD
      ***********/
     static final String FTP_PASS = "vKsj30!9";
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        intialVariable();
+
+        FirebaseMessaging.getInstance().subscribeToTopic("news");
+        //String msg = getString(R.string.welcome);
+       // Log.d(TAG, msg);
+       // Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
 
         initPermissions();
 
@@ -107,6 +119,9 @@ public class MainActivity extends AppCompatActivity
         loadImage.execute();
         user.setText(PreferenceUtil.getInstance().getString(MainActivity.this, "FirstName", "User"));
         Mail.setText(PreferenceUtil.getInstance().getString(MainActivity.this, "MailID", "user@mail.com"));
+
+
+
 //user
         if (UserRole.equalsIgnoreCase("3")) {
             Menu m = navigationView.getMenu();
@@ -160,6 +175,11 @@ public class MainActivity extends AppCompatActivity
             }
         }
     }
+
+    private void intialVariable() {
+
+    }
+
 
     public class LoadImageFromURL extends AsyncTask<String, Void, Bitmap> {
         @Override

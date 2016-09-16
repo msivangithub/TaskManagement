@@ -333,8 +333,6 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
 
                     Toast.makeText(getActivity(), s.toString(), Toast.LENGTH_LONG).show();
                 }
-
-
                 mSwipeRefreshLayout.setRefreshing(false);
                 adapter1 = new USERTaskDetailsAdapter(getActivity(), TaskDetails.this, R.layout.task_row, TaskList, "add");
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

@@ -33,6 +33,7 @@
         <item>Yes</item>
 
     </string-array>
+
     <string name="email">Email Id</string>
     <string name="passowrd">Password</string>
     <string name="login">LOGIN</string>
@@ -52,7 +53,7 @@
     <string name="submit">SUBMIT</string>
     <string name="back">BACK</string>
     <string name="email1">Email Id</string>
-
+    <string name="welcome"> </string>
     <string name="select">Select-UserRoles</string>
 
     <string name="RegistrationActivity">Registration</string>

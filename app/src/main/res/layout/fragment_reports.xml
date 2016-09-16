@@ -62,7 +62,7 @@
             android:id="@+id/taskheading"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1.5"
+            android:layout_weight="1.3"
             android:text="TaskHeading"
             android:padding="5dp"
             android:textColor="#fff" />

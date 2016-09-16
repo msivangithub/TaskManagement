@@ -121,12 +121,7 @@ public class AllUsersAdapter extends RecyclerView.Adapter<AllUsersAdapter.MyView
                             .resize(300, 300)
                             .into(imageView);
                     mName.setText(taskUserArrayList.get(getAdapterPosition()).getFirstName());
-                    mImageMenu.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            showPopupMenu(mImageMenu, getAdapterPosition());
-                        }
-                    });
+
 
                 }
             });

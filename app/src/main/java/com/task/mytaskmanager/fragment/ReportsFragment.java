@@ -85,7 +85,6 @@ public class ReportsFragment extends Fragment implements RestfulListener {
                             e.printStackTrace();
                             Toast.makeText(getActivity(), e.toString(), Toast.LENGTH_LONG).show();
                         }
-                        mSwipeRefreshLayout.setRefreshing(false);
                         if (AppUtil.isNetworkAvailable(getActivity())) {
 
                             AsynHttpPost143 post1 = new AsynHttpPost143(getActivity(), 0, 675, ProjectVariables.TASKREPORT, listener, obj, "");
