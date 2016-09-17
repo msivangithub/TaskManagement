@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.task.taskmanager">
+    package="com.mytask.taskmanager">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -13,13 +13,14 @@
     <uses-feature android:name="android.hardware.camera" />
 
     <application
+        android:name=".application.MyTaskManagerApplication"
         android:allowBackup="true"
         android:icon="@mipmap/my_taskmanager"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.task.taskmanager.LoginSetup.SplashScreen"
+            android:name="com.mytask.taskmanager.LoginSetup.SplashScreen"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,41 +29,41 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.task.taskmanager.activity.MainActivity"
+            android:name="com.mytask.taskmanager.activity.MainActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation">
             >
         </activity>
         <activity
-            android:name="com.task.taskmanager.LoginSetup.ForgotPasswordActivity"
+            android:name="com.mytask.taskmanager.LoginSetup.ForgotPasswordActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation">
             >
         </activity>
         <activity
-            android:name="com.task.taskmanager.LoginSetup.LoginActivity"
+            android:name="com.mytask.taskmanager.LoginSetup.LoginActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation">
             >
         </activity>
         <activity
-            android:name="com.task.taskmanager.LoginSetup.OtpConfirmationActivity"
+            android:name="com.mytask.taskmanager.LoginSetup.OtpConfirmationActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" />
         <activity
-            android:name="com.task.taskmanager.LoginSetup.RegistrationActivity"
+            android:name="com.mytask.taskmanager.LoginSetup.RegistrationActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation">
             >
         </activity>
         <activity
-            android:name="com.task.taskmanager.activity.RecordAudioActivity"
+            android:name="com.mytask.taskmanager.activity.RecordAudioActivity"
             android:theme="@android:style/Theme.Dialog" />
 
         <service
-            android:name="com.task.taskmanager.notifaction.MyFirebaseMessagingService">
+            android:name="com.mytask.taskmanager.notifaction.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
 
         <service
-            android:name="com.task.taskmanager.notifaction.MyFirebaseInstanceIDService">
+            android:name="com.mytask.taskmanager.notifaction.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>

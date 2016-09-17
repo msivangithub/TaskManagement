@@ -1,35 +1,35 @@
 {
   "project_info": {
-    "project_number": "854140068347",
-    "firebase_url": "https://taskmanager-649de.firebaseio.com",
-    "project_id": "taskmanager-649de",
-    "storage_bucket": "taskmanager-649de.appspot.com"
+    "project_number": "171965936920",
+    "firebase_url": "https://mytaskmanager-8f33f.firebaseio.com",
+    "project_id": "mytaskmanager-8f33f",
+    "storage_bucket": "mytaskmanager-8f33f.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:854140068347:android:557aa7887f6f2e98",
+        "mobilesdk_app_id": "1:171965936920:android:ceabdf8cfaf99c7a",
         "android_client_info": {
-          "package_name": "com.task.taskmanager"
+          "package_name": "com.mytask.taskmanager"
         }
       },
       "oauth_client": [
         {
-          "client_id": "854140068347-iji4bik4oq8n8hacllord9j1e15j58dm.apps.googleusercontent.com",
+          "client_id": "171965936920-rh5ovibrshvkbehf3b8g8iv5al1shj0v.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.task.taskmanager",
+            "package_name": "com.mytask.taskmanager",
             "certificate_hash": "F8860FDA27003945CA0B0365E040F920E7D1D9F5"
           }
         },
         {
-          "client_id": "854140068347-t608tj2f55nsnmumt1uq4ilt0j5le3ol.apps.googleusercontent.com",
+          "client_id": "171965936920-f7rqcqa1lfmd39a3gbi41vhglttq8nc0.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBFmdUBYchFFV5H1O1SN5ZnVK8wee-44Zo"
+          "current_key": "AIzaSyC44aQtg1h02mZa2W90gAlzGEghckgoiMs"
         }
       ],
       "services": {
@@ -40,7 +40,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "854140068347-t608tj2f55nsnmumt1uq4ilt0j5le3ol.apps.googleusercontent.com",
+              "client_id": "171965936920-f7rqcqa1lfmd39a3gbi41vhglttq8nc0.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
