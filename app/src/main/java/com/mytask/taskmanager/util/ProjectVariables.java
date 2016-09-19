@@ -128,9 +128,6 @@ public class ProjectVariables {
     public static String _TASKSTATUS ="TaskStatus";
     public static String _CID ="cid";
 
-
-
-
     //  public static String STATUS="Status";
 
 }
