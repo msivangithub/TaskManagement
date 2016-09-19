@@ -74,6 +74,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+
                 android:background="@color/white"
                 android:cacheColorHint="#aca9a9"
                 android:divider="#bab9b9"

@@ -20,7 +20,7 @@ public class ProjectVariables {
     // public static final String URL = "http://makeindiakart.com/Master.svc/";
 
     /*Project Base URL*/
-    // public static final String URL = "http://makeindiakart.com/TaskManger.svc/";
+   // public static final String URL = "http://makeindiakart.com/TaskManger.svc/";
 
     /*Demo Base Url*/
     public static final String URL = "http://myaccountsonline.co.in/taskmanager/TaskManger.svc/";

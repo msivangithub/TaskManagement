@@ -521,11 +521,11 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
                     });
                     dialog.show();
                    break;
-                case R.id.cardMenu_resend:
+              /*  case R.id.cardMenu_resend:
 
 
 
-                    break;
+                    break;*/
                 default:
             }
             return false;

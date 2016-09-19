@@ -1,4 +1,4 @@
-package com.mytask.taskmanager.application;
+package com.mytask.taskmanager.util;
 
 /**
  * Created by NEWSYSTEM1 on 5/30/2016.

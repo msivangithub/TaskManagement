@@ -7,6 +7,7 @@ import android.content.Context;
 import com.mytask.taskmanager.BuildConfig;
 import com.mytask.taskmanager.R;
 import com.mytask.taskmanager.acra.ACRAReportSender;
+import com.mytask.taskmanager.util.PropertyReader;
 
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
