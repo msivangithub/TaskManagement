@@ -65,6 +65,32 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         signUp.setOnClickListener(this);
         loginButton.setOnClickListener(this);
         forgotPassword.setOnClickListener(this);
+        show_hide_password.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton button,
+                                         boolean isChecked) {
+                // If it is checkec then show password else hide
+                // password
+                if (isChecked) {
+                    show_hide_password.setText(R.string.hide_pwd);// change
+                    // checkbox
+                    // text
+                    password.setInputType(InputType.TYPE_CLASS_TEXT);
+                    password.setTransformationMethod(HideReturnsTransformationMethod
+                            .getInstance());// show password
+                } else {
+                    show_hide_password.setText(R.string.show_pwd);// change
+                    // checkbox
+                    // text
+                    password.setInputType(InputType.TYPE_CLASS_TEXT
+                            | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    password.setTransformationMethod(PasswordTransformationMethod
+                            .getInstance());// hide password
+                }
+
+            }
+        });
     }
 
 
@@ -168,12 +194,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void ToastMesseg() {
-        LayoutInflater inflater = getLayoutInflater();
+        dialogManager.showAlertDialog(LoginActivity.this, "Error Connection....!", "Please Check Your Network Connection", false);
+
+       /* LayoutInflater inflater = getLayoutInflater();
         View toastlayout = inflater.inflate(R.layout.toast_network_connection, (ViewGroup) findViewById(R.id.custom_toast_layout));
         Toast toast = new Toast(this);
         toast.setDuration(Toast.LENGTH_LONG);
         toast.setView(toastlayout);
-        toast.show();
+        toast.show();*/
     }
 
     @Override

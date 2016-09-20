@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -21,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -376,7 +379,6 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
 
                 }
             } else if (requestCode == 003) {
-                Toast.makeText(getActivity(), "003 result" + requestCode, Toast.LENGTH_LONG).show();
 
                 Uri selectedimg = data.getData();
                 imageURI = getPath(selectedimg);
@@ -432,7 +434,6 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
         @Override
         protected void onPreExecute() {
             pdForVideoUpload = new ProgressDialog(getActivity());
-            pdForVideoUpload.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             pdForVideoUpload.show();
             pdForVideoUpload.setTitle("Uploading....");
         }

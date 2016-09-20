@@ -1,87 +1,91 @@
 package com.mytask.taskmanager.LoginSetup;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
 
 import com.mytask.taskmanager.R;
+import com.mytask.taskmanager.services.AppNetworkCall;
 import com.mytask.taskmanager.util.ProjectVariables;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-public class OtpConfirmationActivity extends AppCompatActivity implements View.OnClickListener {
+
+public class OtpConfirmationActivity extends AppCompatActivity {
+    ProjectVariables projectVariables = new ProjectVariables();
 
     TextView OTPPhonenumber, OTPEmail, PhoneOtpConfirmation, EmailOtpConfirmation;
-    TextView phonetext,phonecolon,emailtext,emailcolon;
-    EditText PhoneOTPNumber, EmailOTPNumber;
-    ImageButton PhoneOTPButton, EmailOTPButton;
+    TextView phonetext, phonecolon, emailtext, emailcolon;
+    EditText phoneotpnumber, EmailOTPNumber;
+    //ImageButton PhoneOTPButton, EmailOTPButton;
+    Button mSubmit;
+    String otp;
+    private static String URl;
+    JSONObject jsonObject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_otpconfirmation);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        //Initialization Values
-
+        setContentView(R.layout.activity_otp1);
+      //  getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle("  OTP  ");
         OTPPhonenumber = (TextView) findViewById(R.id.id_otpmobilenumber);
-        OTPEmail = (TextView) findViewById(R.id.id_OtpEmailid);
-        PhoneOtpConfirmation = (TextView) findViewById(R.id.id_phoneOtpConfirmation);
-        EmailOtpConfirmation = (TextView) findViewById(R.id.id_emailOtpConfirmation);
+        mSubmit = (Button) findViewById(R.id.otp_Button);
+        phoneotpnumber = (EditText) findViewById(R.id.otp_editext);
+        OTPPhonenumber.setText(projectVariables.PHONENO1);
+        // projectVariables.CLIENTID;
+        mSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                otp = phoneotpnumber.getText().toString();
+                if (otp.equals(ProjectVariables.PHOTP)) {
+                    URl = ProjectVariables.getSendSms(ProjectVariables.CLIENTID);
+                    AppNetworkCall networkCall = new AppNetworkCall(OtpConfirmationActivity.this, URl) {
+                        @Override
+                        public void onComplete(JSONArray array) {
+                            updataresponse(array);
+                        }
 
-        phonetext=(TextView)findViewById(R.id.id_phonetext);
-        phonecolon=(TextView)findViewById(R.id.id_phonecolon);
+                        @Override
+                        public void onFailure(String errorMsg) {
+                            super.onFailure(errorMsg);
+                        }
+                    };
+                    networkCall.execute();
 
-        emailtext=(TextView)findViewById(R.id.id_emailtext);
-        emailcolon=(TextView)findViewById(R.id.id_emailcolon);
 
-        PhoneOTPNumber = (EditText) findViewById(R.id.id_phoneOTPNumber);
-        EmailOTPNumber = (EditText) findViewById(R.id.id_emailOTpNumber);
-
-        PhoneOTPButton = (ImageButton) findViewById(R.id.id_phoneOTPButton);
-        EmailOTPButton = (ImageButton) findViewById(R.id.id_emailOTPButton);
-
-        //Clicking Events
-
-        PhoneOTPButton.setOnClickListener(this);
-        EmailOTPButton.setOnClickListener(this);
-
-        //setting Values To feilds
-
-        OTPPhonenumber.setText(ProjectVariables.PHONENO1);
-        OTPEmail.setText(ProjectVariables.JEMAILID);
+                } else {
+                    Toast.makeText(OtpConfirmationActivity.this, "Please Check OTP", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
-    @Override
-    public void onClick(View view) {
+    private void updataresponse(JSONArray array) {
 
-        switch (view.getId()) {
-            case R.id.id_phoneOTPButton:
-                phonetext.setVisibility(View.GONE);
-                phonecolon.setVisibility(View.GONE);
-                PhoneOTPNumber.setVisibility(View.GONE);
-                PhoneOTPButton.setVisibility(View.GONE);
+        try {
+            jsonObject = array.getJSONObject(0);
 
-                PhoneOtpConfirmation.setVisibility(View.VISIBLE);
-                PhoneOtpConfirmation.setText("Phone Verified Successfully");
-                break;
-
-            case R.id.id_emailOTPButton:
-                emailtext.setVisibility(View.GONE);
-                emailcolon.setVisibility(View.GONE);
-                EmailOTPButton.setVisibility(View.GONE);
-                EmailOTPNumber.setVisibility(View.GONE);
-
-                EmailOtpConfirmation.setVisibility(View.VISIBLE);
-                EmailOtpConfirmation.setText("Email Verified Successfully");
-
-                break;
-
+            if (jsonObject.getString("Result").equalsIgnoreCase("SmsSent")) {
+                Toast.makeText(OtpConfirmationActivity.this, jsonObject.getString("Result"), Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(OtpConfirmationActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+
 
     }
 
@@ -104,3 +108,5 @@ public class OtpConfirmationActivity extends AppCompatActivity implements View.O
         return (super.onOptionsItemSelected(menuItem));
     }
 }
+
+

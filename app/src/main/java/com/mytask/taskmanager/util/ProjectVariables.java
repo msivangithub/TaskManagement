@@ -17,17 +17,24 @@ public class ProjectVariables {
     public static final String PREFERENCES_NAME = "sampleprefs";
     public static final String USERNAME = "userName";
     public static final String PLEASE_CHECK_YOUR_NETWORK_CONNECTION = "please check your network connection";
+    public static final String MASTER_URL = "http://makeindiakart.com/Master.svc/";
     // public static final String URL = "http://makeindiakart.com/Master.svc/";
 
     /*Project Base URL*/
-   // public static final String URL = "http://makeindiakart.com/TaskManger.svc/";
+    //public static final String URL = "http://makeindiakart.com/TaskManger.svc/";
 
     /*Demo Base Url*/
     public static final String URL = "http://myaccountsonline.co.in/taskmanager/TaskManger.svc/";
+
+
+
     //http://myaccountsonline.co.in/taskmanager/Master.svc/
-
-
+    //http://makeindiakart.com/Master.svc/SendSms/MY10077
+    public static String getSendSms(String clientID) {
+        return ProjectVariables.MASTER_URL + "SendSms/" + ProjectVariables.CLIENTID;
+    }
     //public static final String LOGIN = "login";
+    public static final String BASE_URL = URL;
     public static final String LOGIN = "Tasklogin_User";
     public static final String REGISTER = "MasterInsert";
     public static final String USERS = "Users/";
@@ -45,7 +52,10 @@ public class ProjectVariables {
     public static String DAILY_SALES_SUMMARY = "DailySalesSummary";
     public static String PARTYWISE_SALES = "PartywiseSales";
     public static final String USER_DELETED = "User_Deleted";
-
+    public static String PHOTP = "";
+    public static String CLIENTID = "";
+    public static String TASKMANGER = "TaskManger";
+    public static String AAPPTYPE = "AappType";
     public static String ADDRESS1 = "Address1";
     public static String ADDRESS2 = "Address2";
     public static String ADDRESS3 = "Address3";
@@ -69,7 +79,7 @@ public class ProjectVariables {
     public static String JRESULT = "";
     public static String ImAGES = "";
 
-    public static final String BASE_URL = URL;
+
     public static final String USER_PROFILE = "Task_UserMaster";
     public static String RESULT = "Result";
     public static String FIRSTNAME = "FirstName";

@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity
     RestfulListener listener;
     String DevideId = "";
     private int month, day, year;
+    ProgressDialog pdForVideoUpload;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -491,13 +492,13 @@ public class MainActivity extends AppCompatActivity
     private class UploadTask extends AsyncTask<Void, Void, String> {
         InputStream f;
         String v;
-        ProgressDialog pdForVideoUpload;
+
 
         @Override
         protected void onPreExecute() {
             pdForVideoUpload = new ProgressDialog(MainActivity.this);
+            pdForVideoUpload.setMessage("Uploading....");
             pdForVideoUpload.show();
-            pdForVideoUpload.setTitle("Uploading....");
         }
 
         public UploadTask(InputStream file, String videoName) {
