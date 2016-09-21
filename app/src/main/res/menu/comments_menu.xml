@@ -6,18 +6,18 @@
          android:id="@+id/capture_video"
          android:orderInCategory="100"
          android:title="Video"
-         android:icon="@drawable/video_view"
+         android:icon="@drawable/video_camera"
          app:showAsAction="never" />
      <item
          android:id="@+id/capture_image"
          android:orderInCategory="100"
          android:title="Image"
-         android:icon="@drawable/image"
+         android:icon="@drawable/image_view"
          app:showAsAction="never" />
      <item
          android:id="@+id/play_Audio"
          android:orderInCategory="100"
          android:title="Audio"
-         android:icon="@drawable/play_audio"
+         android:icon="@drawable/audio_view"
          app:showAsAction="never" />
 </menu>

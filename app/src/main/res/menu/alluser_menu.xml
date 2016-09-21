@@ -6,7 +6,7 @@
         android:id="@+id/delete_items"
         android:orderInCategory="1"
         android:title="Delete"
-        android:icon="@drawable/delete_button"
+        android:icon="@drawable/delete_task"
         android:showAsAction="never" />
 
 </menu>

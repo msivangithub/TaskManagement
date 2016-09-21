@@ -301,14 +301,7 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
                                         public void onClick(View view) {
                                             d.dismiss();
                                             _context.startActivity(new Intent(_context, RecordAudioActivity.class));
-//
-//                                            ImageName = "Audio_" + DateUtil.getRandomNumberInRange(1, 10000) + ".mp3";
-//                                            File f = new File(Environment.getExternalStorageDirectory(), ImageName);
-//                                            Uri u = Uri.fromFile(f);
-//                                            Intent intent = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
-//                                            Activity act = (Activity) _context;
-//                                            intent.putExtra(MediaStore.EXTRA_OUTPUT, u);
-//                                            act.startActivityForResult(intent, 97);
+
                                         }
                                     });
                                 /*Click the AleartDialog video popsition*/
@@ -495,7 +488,7 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
                     final AlertDialog.Builder dialog = new AlertDialog.Builder(_context);
                     dialog.setTitle("Confirm Delete....!");
                     dialog.setMessage("Are you sure you want delete this ?");
-                    dialog.setIcon(R.drawable.delete_button);
+                    dialog.setIcon(R.drawable.delete_task);
                     dialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -508,7 +501,7 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                            AsynHttpPost post = new AsynHttpPost(_context, 0,  143, ProjectVariables.TASK_DELETED, listener, obj, "");
+                            AsynHttpPost post = new AsynHttpPost(_context, 0, 143, ProjectVariables.TASK_DELETED, listener, obj, "");
                             post.execute();
 
                         }
@@ -520,15 +513,40 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
                         }
                     });
                     dialog.show();
-                   break;
-              /*  case R.id.cardMenu_resend:
+                    break;
+                case R.id.cardMenu_resend:
+                    final AlertDialog.Builder resend = new AlertDialog.Builder(_context);
+                    resend.setTitle("Resend Task....!");
+                    resend.setMessage("Are you sure you want resend task ?");
+                    resend.setIcon(R.drawable.resend_);
+                    resend.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            JSONObject obj = new JSONObject();
+                            try {
+                                obj.accumulate("Cid", billToBillArrayList.get(position).getTaskId() + "");
+                                Log.e("Resend Task :", billToBillArrayList.get(position).getTaskToId());
 
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            AsynHttpPost post = new AsynHttpPost(_context, 0, 154, ProjectVariables.TASK_RESEND, listener, obj, "");
+                            post.execute();
 
-
-                    break;*/
+                        }
+                    });
+                    resend.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    });
+                    resend.show();
+                    break;
                 default:
             }
             return false;
         }
+
     }
 }

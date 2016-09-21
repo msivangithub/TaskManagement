@@ -166,7 +166,7 @@ public class AllUsersAdapter extends RecyclerView.Adapter<AllUsersAdapter.MyView
                     final AlertDialog.Builder dialog = new AlertDialog.Builder(context);
                     dialog.setTitle("Confirm Delete....!");
                     dialog.setMessage("Are you sure you want delete this ?");
-                    dialog.setIcon(R.drawable.delete_button);
+                    dialog.setIcon(R.drawable.delete_task);
                     dialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {

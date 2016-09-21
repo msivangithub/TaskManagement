@@ -83,7 +83,7 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
     String employeeId;
     JSONObject obj;
     String audioURI = "";
-
+PreferenceUtil util ;
     public static TaskDetails newInstance() {
 
         Bundle args = new Bundle();
@@ -293,6 +293,7 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
                         String comments = obj.getString("Comments");
                         String taskId = obj.getString("Cid");
                         int cid = Integer.parseInt(taskId);
+
                         Task t = new Task();
                         t.setTaskId(cid);
                         t.setTaskComment(comments);
@@ -359,6 +360,17 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
                     JSONObject obj = array.getJSONObject(0);
 
                     String result = obj.getString("Result");
+
+                    Toast.makeText(getActivity(), result, Toast.LENGTH_LONG).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else if (rType == 154) {
+                try {
+                    JSONArray array = new JSONArray(s);
+                    JSONObject obj = array.getJSONObject(0);
+
+                    String result = obj.getString("inserted successfully");
 
                     Toast.makeText(getActivity(), result, Toast.LENGTH_LONG).show();
                 } catch (JSONException e) {

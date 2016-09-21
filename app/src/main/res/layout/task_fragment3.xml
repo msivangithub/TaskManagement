@@ -82,13 +82,14 @@
 
     <Button
         android:id="@+id/adduser"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
-        android:background="@drawable/button_background"
+        android:background="@drawable/ripple_effect"
         android:text="Submit"
-        android:textColor="#fff" />
+        android:textStyle="bold"
+        android:textColor="#000" />
 
 
 </LinearLayout>

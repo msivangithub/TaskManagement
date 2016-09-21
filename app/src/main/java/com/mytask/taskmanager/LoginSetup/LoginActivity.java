@@ -1,6 +1,7 @@
 package com.mytask.taskmanager.LoginSetup;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
@@ -104,8 +105,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
         password = (EditText) findViewById(R.id.login_password);
         loginButton = (Button) findViewById(R.id.loginBtn);
+
         forgotPassword = (TextView) findViewById(R.id.forgot_password);
         signUp = (Button) findViewById(R.id.createAccount);
+
         show_hide_password = (CheckBox) findViewById(R.id.show_hide_password);
         show_hide_password.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
@@ -150,6 +153,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
 
             case R.id.loginBtn:
+
                 getLogin();
 
                 break;
@@ -187,6 +191,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             } catch (Exception e) {
             }
         } else {
+
             Toast.makeText(LoginActivity.this, "Please enter username & password", Toast.LENGTH_LONG).show();
 
         }

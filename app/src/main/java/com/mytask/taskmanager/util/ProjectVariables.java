@@ -47,6 +47,9 @@ public class ProjectVariables {
     public static final String TASK_COMMENTS = "TaskComments";
     public static final String getTasksByUserId = "TaskUserTasksById";
     public static final String POST_ANDROIDREGID = "Post_AndroidRegId";
+    public static final String TASK_RESEND = "Task_Resend";
+
+
     public static final int APK_CONNECTION_TIMEOUT = 15000;
     public static final int APK_WAIT_DATA_TIMEOUT = 30000;
     public static String DAILY_SALES_SUMMARY = "DailySalesSummary";
