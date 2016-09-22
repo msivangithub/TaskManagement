@@ -20,7 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.mytask.taskmanager.LoginSetup.SplashScreen"
+            android:name=".LoginSetup.SplashScreen"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,45 +29,47 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.mytask.taskmanager.activity.MainActivity"
+            android:name=".activity.MainActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation">
             >
         </activity>
         <activity
-            android:name="com.mytask.taskmanager.LoginSetup.ForgotPasswordActivity"
+            android:name=".LoginSetup.ForgotPasswordActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation">
             >
         </activity>
         <activity
-            android:name="com.mytask.taskmanager.LoginSetup.LoginActivity"
+            android:name=".LoginSetup.LoginActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation">
             >
         </activity>
         <activity
-            android:name="com.mytask.taskmanager.LoginSetup.OtpConfirmationActivity"
+            android:name=".LoginSetup.OtpConfirmationActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" />
         <activity
-            android:name="com.mytask.taskmanager.LoginSetup.RegistrationActivity"
+            android:name=".LoginSetup.RegistrationActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation">
             >
         </activity>
         <activity
-            android:name="com.mytask.taskmanager.activity.RecordAudioActivity"
+            android:name=".activity.RecordAudioActivity"
             android:theme="@android:style/Theme.Dialog" />
 
-        <service
-            android:name="com.mytask.taskmanager.notifaction.MyFirebaseMessagingService">
+        <service android:name=".notifaction.MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".notifaction.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 
-        <service
-            android:name="com.mytask.taskmanager.notifaction.MyFirebaseInstanceIDService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
-            </intent-filter>
-        </service>
+        <activity
+            android:name=".activity.UserActivity"
+            android:label="@string/title_activity_user"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

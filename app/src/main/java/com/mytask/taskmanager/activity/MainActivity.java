@@ -252,8 +252,9 @@ public class MainActivity extends AppCompatActivity
                 String MainUrl = "http://makeindiakart.com/taskfiles/";
                 URL url = new URL(MainUrl + PreferenceUtil.getInstance().getString(MainActivity.this, "ProfileImage", "Image_5756.jpg"));
                 InputStream is = url.openConnection().getInputStream();
-                Bitmap bitMap = BitmapFactory.decodeStream(is);
-
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 2;
+                Bitmap bitMap = BitmapFactory.decodeStream(is, null, options);
                 return bitMap;
 
             } catch (MalformedURLException e) {

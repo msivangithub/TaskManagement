@@ -34,6 +34,7 @@ import android.widget.ZoomControls;
 
 import com.mytask.taskmanager.Pojo.Comments;
 import com.mytask.taskmanager.R;
+import com.mytask.taskmanager.util.AppUtil;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -214,7 +215,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
                     image.setScaleY((float) (y - 1));
                 }
             });
-
+            image.setImageBitmap(AppUtil.decodeSampledBitmapFromResource(context.getResources(),R.id.imageView, 100, 100));
             image.setImageBitmap(result);
 
         }

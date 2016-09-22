@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.view.ActionMode;
 import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -131,7 +132,7 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
                 }
             });
 
-            taskrow.setOnClickListener(new View.OnClickListener() {
+                taskrow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Log.e("UserRole", UserRole);

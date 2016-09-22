@@ -10,12 +10,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.Icon;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -27,6 +36,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.mytask.taskmanager.R;
 import com.mytask.taskmanager.activity.MainActivity;
+import com.mytask.taskmanager.util.AppUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -77,10 +87,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             this.title = titel;
             this.imageUrl = icon;
         }
+
         @Override
         protected Bitmap doInBackground(String... params) {
             //http://makeindiakart.com/taskfiles/Image_1290.jpg
             InputStream in;
+
             Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
                     R.drawable.my_taskmanager96);
             try {
@@ -117,19 +129,23 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent,
                         PendingIntent.FLAG_ONE_SHOT);
-
+                Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                int numMessages = 0;
                 NotificationManager notificationManagers = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
                 Notification notif = new Notification.Builder(mContext)
                         .setContentIntent(pendingIntent)
                         .setContentTitle(title)
                         .setContentText(message)
                         .setSmallIcon(R.mipmap.my_taskmanager96)
+                        .setSound(defaultSoundUri)
                         .setLargeIcon(result)
+                        .setColor(ContextCompat.getColor(mContext, R.color.pink_900))
+                        .setLights(Color.RED, 1000, 500)
+                        .setNumber(++numMessages)
                         .setStyle(new Notification.BigPictureStyle().bigPicture(result))
                         .build();
                 notif.flags |= Notification.FLAG_AUTO_CANCEL;
                 notificationManagers.notify(1, notif);
-
                 // hide the notification after its selected
 
             } catch (Exception e) {
@@ -164,5 +180,23 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             notificationManager.notify(0, notificationBuilder.build());*/
 
-
-  }
+/* Intent intent = new Intent(mContext, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent,
+                        PendingIntent.FLAG_ONE_SHOT);
+                Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                int numMessages = 0;
+                NotificationManager notificationManagers = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+                Notification notif = new Notification.Builder(mContext)
+                        .setContentIntent(pendingIntent)
+                        .setContentTitle(title)
+                        .setContentText(message)
+                        .setSmallIcon(R.mipmap.my_taskmanager96)
+                        .setSound(defaultSoundUri)
+                        .setLargeIcon(getCircleBitmap(result))
+                        .setNumber(++numMessages)
+                        .setStyle(new Notification.BigPictureStyle().bigPicture(result))
+                        .build();
+                notif.flags |= Notification.FLAG_AUTO_CANCEL;
+                notificationManagers.notify(1, notif);*/
+}

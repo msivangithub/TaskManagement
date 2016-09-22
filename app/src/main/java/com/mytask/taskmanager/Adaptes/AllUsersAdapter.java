@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -19,7 +21,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.mytask.taskmanager.activity.RecordAudioActivity;
+import com.mytask.taskmanager.activity.UserActivity;
+import com.mytask.taskmanager.util.PositionClickListener;
 import com.squareup.picasso.Picasso;
 import com.mytask.taskmanager.Pojo.TaskUser;
 import com.mytask.taskmanager.R;
@@ -38,12 +44,15 @@ import java.util.ArrayList;
  */
 public class AllUsersAdapter extends RecyclerView.Adapter<AllUsersAdapter.MyViewHolder> implements RestfulListener {
 
+    public static final String NAME = "name";
+    public static final String IMAGE = "image";
+    public static final String TAG = "UserActivity";
     ArrayList<TaskUser> taskUserArrayList;
     Context context;
     RestfulListener listener;
     Activity a;
     String _type;
-
+    PositionClickListener clickListener;
 
     public AllUsersAdapter(Context context, RestfulListener rl, int user_rowitems, ArrayList<TaskUser> taskUsers) {
         this.taskUserArrayList = taskUsers;
@@ -75,14 +84,14 @@ public class AllUsersAdapter extends RecyclerView.Adapter<AllUsersAdapter.MyView
         public ImageView imageView;
         public LinearLayout user_details;
 
-        public MyViewHolder(View itemView) {
+        public MyViewHolder(final View itemView) {
             super(itemView);
             user = (TextView) itemView.findViewById(R.id.user);
             roles = (TextView) itemView.findViewById(R.id.userlevel);
             mImageMenu = (ImageButton) itemView.findViewById(R.id.Button_menu);
             imageView = (ImageView) itemView.findViewById(R.id.profiles_imageView);
             user_details = (LinearLayout) itemView.findViewById(R.id.user_details);
-            user_details.setOnClickListener(new View.OnClickListener() {
+          /*  user_details.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     final ImageView imageView ,mImageMenu;
@@ -112,7 +121,20 @@ public class AllUsersAdapter extends RecyclerView.Adapter<AllUsersAdapter.MyView
                     mPhone.setText(taskUserArrayList.get(getAdapterPosition()).getPhone());
                     mCity.setText(taskUserArrayList.get(getAdapterPosition()).getCity());
                 }
+            });*/
+            user_details.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(TAG, "Element " + taskUserArrayList.get(getAdapterPosition()).getFirstName());
+                    Toast.makeText(context, taskUserArrayList.get(getAdapterPosition()).getEmailid(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(context, UserActivity.class);
+                    intent.putExtra(NAME, taskUserArrayList.get(getAdapterPosition()).getEmailid());
+                    intent.putExtra(IMAGE, taskUserArrayList.get(getAdapterPosition()).getImage());
+                    Activity act = (Activity) context;
+                    act.startActivity(intent);
+                }
             });
+
 
             mImageMenu.setOnClickListener(new View.OnClickListener() {
                 @Override

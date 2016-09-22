@@ -325,6 +325,7 @@ PreferenceUtil util ;
                 recyclerView.setHasFixedSize(true);
                 recyclerView.setAdapter(adapter1);
 
+
             } else if (rType == 11) {
 
                 users = new ArrayList<>();
@@ -357,22 +358,25 @@ PreferenceUtil util ;
             } else if (rType == 143) {
                 try {
                     JSONArray array = new JSONArray(s);
-                    JSONObject obj = array.getJSONObject(0);
+                    for (int i = 0;i<array.length();i++) {
 
-                    String result = obj.getString("Result");
-
-                    Toast.makeText(getActivity(), result, Toast.LENGTH_LONG).show();
+                        JSONObject obj = array.getJSONObject(i);
+                        String result = obj.getString("Result");
+                        Toast.makeText(getActivity(), result.toString(), Toast.LENGTH_LONG).show();
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             } else if (rType == 154) {
                 try {
                     JSONArray array = new JSONArray(s);
-                    JSONObject obj = array.getJSONObject(0);
+                    for (int i = 0;i<array.length();i++) {
 
-                    String result = obj.getString("inserted successfully");
+                        JSONObject obj = array.getJSONObject(i);
+                        String result = obj.getString("Result");
 
-                    Toast.makeText(getActivity(), result, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), result.toString(), Toast.LENGTH_LONG).show();
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
