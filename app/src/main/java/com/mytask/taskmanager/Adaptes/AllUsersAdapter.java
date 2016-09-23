@@ -44,8 +44,11 @@ import java.util.ArrayList;
  */
 public class AllUsersAdapter extends RecyclerView.Adapter<AllUsersAdapter.MyViewHolder> implements RestfulListener {
 
-    public static final String NAME = "name";
+    public static final String EMAIL = "name";
     public static final String IMAGE = "image";
+    public static final String FNAME = "fname";
+    public static final String PHONE = "phone";
+    public static final String CITY = "city";
     public static final String TAG = "UserActivity";
     ArrayList<TaskUser> taskUserArrayList;
     Context context;
@@ -125,11 +128,14 @@ public class AllUsersAdapter extends RecyclerView.Adapter<AllUsersAdapter.MyView
             user_details.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d(TAG, "Element " + taskUserArrayList.get(getAdapterPosition()).getFirstName());
-                    Toast.makeText(context, taskUserArrayList.get(getAdapterPosition()).getEmailid(), Toast.LENGTH_SHORT).show();
+                   /* Log.d(TAG, "Element " + taskUserArrayList.get(getAdapterPosition()).getFirstName());
+                    Toast.makeText(context, taskUserArrayList.get(getAdapterPosition()).getEmailid(), Toast.LENGTH_SHORT).show();*/
                     Intent intent = new Intent(context, UserActivity.class);
-                    intent.putExtra(NAME, taskUserArrayList.get(getAdapterPosition()).getEmailid());
+                    intent.putExtra(EMAIL, taskUserArrayList.get(getAdapterPosition()).getEmailid());
                     intent.putExtra(IMAGE, taskUserArrayList.get(getAdapterPosition()).getImage());
+                    intent.putExtra(FNAME,taskUserArrayList.get(getAdapterPosition()).getFirstName());
+                    intent.putExtra(PHONE,taskUserArrayList.get(getAdapterPosition()).getPhone());
+                    intent.putExtra(CITY,taskUserArrayList.get(getAdapterPosition()).getCity());
                     Activity act = (Activity) context;
                     act.startActivity(intent);
                 }

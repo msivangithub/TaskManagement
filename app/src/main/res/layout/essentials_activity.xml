@@ -329,7 +329,6 @@
                 android:id="@+id/submit"
                 android:layout_gravity="center"
                 android:textColor="#000"
-                android:background="@drawable/ripple_effect"
                 android:layout_height="wrap_content" />
 
 

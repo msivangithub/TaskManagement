@@ -20,11 +20,17 @@ import com.squareup.picasso.Picasso;
 import java.util.jar.Attributes;
 
 public class UserActivity extends AppCompatActivity {
-    TextView textView;
-    String name = "";
+    TextView mEmail ,mFname ,mPhone,mCity;
+    String email = "";
     String image = "";
-    public static final String NAME = "name";
+    String fname = "";
+    String phone = "";
+    String city = "";
+    public static final String EMAIL = "name";
     public static final String IMAGE = "image";
+    public static final String FNAME = "fname";
+    public static final String PHONE = "phone";
+    public static final String CITY = "city";
     ImageView imageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,15 +40,25 @@ public class UserActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         imageView = (ImageView) findViewById(R.id.profileImage);
-        textView = (TextView) findViewById(R.id.email);
-        name = getIntent().getStringExtra(NAME);
+        mEmail = (TextView) findViewById(R.id.email);
+        mFname = (TextView) findViewById(R.id.fname);
+        mPhone= (TextView) findViewById(R.id.phone);
+        mCity = (TextView) findViewById(R.id.city);
+
+        email = getIntent().getStringExtra(EMAIL);
         image = getIntent().getStringExtra(IMAGE);
-        textView.setText(name);
+        fname = getIntent().getStringExtra(FNAME);
+        phone = getIntent().getStringExtra(PHONE);
+        city = getIntent().getStringExtra(CITY);
+        mEmail.setText(email);
+        mPhone.setText(phone);
+        mCity.setText(city);
+        mFname.setText(fname);
 
         Picasso.with(this)
                 .load("http://makeindiakart.com/taskfiles/" + image)
-                .placeholder(R.drawable.imge_placeholder)   // optional
-                .error(R.drawable.imge_placeholder)      // optional
+                .placeholder(R.drawable.employee)   // optional
+                .error(R.drawable.employee)      // optional
                 .resize(300, 300)
                 .into(imageView);
 
@@ -55,17 +71,6 @@ public class UserActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-
-
-/*
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == 65) {
-                textView.setText(data.getStringExtra(AllUsersAdapter.NAME));
-            }
-        }*/
     }
 
     @Override

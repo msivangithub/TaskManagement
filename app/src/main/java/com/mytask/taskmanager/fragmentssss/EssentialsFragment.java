@@ -266,7 +266,7 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
                         ToastMessegNetwork();
                     }
                 }
-                //}
+
             }
         });
 
