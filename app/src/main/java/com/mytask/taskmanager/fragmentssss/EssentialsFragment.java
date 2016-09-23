@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -345,7 +346,9 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
                 PostsDatabaseHelper databaseHelper = PostsDatabaseHelper.getInstance(getActivity());
                 databaseHelper.addPost(post1);
                 try {
+
                     image.setImageBitmap(MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedimg));
+
                     imageURI = "Image_" + getRandomNumberInRange(1, 10000) + ".jpg";
                     UploadTask task = new UploadTask(null, imageURI, selectedimg);
                     task.execute();
@@ -360,6 +363,7 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
                 //here we can add ftp call    i will open camera yes onslsy camer only camera.....ok
                 UploadTask task = new UploadTask(new File(Environment.getExternalStorageDirectory(), imageURI), imageURI, null);
                 task.execute();
+
                 image.setImageBitmap(BitmapFactory.decodeFile(new File(Environment.getExternalStorageDirectory(), imageURI).getAbsolutePath()));
                 pd.show();
                 User user = new User();

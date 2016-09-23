@@ -2,7 +2,9 @@ package com.mytask.taskmanager.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,8 +22,9 @@ import com.squareup.picasso.Picasso;
 
 import java.util.jar.Attributes;
 
-public class UserActivity extends AppCompatActivity {
+public class UserActivity extends AppCompatActivity implements View.OnClickListener {
     TextView mEmail ,mFname ,mPhone,mCity;
+    ImageButton mCall;
     String email = "";
     String image = "";
     String fname = "";
@@ -37,19 +41,27 @@ public class UserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) // Habilitar up button
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         imageView = (ImageView) findViewById(R.id.profileImage);
         mEmail = (TextView) findViewById(R.id.email);
         mFname = (TextView) findViewById(R.id.fname);
         mPhone= (TextView) findViewById(R.id.phone);
         mCity = (TextView) findViewById(R.id.city);
-
+        mCall = (ImageButton)findViewById(R.id.calling);
+        mCall.setOnClickListener(this);
         email = getIntent().getStringExtra(EMAIL);
         image = getIntent().getStringExtra(IMAGE);
         fname = getIntent().getStringExtra(FNAME);
         phone = getIntent().getStringExtra(PHONE);
         city = getIntent().getStringExtra(CITY);
+
+        CollapsingToolbarLayout collapser =
+                (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+        collapser.setTitle(fname);
+
         mEmail.setText(email);
         mPhone.setText(phone);
         mCity.setText(city);
@@ -90,4 +102,15 @@ public class UserActivity extends AppCompatActivity {
         return (super.onOptionsItemSelected(menuItem));
     }
 
+    @Override
+    public void onClick(View v) {
+         switch (v.getId()){
+             case R.id.calling:
+                 Intent myIntent = new Intent(Intent.ACTION_CALL);
+                 String phNum = "tel:" + phone;
+                 myIntent.setData(Uri.parse(phNum));
+                 startActivity( myIntent ) ;
+                 break;
+         }
+    }
 }

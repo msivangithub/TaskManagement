@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
+    android:scrollbars="none"
+    android:layout_gravity="fill_vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.mytask.taskmanager.activity.UserActivity"
     tools:showIn="@layout/activity_user">
@@ -57,7 +58,7 @@
                         android:lines="@android:integer/config_longAnimTime"
                         android:text="user"
                         android:textColor="#000"
-                        android:textSize="13dp" />
+                        android:textSize="15dp" />
 
 
                 </LinearLayout>
@@ -122,9 +123,10 @@
                         android:lines="@android:integer/config_longAnimTime"
                         android:text="user"
                         android:textColor="#000"
-                        android:textSize="13dp" />
+                        android:textSize="15dp" />
 
                 </LinearLayout>
+
 
                 <LinearLayout
 
@@ -186,7 +188,7 @@
                         android:lines="@android:integer/config_longAnimTime"
                         android:text="user"
                         android:textColor="#000"
-                        android:textSize="13dp" />
+                        android:textSize="15dp" />
 
                 </LinearLayout>
 
@@ -198,14 +200,14 @@
                     android:gravity="center">
 
                     <ImageButton
-
+                        android:id="@+id/calling"
                         android:layout_width="45dp"
                         android:layout_height="45dp"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
                         android:layout_gravity="center"
-                        android:background="@drawable/btn_feed_action"
-                        android:src="@drawable/ic_more_grey_48" />
+                        android:background="@drawable/phone"
+                       />
 
                 </LinearLayout>
             </LinearLayout>
@@ -248,7 +250,7 @@
                         android:lines="@android:integer/config_longAnimTime"
                         android:text="user"
                         android:textColor="#000"
-                        android:textSize="13dp" />
+                        android:textSize="15dp" />
 
                 </LinearLayout>
 
