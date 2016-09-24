@@ -139,8 +139,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         .setSmallIcon(R.mipmap.my_taskmanager96)
                         .setSound(defaultSoundUri)
                         .setLargeIcon(result)
-                        .setColor(ContextCompat.getColor(mContext, R.color.pink_900))
-                        .setLights(Color.RED, 1000, 500)
                         .setNumber(++numMessages)
                         .setStyle(new Notification.BigPictureStyle().bigPicture(result))
                         .build();

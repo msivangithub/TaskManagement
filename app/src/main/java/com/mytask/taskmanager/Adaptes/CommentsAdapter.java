@@ -215,7 +215,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
                     image.setScaleY((float) (y - 1));
                 }
             });
-            image.setImageBitmap(AppUtil.decodeSampledBitmapFromResource(context.getResources(),R.id.imageView, 100, 100));
+
             image.setImageBitmap(result);
 
         }
@@ -262,6 +262,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
                         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
                         lp.height = WindowManager.LayoutParams.MATCH_PARENT;
                         showVideo.show();
+                        /*VideoView*/
                         VideoView videoview = (VideoView) showVideo.findViewById(R.id.videoPreview);
                         MediaController mediaController = new MediaController(context);
                         mediaController.setAnchorView(videoview);

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -52,6 +53,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -94,6 +96,7 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
     JSONObject jsonObject;
     private static final String TAG = "EssentialsFragment";
     static final String FTP_HOST = "myaccountsretail.com";
+    ProgressDialog pdDialog;
     ProgressDialog pd;
     /*  FTP USERNAME*/
     static final String FTP_USER = "myRetail";
@@ -328,7 +331,46 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
 
         return valid;
     }
+    private static int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
 
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) >= reqHeight
+                    && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
+    }
+
+    public static Bitmap decodeSampledBitmapFromUri(Context context, Uri imageUri, int reqWidth, int reqHeight) throws FileNotFoundException {
+
+        // Get input stream of the image
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        InputStream iStream = context.getContentResolver().openInputStream(imageUri);
+
+        // First decode with inJustDecodeBounds=true to check dimensions
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeStream(iStream, null, options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeStream(iStream, null, options);
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -346,9 +388,10 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
                 PostsDatabaseHelper databaseHelper = PostsDatabaseHelper.getInstance(getActivity());
                 databaseHelper.addPost(post1);
                 try {
-
+                    pd = new ProgressDialog(getActivity());
+                    pd.setMessage("Uploading......");
+                    //image.setImageBitmap(decodeSampledBitmapFromUri(getActivity(),selectedimg,200,200));
                     image.setImageBitmap(MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedimg));
-
                     imageURI = "Image_" + getRandomNumberInRange(1, 10000) + ".jpg";
                     UploadTask task = new UploadTask(null, imageURI, selectedimg);
                     task.execute();
@@ -363,7 +406,8 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
                 //here we can add ftp call    i will open camera yes onslsy camer only camera.....ok
                 UploadTask task = new UploadTask(new File(Environment.getExternalStorageDirectory(), imageURI), imageURI, null);
                 task.execute();
-
+                pd = new ProgressDialog(getActivity());
+                pd.setMessage("Uploading......");
                 image.setImageBitmap(BitmapFactory.decodeFile(new File(Environment.getExternalStorageDirectory(), imageURI).getAbsolutePath()));
                 pd.show();
                 User user = new User();
@@ -420,9 +464,16 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
             }
 
         }
-
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pdDialog = new ProgressDialog(getActivity());
+            pdDialog.setMessage("Uploading......");
+            pdDialog.show();
+        }
         @Override
         protected void onPostExecute(String s) {
+            pdDialog.dismiss();
             Toast.makeText(getActivity(), s, Toast.LENGTH_LONG).show();
         }
     }

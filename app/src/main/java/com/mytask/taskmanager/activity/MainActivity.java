@@ -46,7 +46,6 @@ import com.mytask.taskmanager.fragment.AddUserFragment;
 import com.mytask.taskmanager.fragment.AllUsersFragement;
 import com.mytask.taskmanager.fragment.ReportsFragment;
 import com.mytask.taskmanager.fragment.TaskcreationFragment;
-import com.mytask.taskmanager.fragmentssss.SettingsFragments;
 import com.mytask.taskmanager.fragmentssss.TaskDetails;
 import com.mytask.taskmanager.fragmentssss.UserTaskDetails;
 import com.mytask.taskmanager.services.AsynHttpPost;
@@ -376,11 +375,15 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_setting) {
 
-            Fragment f = SettingsFragments.newInstance();
+           /* Fragment f = SettingsFragments.newInstance();
             FragmentManager fm = getSupportFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
             ft.replace(R.id.container, f);
-            ft.commit();
+            ft.commit();*/
+
+            Intent setting = new Intent(MainActivity.this,UsersProfileActivity.class);
+            startActivity(setting);
+
 
         } else if (id == R.id.nav_logout) {
 

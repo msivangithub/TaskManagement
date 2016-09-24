@@ -2,6 +2,7 @@ package com.mytask.taskmanager.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -52,14 +53,15 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
         mCity = (TextView) findViewById(R.id.city);
         mCall = (ImageButton)findViewById(R.id.calling);
         mCall.setOnClickListener(this);
+
         email = getIntent().getStringExtra(EMAIL);
         image = getIntent().getStringExtra(IMAGE);
         fname = getIntent().getStringExtra(FNAME);
         phone = getIntent().getStringExtra(PHONE);
         city = getIntent().getStringExtra(CITY);
 
-        CollapsingToolbarLayout collapser =
-                (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+        CollapsingToolbarLayout collapser = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+        collapser.setExpandedTitleColor(Color.parseColor("#880E4F"));
         collapser.setTitle(fname);
 
         mEmail.setText(email);
@@ -69,8 +71,8 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
 
         Picasso.with(this)
                 .load("http://makeindiakart.com/taskfiles/" + image)
-                .placeholder(R.drawable.employee)   // optional
-                .error(R.drawable.employee)      // optional
+                .placeholder(R.drawable.imge_placeholder)   // optional
+                .error(R.drawable.imge_placeholder)      // optional
                 .resize(300, 300)
                 .into(imageView);
 
