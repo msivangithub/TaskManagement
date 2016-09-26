@@ -81,6 +81,7 @@ public class AllUsersFragement extends Fragment implements RestfulListener {
 
             } catch (Exception e) {
                 e.printStackTrace();
+                Toast.makeText(getActivity(), s, Toast.LENGTH_LONG).show();
             }
         }else if (rType == 109) {
             try {
@@ -92,6 +93,7 @@ public class AllUsersFragement extends Fragment implements RestfulListener {
                 Toast.makeText(getActivity(), result, Toast.LENGTH_LONG).show();
             } catch (JSONException e) {
                 e.printStackTrace();
+                Toast.makeText(getActivity(), s, Toast.LENGTH_LONG).show();
             }
         }
     }

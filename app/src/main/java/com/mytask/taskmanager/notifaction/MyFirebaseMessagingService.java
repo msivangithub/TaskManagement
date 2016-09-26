@@ -140,7 +140,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         .setSound(defaultSoundUri)
                         .setLargeIcon(result)
                         .setNumber(++numMessages)
-                        .setStyle(new Notification.BigPictureStyle().bigPicture(result))
+                       // .setStyle(new Notification.BigPictureStyle().bigPicture(result))
                         .build();
                 notif.flags |= Notification.FLAG_AUTO_CANCEL;
                 notificationManagers.notify(1, notif);

@@ -69,7 +69,7 @@ public class TaskcreationFragment extends Fragment implements addbutton {
 
         tabLayout.getTabAt(0).setIcon(tabIcons[0]);
         tabLayout.getTabAt(1).setIcon(tabIcons[1]);
-        tabLayout.getTabAt(2).setIcon(tabIcons[2]);
+       // tabLayout.getTabAt(2).setIcon(tabIcons[2]);
 
     }
 
@@ -77,8 +77,8 @@ public class TaskcreationFragment extends Fragment implements addbutton {
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
         adapter.addFrag(TaskFragment1.newInstance(TaskcreationFragment.this), "ONE");
-        adapter.addFrag(TaskFragment2.newInstance(TaskcreationFragment.this), "TWO");
-        adapter.addFrag(TaskFragment3.newInstance(TaskcreationFragment.this), "THREE");
+        //adapter.addFrag(TaskFragment2.newInstance(TaskcreationFragment.this), "TWO");
+        adapter.addFrag(TaskFragment2.newInstance(TaskcreationFragment.this), "THREE");
         viewPager.setAdapter(adapter);
     }
 
@@ -106,11 +106,12 @@ public class TaskcreationFragment extends Fragment implements addbutton {
                     TaskFragment1 notesFragment = TaskFragment1.newInstance(TaskcreationFragment.this);
                     return notesFragment;
 
-                case 1:
+               /* case 1:
 
                     TaskFragment2 notesF = TaskFragment2.newInstance(TaskcreationFragment.this);
-                    return notesF;
-                case 2:
+                    return notesF;*/
+
+                case 1:
 
                     TaskFragment3 notes = TaskFragment3.newInstance(TaskcreationFragment.this);
                     return notes;

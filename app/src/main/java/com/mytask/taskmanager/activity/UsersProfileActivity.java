@@ -23,6 +23,7 @@ import com.facebook.drawee.generic.RoundingParams;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.mytask.taskmanager.R;
 import com.mytask.taskmanager.util.PreferenceUtil;
+import com.mytask.taskmanager.util.ProjectVariables;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,7 +36,7 @@ public class UsersProfileActivity extends AppCompatActivity implements AppBarLay
     private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.9f;
     private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.3f;
     private static final int ALPHA_ANIMATIONS_DURATION = 200;
-    //final Uri imageUri = Uri.parse("http://i.imgur.com/VIlcLfg.jpg");
+    final Uri imageUris = Uri.parse("http://i.imgur.com/VIlcLfg.jpg");
     String MainUrl = "http://makeindiakart.com/taskfiles/";
 
 
@@ -99,7 +100,7 @@ public class UsersProfileActivity extends AppCompatActivity implements AppBarLay
         phone.setText(PreferenceUtil.getInstance().getString(UsersProfileActivity.this, "PhoneNo", "phoneno"));
         branchname.setText(PreferenceUtil.getInstance().getString(UsersProfileActivity.this, "BranchName", "branch"));
         //set avatar and cover
-       // avatar.setImageURI(imageUri);
+        // avatar.setImageURI(imageUri);
 
     }
 
@@ -108,7 +109,7 @@ public class UsersProfileActivity extends AppCompatActivity implements AppBarLay
         protected Bitmap doInBackground(String... params) {
             //http://makeindiakart.com/taskfiles/Image_1290.jpg
             try {
-                String MainUrl = "http://makeindiakart.com/taskfiles/";
+                String MainUrl = ProjectVariables.IMAGE_PATH;
                 URL url = new URL(MainUrl + PreferenceUtil.getInstance().getString(UsersProfileActivity.this, "ProfileImage", "Image_5756.jpg"));
                 InputStream is = url.openConnection().getInputStream();
                 Bitmap bitMap = BitmapFactory.decodeStream(is);
@@ -135,6 +136,7 @@ public class UsersProfileActivity extends AppCompatActivity implements AppBarLay
             avatar.getHierarchy().setRoundingParams(roundingParams);
             avatar.setImageBitmap(result);
             coverImage.setImageBitmap(result);
+
         }
     }
 

@@ -157,7 +157,7 @@ public class AllUsersAdapter extends RecyclerView.Adapter<AllUsersAdapter.MyView
         holder.user.setText(taskUser.getFirstName());
         holder.roles.setText(taskUser.getUserLevel());
         Picasso.with(context)
-                .load("http://makeindiakart.com/taskfiles/" + taskUser.getImage())
+                .load(ProjectVariables.IMAGE_PATH + taskUser.getImage())
                 .placeholder(R.drawable.imge_placeholder)   // optional
                 .error(R.drawable.imge_placeholder)      // optional
                 .resize(300, 300)

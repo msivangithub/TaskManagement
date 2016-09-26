@@ -176,7 +176,7 @@ public class ReportsFragment extends Fragment implements RestfulListener {
             } catch (JSONException e) {
                 e.printStackTrace();
 
-                Toast.makeText(getActivity(), s.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), s, Toast.LENGTH_LONG).show();
             }
 
             mSwipeRefreshLayout.setRefreshing(false);

@@ -20,11 +20,21 @@ public class ProjectVariables {
     public static final String MASTER_URL = "http://makeindiakart.com/Master.svc/";
     // public static final String URL = "http://makeindiakart.com/Master.svc/";
 
+
+
+
+
+
     /*Project Base URL*/
-    //public static final String URL = "http://makeindiakart.com/TaskManger.svc/";
+    public static final String URL = "http://makeindiakart.com/TaskManger.svc/";
+    public static final String IMAGE_PATH = "http://makeindiakart.com/taskfiles/";
 
     /*Demo Base Url*/
-    public static final String URL = "http://myaccountsonline.co.in/taskmanager/TaskManger.svc/";
+   // public static final String URL = "http://myaccountsonline.co.in/taskmanager/TaskManger.svc/";
+   // public static final String IMAGE_PATH = "http://myaccountsonline.co.in/Taskmanger/taskfiles/";
+
+
+
 
 
 

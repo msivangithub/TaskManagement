@@ -1,13 +1,17 @@
 package com.mytask.taskmanager.activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -19,6 +23,7 @@ import android.widget.TextView;
 
 import com.mytask.taskmanager.Adaptes.AllUsersAdapter;
 import com.mytask.taskmanager.R;
+import com.mytask.taskmanager.util.ProjectVariables;
 import com.squareup.picasso.Picasso;
 
 import java.util.jar.Attributes;
@@ -41,7 +46,7 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
-
+        initPermissions();
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) // Habilitar up button
@@ -70,7 +75,7 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
         mFname.setText(fname);
 
         Picasso.with(this)
-                .load("http://makeindiakart.com/taskfiles/" + image)
+                .load(ProjectVariables.IMAGE_PATH + image)
                 .placeholder(R.drawable.imge_placeholder)   // optional
                 .error(R.drawable.imge_placeholder)      // optional
                 .resize(300, 300)
@@ -114,5 +119,28 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
                  startActivity( myIntent ) ;
                  break;
          }
+    }
+
+    private void initPermissions() {
+        if (ContextCompat.checkSelfPermission(UserActivity.this,
+                Manifest.permission.CALL_PHONE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(UserActivity.this,
+                    Manifest.permission.CALL_PHONE)) {
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(UserActivity.this,
+                        new String[]{Manifest.permission.CALL_PHONE},
+                        1);
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
     }
 }

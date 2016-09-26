@@ -384,7 +384,7 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
                                         if (!audio.equalsIgnoreCase(ProjectVariables.NOAUDIO))
                                             obj.accumulate("Audio", audio);
 
-                                        obj.accumulate("TaskToId", PreferenceUtil.getInstance().getString(_context, "currentUser", "000"));
+                                        obj.accumulate("TaskToId", t.getTaskFromId());
                                         obj.accumulate("TaskFromId", PreferenceUtil.getInstance().getString(_context, "Uid", "c001"));
 
                                     } catch (JSONException e) {

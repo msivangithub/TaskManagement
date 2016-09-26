@@ -249,6 +249,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
 
         @Override
         public boolean onMenuItemClick(MenuItem menuItem) {
+
             switch (menuItem.getItemId()) {
                 case R.id.capture_video:
                     if (commentsList.get(position).getVideo().isEmpty() || commentsList.get(position).getVideo().equalsIgnoreCase("") || commentsList.get(position).getVideo().length() == 0 || commentsList.get(position).getVideo().equalsIgnoreCase("novideo")) {

@@ -247,8 +247,9 @@ public class MainActivity extends AppCompatActivity
         @Override
         protected Bitmap doInBackground(String... params) {
             //http://makeindiakart.com/taskfiles/Image_1290.jpg
+            //http://myaccountsonline.co.in/Taskmanger/taskfiles/Demo.JPG
             try {
-                String MainUrl = "http://makeindiakart.com/taskfiles/";
+                String MainUrl = ProjectVariables.IMAGE_PATH;
                 URL url = new URL(MainUrl + PreferenceUtil.getInstance().getString(MainActivity.this, "ProfileImage", "Image_5756.jpg"));
                 InputStream is = url.openConnection().getInputStream();
                 BitmapFactory.Options options = new BitmapFactory.Options();
@@ -622,6 +623,27 @@ public class MainActivity extends AppCompatActivity
             }
 
         }
+        if (ContextCompat.checkSelfPermission(MainActivity.this,
+                Manifest.permission.CALL_PHONE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
+                    Manifest.permission.CALL_PHONE)) {
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(MainActivity.this,
+                        new String[]{Manifest.permission.CALL_PHONE},
+                        5);
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
+
     }
 
     @Override
