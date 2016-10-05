@@ -37,6 +37,7 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.mytask.taskmanager.R;
 import com.mytask.taskmanager.activity.MainActivity;
 import com.mytask.taskmanager.util.AppUtil;
+import com.mytask.taskmanager.util.ProjectVariables;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,7 +52,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "MyFirebaseMsgService";
     Context context;
-
+    Bitmap Bitmapicon;
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         //Displaying data in log
@@ -60,6 +61,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.d(TAG, "From: " + remoteMessage.getFrom());
         Log.d(TAG, "Notification Message Body: " + remoteMessage.getNotification().getBody());
         Log.d(TAG, "Notification Message Tital: " + remoteMessage.getNotification().getTitle());
+        Log.d(TAG, "Notification Icons: " + remoteMessage.getNotification().getIcon());
 
         //Calling method to generate notification
         String tag = remoteMessage.getNotification().getTag();
@@ -67,11 +69,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String titel = remoteMessage.getNotification().getTitle();
         String icon = remoteMessage.getNotification().getIcon();
 
+
         sendNotifications(body, titel, icon);
     }
 
     private void sendNotifications(String messageBody, String titel, String icon) {
-        new LoadImageFromURL(context, messageBody, titel, "http://myaccountsonline.co.in/Taskmanger/taskfiles/" + icon).execute();
+        new LoadImageFromURL(context, messageBody, titel, ProjectVariables.IMAGE_PATH + icon).execute();
         Log.d(TAG, "Notification Icon name: " + icon.toString());
     }
 
@@ -93,7 +96,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             //http://makeindiakart.com/taskfiles/Image_1290.jpg
             InputStream in;
 
-            Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
+            Bitmapicon = BitmapFactory.decodeResource(context.getResources(),
                     R.drawable.my_taskmanager96);
             try {
                 URL url = new URL(this.imageUrl);
@@ -115,7 +118,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
                 Log.e("ERRRRRRRR", e.getMessage().toString());
             }
-            return icon;
+            return Bitmapicon;
         }
 
         @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -136,7 +139,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         .setContentIntent(pendingIntent)
                         .setContentTitle(title)
                         .setContentText(message)
-                        .setSmallIcon(R.mipmap.my_taskmanager96)
+                        .setSmallIcon(R.mipmap.my_taskmanager)
                         .setSound(defaultSoundUri)
                         .setLargeIcon(result)
                         .setNumber(++numMessages)

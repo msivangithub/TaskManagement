@@ -11,13 +11,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.futuremind.recyclerviewfastscroll.FastScroller;
 import com.mytask.taskmanager.Adaptes.AllUsersAdapter;
+import com.mytask.taskmanager.Adaptes.FastScrollAdapter;
 import com.mytask.taskmanager.Pojo.TaskUser;
 import com.mytask.taskmanager.R;
 import com.mytask.taskmanager.services.AsynHttpPost;
 import com.mytask.taskmanager.services.RestfulListener;
 import com.mytask.taskmanager.util.PreferenceUtil;
 import com.mytask.taskmanager.util.ProjectVariables;
+import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,6 +34,9 @@ public class AllUsersFragement extends Fragment implements RestfulListener {
     ArrayList<TaskUser> users = new ArrayList<>();
     JSONArray jsonArray;
     AllUsersAdapter allUsersAdapter;
+    FastScrollRecyclerView recyclerView;
+    FastScrollAdapter fastScrollAdapter;
+    RestfulListener listener;
 
     public static AllUsersFragement newInstance() {
 
@@ -44,7 +51,10 @@ public class AllUsersFragement extends Fragment implements RestfulListener {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_all_users_fragement, container, false);
-        mRecycleruserDelete = (RecyclerView) view.findViewById(R.id.userdelete);
+         mRecycleruserDelete = (RecyclerView) view.findViewById(R.id.userdelete);
+
+        listener = this;
+        //recyclerView = (FastScrollRecyclerView) view.findViewById(R.id.recycler);
         AsynHttpPost post = new AsynHttpPost(getActivity(), 0, 190, ProjectVariables.USERS + PreferenceUtil.getInstance().getString(getActivity(), "UserRole", "user") + "," + PreferenceUtil.getInstance().getString(getActivity(), "Compname", "companyname"), this, null, "");
         post.execute();
         setHasOptionsMenu(true);
@@ -60,6 +70,7 @@ public class AllUsersFragement extends Fragment implements RestfulListener {
                 users = new ArrayList<>();
                 jsonArray = new JSONArray(s);
                 for (int i = 0; i < jsonArray.length(); i++) {
+
                     JSONObject obj = jsonArray.getJSONObject(i);
                     TaskUser user = new TaskUser();
                     user.setFirstName(obj.getString(ProjectVariables.FNAME));
@@ -72,6 +83,12 @@ public class AllUsersFragement extends Fragment implements RestfulListener {
                     user.setCity(obj.getString(ProjectVariables.CI_TY));
                     users.add(user);
                 }
+
+
+              /*  fastScrollAdapter = new FastScrollAdapter(getActivity(),AllUsersFragement.this, R.layout.user_rowitems, users);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                recyclerView.setHasFixedSize(true);
+                recyclerView.setAdapter(fastScrollAdapter);*/
 
                 allUsersAdapter = new AllUsersAdapter(getActivity(),AllUsersFragement.this, R.layout.user_rowitems, users);
                 mRecycleruserDelete.setLayoutManager(new LinearLayoutManager(getActivity()));

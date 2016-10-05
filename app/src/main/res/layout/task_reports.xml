@@ -12,7 +12,7 @@
         android:padding="5dp"
         android:layout_height="wrap_content"
         android:textColor="#000"
-        android:textSize="10dp"
+        android:textSize="@dimen/textsize"
         android:text="name" />
     <View
         android:layout_width="1dp"
@@ -24,7 +24,7 @@
         android:layout_width="0dp"
         android:layout_weight="1"
         android:textColor="#000"
-        android:textSize="10dp"
+        android:textSize="@dimen/textsize"
         android:gravity="center"
         android:layout_height="wrap_content"
         android:text="name" />
@@ -38,7 +38,7 @@
         android:layout_width="0dp"
         android:layout_weight="1.1"
         android:textColor="#000"
-        android:textSize="10dp"
+        android:textSize="@dimen/textsize"
         android:gravity="center"
         android:layout_height="wrap_content"
         android:text="name" />
@@ -54,7 +54,7 @@
         android:layout_width="0dp"
         android:layout_weight="1"
         android:textColor="#000"
-        android:textSize="10dp"
+        android:textSize="@dimen/textsize"
         android:gravity="center"
         android:layout_height="wrap_content"
         android:text="name" />
@@ -68,7 +68,7 @@
         android:layout_width="0dp"
         android:layout_weight="1"
         android:visibility="gone"
-        android:textSize="10dp"
+        android:textSize="@dimen/textsize"
         android:layout_height="wrap_content"
         android:text="name" />
 </LinearLayout>

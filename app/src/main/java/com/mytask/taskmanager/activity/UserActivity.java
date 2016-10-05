@@ -76,8 +76,8 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
 
         Picasso.with(this)
                 .load(ProjectVariables.IMAGE_PATH + image)
-                .placeholder(R.drawable.imge_placeholder)   // optional
-                .error(R.drawable.imge_placeholder)      // optional
+                .placeholder(R.drawable.amply_background)   // optional
+                .error(R.drawable.amply_background)      // optional
                 .resize(300, 300)
                 .into(imageView);
 

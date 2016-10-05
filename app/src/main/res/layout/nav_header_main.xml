@@ -15,7 +15,7 @@
         android:layout_width="@dimen/DrawerHeader_CircleImageView_width"
         android:layout_height="@dimen/DrawerHeader_CircleImageView_height"
         android:layout_marginTop="@dimen/DrawerHeader_CircleImageView_marginTop"
-        android:src="@drawable/ic_menu_gallery"
+        android:src="@drawable/profile_sample"
         app:civ_border_color="@color/white"
         app:civ_border_width="@dimen/DrawerHeader_CircleImageView_border_width" />
 

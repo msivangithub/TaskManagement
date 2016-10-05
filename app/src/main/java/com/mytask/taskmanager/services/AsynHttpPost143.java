@@ -2,6 +2,8 @@ package com.mytask.taskmanager.services;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -22,11 +24,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Set;
 
 /**
  * Created by GhanaShyam on 7/13/2016.
  */
 public class AsynHttpPost143 extends AsyncTask<Void, Void, String> {
+
     private ProgressDialog pd;
     private Context _con;
     private int _requestId;
@@ -35,7 +41,7 @@ public class AsynHttpPost143 extends AsyncTask<Void, Void, String> {
     private RestfulListener _listener;
     private JSONObject _obj;
     private String serviceStatus;
-
+    boolean isConnected;
 
     public AsynHttpPost143(Context con, int requestId, int requestType, String apiMethod, RestfulListener listener, JSONObject obj, String temp2) {
         _con = con;
@@ -49,7 +55,7 @@ public class AsynHttpPost143 extends AsyncTask<Void, Void, String> {
 
     @Override
     protected String doInBackground(Void... params) {
-
+        isConnected = hasInternetAccess(_con);
         String MainUrl = ProjectVariables.BASE_URL + _apiMethod;
         String result = null;
         HttpPost post = null;
@@ -96,7 +102,7 @@ public class AsynHttpPost143 extends AsyncTask<Void, Void, String> {
                     if (inputStream != null) {
 
                         result = convertInputStreamToString(inputStream);
-                        pd.dismiss();
+                       // pd.dismiss();
                         if (result.length() > 10) {
                             if (_requestId == 1) {
 
@@ -112,12 +118,12 @@ public class AsynHttpPost143 extends AsyncTask<Void, Void, String> {
                             return "NO DATA FOUND";
                         }
                     } else {
-                        pd.dismiss();
+                      //  pd.dismiss();
                         serviceStatus = "0";
                         return "NO DATA FOUND";
                     }
                 } else {
-                    pd.dismiss();
+                   // pd.dismiss();
                     serviceStatus = "0";
                     return res.getStatusLine().getStatusCode() + " Error";
                 }
@@ -127,12 +133,12 @@ public class AsynHttpPost143 extends AsyncTask<Void, Void, String> {
                 e.printStackTrace();
                 serviceStatus = "0";
                 Log.e("Exception Occured ", e.getMessage().toString());
-                pd.dismiss();
+               // pd.dismiss();
                 return e.getMessage().toString();
             }
 
         } else {
-            pd.dismiss();
+         //   pd.dismiss();
             serviceStatus = "0";
             return "Try again later";
 
@@ -151,8 +157,8 @@ public class AsynHttpPost143 extends AsyncTask<Void, Void, String> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        pd = new ProgressDialog(_con);
-        pd.setTitle("Loading Please Wait....");
+       // pd = new ProgressDialog(_con);
+       // pd.setTitle("Loading Please Wait....");
        // pd.show();
     }
 
@@ -167,4 +173,31 @@ public class AsynHttpPost143 extends AsyncTask<Void, Void, String> {
         return result;
 
     }
+    private static boolean isNetworkAvailable(Context context) {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null;
+    }
+    public boolean hasInternetAccess(Context context) {
+        if (isNetworkAvailable(context)) {
+            try {
+                HttpURLConnection urlc = (HttpURLConnection)
+                        (new URL("http://clients3.google.com/generate_204")
+                                .openConnection());
+                urlc.setRequestProperty("User-Agent", "Android");
+                urlc.setRequestProperty("Connection", "close");
+                urlc.setConnectTimeout(1500);
+                urlc.connect();
+                return (urlc.getResponseCode() == 204 &&
+                        urlc.getContentLength() == 0);
+            } catch (IOException e) {
+                Log.e("LOGGER=TaskManager ", "Error checking internet connection", e);
+            }
+        } else {
+            Log.d("LOGGER=TaskManager", "No network available!");
+        }
+        return false;
+    }
 }
+

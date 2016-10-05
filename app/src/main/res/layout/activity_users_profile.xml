@@ -27,7 +27,7 @@
                 <ImageView
                     android:id="@+id/imageview_placeholder"
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
+                    android:layout_height="@dimen/profile_width"
                     android:contentDescription="@string/app_name"
                     android:scaleType="centerCrop"
                     android:tint="#11000000"
@@ -37,7 +37,7 @@
                 <FrameLayout
                     android:id="@+id/framelayout_title"
                     android:layout_width="match_parent"
-                    android:layout_height="120dp"
+                    android:layout_height="100dp"
                     android:layout_gravity="bottom|center_horizontal"
                     android:background="@color/pink_900"
                     android:orientation="vertical"
@@ -127,12 +127,10 @@
             android:layout_height="@dimen/image_width"
             android:layout_gravity="center"
             app:layout_behavior="com.mytask.taskmanager.activity.ImageBehaviors"
-            android:background="@drawable/imge_placeholder"
             fresco:roundAsCircle="true"
-            fresco:roundedCornerRadius="5dp"
-            fresco:roundBottomLeft="false"
-            fresco:roundBottomRight="false"
-            fresco:roundingBorderWidth="2dp"
+            fresco:actualImageScaleType="fitXY"
+            fresco:roundedCornerRadius="15dp"
+            fresco:roundingBorderWidth="5dp"
             fresco:roundingBorderColor="@color/black"/>
 
     </android.support.design.widget.CoordinatorLayout>

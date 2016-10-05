@@ -85,14 +85,10 @@ public class ReportsFragment extends Fragment implements RestfulListener {
                             e.printStackTrace();
                             Toast.makeText(getActivity(), e.toString(), Toast.LENGTH_LONG).show();
                         }
-                        if (AppUtil.isNetworkAvailable(getActivity())) {
 
                             AsynHttpPost143 post1 = new AsynHttpPost143(getActivity(), 0, 675, ProjectVariables.TASKREPORT, listener, obj, "");
                             post1.execute();
 
-                        } else {
-                            ToastMessegNetwork();
-                        }
                     }
                 }, 1500);
             }
@@ -184,7 +180,6 @@ public class ReportsFragment extends Fragment implements RestfulListener {
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             recyclerView.setItemAnimator(new DefaultItemAnimator());
             recyclerView.setHasFixedSize(true);
-            recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
             recyclerView.setAdapter(adapter1);
 
         } else if (rType == 167) {

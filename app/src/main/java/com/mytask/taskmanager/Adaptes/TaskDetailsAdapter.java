@@ -24,6 +24,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.Spinner;
@@ -32,16 +33,20 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.mytask.taskmanager.Pojo.Comments;
 import com.mytask.taskmanager.Pojo.Task;
 import com.mytask.taskmanager.R;
 import com.mytask.taskmanager.activity.RecordAudioActivity;
 import com.mytask.taskmanager.activity.Tasks;
+import com.mytask.taskmanager.activity.UserTaskDetailsActivity;
 import com.mytask.taskmanager.services.AsynHttpPost;
 import com.mytask.taskmanager.services.RestfulListener;
 import com.mytask.taskmanager.util.AppUtil;
 import com.mytask.taskmanager.util.PreferenceUtil;
 import com.mytask.taskmanager.util.ProjectVariables;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,6 +59,19 @@ import java.util.Random;
  * Created by NEWSYSTEM1 on 6/9/2016.
  */
 public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.MyViewHolder> implements RestfulListener {
+
+    public static final String TASK_HEADING = "task_heading";
+    public static final String TASK = "task";
+    public static final String ASIGNBY = "asignby";
+    public static final String START = "start";
+    public static final String END = "end";
+    public static final String STARTTIME = "starttime";
+    public static final String ENDTIME = "endtime";
+    public static final String UNAME = "uname";
+    public static final String PROFILE = "profile";
+    public static final String STATUS = "status";
+    public static final String TASK_ID = "task_id";
+
     List<Task> billToBillArrayList;
     Context _context;
     String _type;
@@ -64,7 +82,7 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
     String UserRole = "";
     Button pComments;
     RecyclerView Comment;
-    String video ,audio ,images;
+    String video, audio, images;
     JSONObject obj;
 
     public TaskDetailsAdapter(Context context, RestfulListener rl, int taskId, List<Task> billToBillArrayList, String type) {
@@ -93,10 +111,11 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView task, task_header, icon_entry, mTaskDate, mTaskTime;
+        public TextView task, task_header, mTaskDate, mTaskTime, mAsignBy;
         public CheckBox check;
         public LinearLayout taskrow, deleteTask;
         public View itemView;
+        public ImageView icon_entry;
         public ImageButton mImageMenu;
 
         public MyViewHolder(View convertView) {
@@ -106,10 +125,33 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
             task_header = (TextView) convertView.findViewById(R.id.txt_taskheader);
             taskrow = (LinearLayout) convertView.findViewById(R.id.taskrow);
             mImageMenu = (ImageButton) convertView.findViewById(R.id.Button_menu);
+            mAsignBy = (TextView) convertView.findViewById(R.id.asignBy);
             //check = (CheckBox) convertView.findViewById(R.id.check);
-            icon_entry = (TextView) itemView.findViewById(R.id.icon_entry);
+            icon_entry = (ImageView) itemView.findViewById(R.id.icon_entry);
             mTaskDate = (TextView) convertView.findViewById(R.id.taskDate);
             mTaskTime = (TextView) convertView.findViewById(R.id.taskTime);
+
+
+            taskrow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(_context, UserTaskDetailsActivity.class);
+                    intent.putExtra(TASK_HEADING, billToBillArrayList.get(getAdapterPosition()).getTaskHeading());
+                    intent.putExtra(TASK, billToBillArrayList.get(getAdapterPosition()).getTaskDes());
+                    intent.putExtra(ASIGNBY, billToBillArrayList.get(getAdapterPosition()).getTaskFromId());
+                    intent.putExtra(START, billToBillArrayList.get(getAdapterPosition()).getExpStartDate());
+                    intent.putExtra(END, billToBillArrayList.get(getAdapterPosition()).getExpEndDate());
+                    intent.putExtra(STARTTIME, billToBillArrayList.get(getAdapterPosition()).getStartTime());
+                    intent.putExtra(ENDTIME, billToBillArrayList.get(getAdapterPosition()).getEndTime());
+                    intent.putExtra(UNAME, billToBillArrayList.get(getAdapterPosition()).getUname());
+                    intent.putExtra(PROFILE, billToBillArrayList.get(getAdapterPosition()).getProfile());
+                    intent.putExtra(STATUS, billToBillArrayList.get(getAdapterPosition()).getTaskStatus());
+                    intent.putExtra(TASK_ID, billToBillArrayList.get(getAdapterPosition()).getTaskId());
+
+                    Activity act = (Activity) _context;
+                    act.startActivity(intent);
+                }
+            });
 
         }
     }
@@ -123,11 +165,30 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
         viewHolder.task_header.setText(t.getTaskHeading());
         viewHolder.mTaskDate.setText(t.getActStartDate());
         viewHolder.mTaskTime.setText(t.getStartTime());
-       // setAnimation(viewHolder.itemView, position);
+        viewHolder.mAsignBy.setText(t.getUname());
+        // setAnimation(viewHolder.itemView, position);
 
+      /*  Picasso.with(_context)
+                .load(ProjectVariables.IMAGE_PATH + billToBillArrayList.get(position).getProfile())
+                .placeholder(R.drawable.profile_sample)   // optional
+                .error(R.drawable.profile_sample)      // optional
+                .resize(300 ,300)
+                .into(viewHolder.icon_entry);*/
 
-        if (billToBillArrayList.get(position).getTaskHeading().length() > 0)
-            viewHolder.icon_entry.setText("" + billToBillArrayList.get(position).getTaskHeading().charAt(0));
+       /* if (billToBillArrayList.get(position).getTaskHeading().length() > 0)
+            viewHolder.icon_entry.setText("" + billToBillArrayList.get(position).getTaskHeading().charAt(0));*/
+
+        if (billToBillArrayList.get(position).getTaskHeading().length() > 0) {
+            // viewHolder.icon_entry.setText("" + billToBillArrayList.get(position).getTaskHeading().charAt(0));
+            String firstLetter = String.valueOf(billToBillArrayList.get(position).getTaskHeading().charAt(0));
+            ColorGenerator generator = ColorGenerator.MATERIAL; // or use DEFAULT
+            // int color = generator.getColor(billToBillArrayList.get(position));
+            int color = generator.getRandomColor();
+            TextDrawable drawable = TextDrawable.builder()
+                    .buildRound(firstLetter, color); // radius in px
+            viewHolder.icon_entry.setImageDrawable(drawable);
+        }
+
         if (UserRole.equalsIgnoreCase("3")) {
             viewHolder.mImageMenu.setVisibility(View.GONE);
         }
@@ -137,7 +198,7 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
         } else {
             viewHolder.itemView.setBackgroundColor(Color.parseColor("#ffffff"));
         }
-        viewHolder.taskrow.setOnClickListener(new View.OnClickListener() {
+/*        viewHolder.taskrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.e("UserRole", UserRole);
@@ -182,7 +243,8 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
                     }
                 });
 
-                final TextView task, taskHead, asignBy, start, end, status, startTime, endTime;
+                final TextView task, taskHead, asignBy, start, end, status, startTime, endTime ,Uname;
+                final ImageView mProfile;
                 final RecyclerView Comment;
                 task = (TextView) d.findViewById(R.id.txt_show_desc);
                 taskHead = (TextView) d.findViewById(R.id.txt_show_task_head);
@@ -192,6 +254,8 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
                 status = (TextView) d.findViewById(R.id.TaskStatus);
                 startTime = (TextView) d.findViewById(R.id.startTime);
                 endTime = (TextView) d.findViewById(R.id.endTime);
+                Uname = (TextView)d.findViewById(R.id.uname);
+                mProfile = (ImageView)d.findViewById(R.id.profile_taskdetails);
 
                 pComments = (Button) d.findViewById(R.id.previousComments);
                 Comment = (RecyclerView) d.findViewById(R.id.TaskComment);
@@ -220,7 +284,16 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
                 status.setText(t.getTaskStatus());
                 startTime.setText(t.getStartTime());
                 endTime.setText(t.getEndTime());
+                Uname.setText(t.getUname());
+                Picasso.with(_context)
+                        .load(ProjectVariables.IMAGE_PATH + billToBillArrayList.get(position).getProfile())
+                        .placeholder(R.drawable.profile_sample)   // optional
+                        .error(R.drawable.profile_sample)      // optional
+                        .resize(200 ,200)
+                        .into(mProfile);
+
                 Button b = (Button) d.findViewById(R.id.showvideo);
+
                 b.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -281,12 +354,12 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
                                 updateDialog.dismiss();
                             }
                         });
-                        /*Record video in Task Replay  */
+                        *//*Record video in Task Replay  *//*
                         ImageButton record = (ImageButton) updateDialog.findViewById(R.id.record);
 
-                        /**
-                         *Click the Capture Video and Capture Image Using Alear Dialog
-                         */
+                        *//**
+         *Click the Capture Video and Capture Image Using Alear Dialog
+         *//*
                         record.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -304,7 +377,7 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
                                         d.dismiss();
                                     }
                                 });
-                                /*Click the AleartDialog video popsition*/
+                                *//*Click the AleartDialog video popsition*//*
 
                                 recordAudio.setOnClickListener(new View.OnClickListener() {
                                     @Override
@@ -324,7 +397,7 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
                                         act.startActivityForResult(takeVideoIntent, 667);
                                     }
                                 });
-                                 /*Click the AleartDialog image popsition*/
+                                 *//*Click the AleartDialog image popsition*//*
                                 mImage.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
@@ -371,7 +444,7 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
                                 if (!(task_comment.equalsIgnoreCase("") && task_comment.isEmpty()) && !(status[0].equalsIgnoreCase("") && status[0].isEmpty())) {
                                     obj = new JSONObject();
                                     try {
-                                        obj.accumulate("Cid", t.getTaskId() + "");
+                                        obj.accumulate("Cid", billToBillArrayList.get(position).getTaskId() + "");
                                         obj.accumulate("TaskStatus", status[0]);
                                         obj.accumulate("Comments", task_comment);
 
@@ -405,7 +478,7 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
                 d.show();
 
             }
-        });
+        });*/
 
     }
 

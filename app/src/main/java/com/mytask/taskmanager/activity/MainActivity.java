@@ -12,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -94,6 +95,8 @@ public class MainActivity extends AppCompatActivity
     String DevideId = "";
     private int month, day, year;
     ProgressDialog pdForVideoUpload;
+    private int progressStatus = 0;
+    private Handler handler = new Handler();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,6 +113,7 @@ public class MainActivity extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         UserRole = PreferenceUtil.getInstance().getString(MainActivity.this, ProjectVariables.USER_ROLE, "4");
         DevideId = PreferenceUtil.getInstance().getString(MainActivity.this, "currentToken", "token");
 
@@ -169,7 +173,7 @@ public class MainActivity extends AppCompatActivity
             MenuItem reports = m.findItem(R.id.nav_allReports);
             reports.setVisible(false);
 //ggyddgfyfyfyf
-        } else if (UserRole.equalsIgnoreCase("5") || (UserRole.equalsIgnoreCase("6"))) {//manager
+        } else if (UserRole.equalsIgnoreCase("5")) {
             Menu m = navigationView.getMenu();
 
             MenuItem addItem = m.findItem(R.id.nav_addUser);
@@ -178,6 +182,14 @@ public class MainActivity extends AppCompatActivity
             MenuItem alluser = m.findItem(R.id.nav_allusers);
             alluser.setVisible(false);
 
+        }else if (UserRole.equalsIgnoreCase("6")){//manager
+            Menu m = navigationView.getMenu();
+
+            MenuItem addItem = m.findItem(R.id.nav_addUser);
+            addItem.setVisible(false);
+
+            MenuItem alluser = m.findItem(R.id.nav_allusers);
+            alluser.setVisible(false);
         }
 
         if (UserRole.equalsIgnoreCase("4")) {
@@ -191,7 +203,7 @@ public class MainActivity extends AppCompatActivity
         }
         if (savedInstanceState == null) {
 
-            if (UserRole.equalsIgnoreCase("4") || UserRole.equalsIgnoreCase("1")) {//admin
+            if (UserRole.equalsIgnoreCase("4") || UserRole.equalsIgnoreCase("1") || UserRole.equalsIgnoreCase("5")|| UserRole.equalsIgnoreCase("6")) {//admin
                 Fragment f = TaskDetails.newInstance();
                 FragmentManager fm = getSupportFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
@@ -271,7 +283,11 @@ public class MainActivity extends AppCompatActivity
         protected void onPostExecute(Bitmap result) {
             // TODO Auto-generated method stub
             super.onPostExecute(result);
-            image.setImageBitmap(result);
+            if (result!=null) {
+                image.setImageBitmap(result);
+            }else {
+                image.setImageResource(R.drawable.profile_sample);
+            }
         }
     }
 
@@ -503,7 +519,10 @@ public class MainActivity extends AppCompatActivity
         protected void onPreExecute() {
             pdForVideoUpload = new ProgressDialog(MainActivity.this);
             pdForVideoUpload.setMessage("Uploading....");
+            pdForVideoUpload.setCanceledOnTouchOutside(false);
             pdForVideoUpload.show();
+           // showProgressDialogHorizontal();
+
         }
 
         public UploadTask(InputStream file, String videoName) {
@@ -538,6 +557,37 @@ public class MainActivity extends AppCompatActivity
         protected void onPostExecute(String s) {
             Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void showProgressDialogHorizontal() {
+
+        pdForVideoUpload = new ProgressDialog(MainActivity.this);
+        pdForVideoUpload.setTitle("Please Wait.....");
+        pdForVideoUpload.setMessage("Uploading ......");
+        pdForVideoUpload.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        pdForVideoUpload.setCancelable(false);
+        pdForVideoUpload.setMax(100);
+        pdForVideoUpload.show();
+        new Thread(new Runnable() {
+            public void run() {
+                while (progressStatus < 100) {
+                    try{
+                        // Here I'm making thread sleep to show progress
+                        Thread.sleep(500);
+                        progressStatus += 2;
+                    } catch (InterruptedException e){
+                        e.printStackTrace();
+                    }
+                    // Update the progress bar
+                    handler.post(new Runnable() {
+                        public void run() {
+                            pdForVideoUpload.setProgress(progressStatus);
+                        }
+                    });
+                }
+                pdForVideoUpload.dismiss();
+            }
+        }).start();
     }
 
     private void initPermissions() {

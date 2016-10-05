@@ -5,7 +5,7 @@ package com.mytask.taskmanager.Pojo;
  */
 public class TaskUser {
 
-    private String FirstName;
+    String FirstName;
     private String Uid;
     private String UserLevel;
     private String UserRole;

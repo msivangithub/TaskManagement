@@ -21,21 +21,13 @@ public class ProjectVariables {
     // public static final String URL = "http://makeindiakart.com/Master.svc/";
 
 
-
-
-
-
     /*Project Base URL*/
-    public static final String URL = "http://makeindiakart.com/TaskManger.svc/";
+    //public static final String URL = "http://makeindiakart.com/TaskManger.svc/";
     public static final String IMAGE_PATH = "http://makeindiakart.com/taskfiles/";
 
     /*Demo Base Url*/
-   // public static final String URL = "http://myaccountsonline.co.in/taskmanager/TaskManger.svc/";
-   // public static final String IMAGE_PATH = "http://myaccountsonline.co.in/Taskmanger/taskfiles/";
-
-
-
-
+    public static final String URL = "http://myaccountsonline.co.in/taskmanager/TaskManger.svc/";
+    //public static final String IMAGE_PATH = "http://myaccountsonline.co.in/Taskmanger/taskfiles/";
 
 
     //http://myaccountsonline.co.in/taskmanager/Master.svc/
@@ -43,6 +35,7 @@ public class ProjectVariables {
     public static String getSendSms(String clientID) {
         return ProjectVariables.MASTER_URL + "SendSms/" + ProjectVariables.CLIENTID;
     }
+
     //public static final String LOGIN = "login";
     public static final String BASE_URL = URL;
     public static final String LOGIN = "Tasklogin_User";
@@ -145,11 +138,11 @@ public class ProjectVariables {
     public static String STARTTIME = "StartTime";
     public static String ENDTIME = "EndTime";
 
-    public static String _ACTENDDATE ="ActEndDate";
-    public static String _ACTSTARTDATE ="ActStartDate";
-    public static String _TASKHEADING ="TaskHeading";
-    public static String _TASKSTATUS ="TaskStatus";
-    public static String _CID ="cid";
+    public static String _ACTENDDATE = "ActEndDate";
+    public static String _ACTSTARTDATE = "ActStartDate";
+    public static String _TASKHEADING = "TaskHeading";
+    public static String _TASKSTATUS = "TaskStatus";
+    public static String _CID = "cid";
 
     //  public static String STATUS="Status";
 

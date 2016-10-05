@@ -66,6 +66,7 @@
             android:layout_weight="1.3"
             android:text="TaskHeading"
             android:padding="5dp"
+            android:textSize="@dimen/textsize"
             android:textColor="#fff" />
         <TextView
             android:id="@+id/actstartdate"
@@ -73,6 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="StartDate"
+            android:textSize="@dimen/textsize"
             android:textColor="#fff" />
         <TextView
             android:id="@+id/actenddate"
@@ -80,6 +82,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="EndDate"
+            android:textSize="@dimen/textsize"
             android:textColor="#fff" />
 
         <TextView
@@ -88,6 +91,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="TaskStatus"
+            android:textSize="@dimen/textsize"
             android:textColor="#fff" />
     </LinearLayout>
     <LinearLayout

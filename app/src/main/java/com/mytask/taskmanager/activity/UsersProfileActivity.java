@@ -58,6 +58,7 @@ public class UsersProfileActivity extends AppCompatActivity implements AppBarLay
      * (http://www.buzzingandroid.com/tools/android-layout-finder)
      */
     private void findViews() {
+
         appbar = (AppBarLayout) findViewById(R.id.appbar);
         collapsing = (CollapsingToolbarLayout) findViewById(R.id.collapsing);
         coverImage = (ImageView) findViewById(R.id.imageview_placeholder);
@@ -71,6 +72,7 @@ public class UsersProfileActivity extends AppCompatActivity implements AppBarLay
         Mail = (TextView) findViewById(R.id.txt_Mail);
         phone = (TextView) findViewById(R.id.phoneNo);
         branchname = (TextView) findViewById(R.id.branchname);
+        city = (TextView) findViewById(R.id.city);
 
     }
 
@@ -81,6 +83,7 @@ public class UsersProfileActivity extends AppCompatActivity implements AppBarLay
         Fresco.initialize(this);
         setContentView(R.layout.activity_users_profile);
         findViews();
+
 
         toolbar.setTitle("");
         appbar.addOnOffsetChangedListener(this);
@@ -99,15 +102,20 @@ public class UsersProfileActivity extends AppCompatActivity implements AppBarLay
 
         phone.setText(PreferenceUtil.getInstance().getString(UsersProfileActivity.this, "PhoneNo", "phoneno"));
         branchname.setText(PreferenceUtil.getInstance().getString(UsersProfileActivity.this, "BranchName", "branch"));
+        city.setText(PreferenceUtil.getInstance().getString(UsersProfileActivity.this, "City", "city"));
         //set avatar and cover
         // avatar.setImageURI(imageUri);
 
     }
 
+
+
     public class ProfileImageFromURL extends AsyncTask<String, Void, Bitmap> {
         @Override
         protected Bitmap doInBackground(String... params) {
             //http://makeindiakart.com/taskfiles/Image_1290.jpg
+            Bitmap Bitmapicon = BitmapFactory.decodeResource(UsersProfileActivity.this.getResources(),
+                    R.drawable.imge_placeholder);
             try {
                 String MainUrl = ProjectVariables.IMAGE_PATH;
                 URL url = new URL(MainUrl + PreferenceUtil.getInstance().getString(UsersProfileActivity.this, "ProfileImage", "Image_5756.jpg"));
@@ -122,18 +130,13 @@ public class UsersProfileActivity extends AppCompatActivity implements AppBarLay
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            return null;
+            return Bitmapicon;
         }
 
         @Override
         protected void onPostExecute(Bitmap result) {
             // TODO Auto-generated method stub
             super.onPostExecute(result);
-            int color = getResources().getColor(R.color.amber_50);
-            RoundingParams roundingParams = RoundingParams.fromCornersRadius(5f);
-            roundingParams.setBorder(color, 1.0f);
-            roundingParams.setRoundAsCircle(true);
-            avatar.getHierarchy().setRoundingParams(roundingParams);
             avatar.setImageBitmap(result);
             coverImage.setImageBitmap(result);
 

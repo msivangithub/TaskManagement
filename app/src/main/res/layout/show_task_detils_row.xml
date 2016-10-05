@@ -34,6 +34,146 @@
         android:layout_height="1dp"
         android:background="@color/grey_600" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/profile_taskdetails"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/rounded_edittext"
+            android:padding="2dp"
+            android:src="@android:drawable/ic_menu_gallery" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:text="Assign By :"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/uname"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="6"
+                    android:text="This is sample task" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:orientation="horizontal"
+                android:paddingLeft="2dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:text="StartDate:"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txt_show_start"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="6"
+                    android:text="This is sample task" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:orientation="horizontal"
+                android:paddingLeft="2dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:text="End Date :"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txt_show_endDate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="6.2"
+                    android:text="This is sample task" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:orientation="horizontal"
+                android:paddingLeft="2dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:text="StartTime:"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/startTime"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="6.2"
+                    android:text="This is sample task" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:orientation="horizontal"
+                android:paddingLeft="2dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:text="EndTime :"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/endTime"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="6.2"
+                    android:text="This is sample task" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </LinearLayout>
+    <!-- <ImageView
+         android:id="@+id/profile_taskdetails"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:src="@android:drawable/ic_menu_gallery" />-->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -55,8 +195,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="6.2"
-            android:textColor="@color/black"
             android:text="This is sample task"
+            android:textColor="@color/black"
             android:textStyle="bold" />
 
 
@@ -91,7 +231,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
         android:orientation="horizontal"
-        android:paddingLeft="2dp">
+        android:paddingLeft="2dp"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="0dp"
@@ -110,96 +251,6 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:orientation="horizontal"
-        android:paddingLeft="2dp">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:text="StartDate         :"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/txt_show_start"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="6.2"
-            android:text="This is sample task" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:orientation="horizontal"
-        android:paddingLeft="2dp">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:text="End Date          :"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/txt_show_endDate"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="6.2"
-            android:text="This is sample task" />
-
-
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:orientation="horizontal"
-        android:paddingLeft="2dp">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:text="StartTime        :"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/startTime"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="6.2"
-            android:text="This is sample task" />
-
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:orientation="horizontal"
-        android:paddingLeft="2dp">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:text="EndTime        :"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/endTime"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="6.2"
-            android:text="This is sample task" />
-
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -230,9 +281,9 @@
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
         android:layout_weight="1"
-        android:visibility="gone"
         android:orientation="vertical"
-        android:paddingLeft="2dp">
+        android:paddingLeft="2dp"
+        android:visibility="gone">
 
         <Button
             android:id="@+id/previousComments"
@@ -240,7 +291,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:layout_weight="3.5"
-
             android:text="Comments"
             android:textStyle="bold" />
 

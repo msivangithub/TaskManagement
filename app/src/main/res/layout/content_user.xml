@@ -58,7 +58,7 @@
                         android:lines="@android:integer/config_longAnimTime"
                         android:text="user"
                         android:textColor="#000"
-                        android:textSize="15dp" />
+                        android:textSize="@dimen/taskCreation_textSize" />
 
 
                 </LinearLayout>
@@ -123,7 +123,7 @@
                         android:lines="@android:integer/config_longAnimTime"
                         android:text="user"
                         android:textColor="#000"
-                        android:textSize="15dp" />
+                        android:textSize="@dimen/taskCreation_textSize" />
 
                 </LinearLayout>
 
@@ -188,7 +188,7 @@
                         android:lines="@android:integer/config_longAnimTime"
                         android:text="user"
                         android:textColor="#000"
-                        android:textSize="15dp" />
+                        android:textSize="@dimen/taskCreation_textSize" />
 
                 </LinearLayout>
 
@@ -251,7 +251,7 @@
                         android:lines="@android:integer/config_longAnimTime"
                         android:text="user"
                         android:textColor="#000"
-                        android:textSize="15dp" />
+                        android:textSize="@dimen/taskCreation_textSize"  />
 
                 </LinearLayout>
 

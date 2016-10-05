@@ -16,6 +16,7 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,6 +36,8 @@ import android.widget.ZoomControls;
 import com.mytask.taskmanager.Pojo.Comments;
 import com.mytask.taskmanager.R;
 import com.mytask.taskmanager.util.AppUtil;
+import com.mytask.taskmanager.util.ProjectVariables;
+import com.squareup.picasso.Picasso;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -91,6 +94,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView comment, roles;
         ImageButton play, image, audio;
+        ImageView mProfile;
         public ImageButton mImageMenu;
         public LinearLayout cardView;
 
@@ -101,6 +105,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
             play = (ImageButton) itemView.findViewById(R.id.playVideo);
             audio = (ImageButton) itemView.findViewById(R.id.play_Audio);
             image = (ImageButton) itemView.findViewById(R.id.image);
+            mProfile = (ImageView) itemView.findViewById(R.id.profile);
             cardView = (LinearLayout) itemView.findViewById(R.id.cardView_comments);
             mImageMenu = (ImageButton) itemView.findViewById(R.id.Button_menu);
             cardView.setOnClickListener(new View.OnClickListener() {
@@ -108,7 +113,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
                 public void onClick(View view) {
                     final Dialog dialog = new Dialog(context);
                     dialog.setCancelable(false);
-                    dialog.setContentView(R.layout.comments_details);
+                    dialog.setContentView(R.layout.demo);
                     dialog.setTitle("Comments Details...!");
                     WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
                     lp.copyFrom(dialog.getWindow().getAttributes());
@@ -118,6 +123,13 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
                     dialog.show();
                     final TextView commet = (TextView) dialog.findViewById(R.id.comment_heading);
                     final Button button = (Button) dialog.findViewById(R.id.ok);
+                    final ImageView profileDetail = (ImageView) dialog.findViewById(R.id.profiles_imageView);
+                    Picasso.with(context)
+                            .load(ProjectVariables.IMAGE_PATH + commentsList.get(getAdapterPosition()).getProfile())
+                            .placeholder(R.drawable.profile_sample)   // optional
+                            .error(R.drawable.profile_sample)      // optional
+                            .resize(200, 200)
+                            .into(profileDetail);
                     commet.setText(commentsList.get(getAdapterPosition()).getComments());
                     button.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -143,7 +155,13 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
         comments = commentsList.get(position);
         holder.comment.setText(comments.getComments());
         holder.roles.setText(comments.getUserRole());
-
+        Log.e("ProfilePath = ", ProjectVariables.IMAGE_PATH + commentsList.get(position).getProfile());
+        Picasso.with(context)
+                .load(ProjectVariables.IMAGE_PATH + commentsList.get(position).getProfile())
+                .placeholder(R.drawable.profile_sample)   // optional
+                .error(R.drawable.profile_sample)      // optional
+                .resize(200, 200)
+                .into(holder.mProfile);
     }
 
 
@@ -254,6 +272,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
                 case R.id.capture_video:
                     if (commentsList.get(position).getVideo().isEmpty() || commentsList.get(position).getVideo().equalsIgnoreCase("") || commentsList.get(position).getVideo().length() == 0 || commentsList.get(position).getVideo().equalsIgnoreCase("novideo")) {
                         Toast.makeText(context, "No video available for this comment", Toast.LENGTH_SHORT).show();
+
                     } else {
                         Dialog showVideo = new Dialog(context);
                         showVideo.requestWindowFeature(Window.FEATURE_NO_TITLE);

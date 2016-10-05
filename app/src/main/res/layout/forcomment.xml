@@ -4,6 +4,7 @@
 
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/tools"
     android:orientation="vertical">
 
 
@@ -34,7 +35,13 @@
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:padding="7dp">
-
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:civ_border_color="@color/grey_50"
+                    app:civ_border_width="@dimen/DrawerHeader_CircleImageView_border_width"
+                    android:src="@android:drawable/ic_menu_gallery"/>
                 <TextView
                     android:id="@+id/insidecomment"
                     android:layout_width="0dp"
@@ -51,7 +58,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="3dp"
-                    android:layout_weight="1.5"
+                    android:layout_weight="2"
                     android:gravity="center"
                     android:singleLine="true"
                     android:text="roles"

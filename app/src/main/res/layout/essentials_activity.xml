@@ -24,13 +24,16 @@
 
                 <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/display_image"
-                    android:layout_width="@dimen/DrawerHeader_CircleImageView_width"
-                    android:layout_height="@dimen/DrawerHeader_CircleImageView_height"
-                    android:layout_marginTop="@dimen/DrawerHeader_CircleImageView_marginTop"
-                    android:src="@drawable/imge_placeholder"
+                    android:layout_width="@dimen/image_width"
+                    android:layout_height="@dimen/image_width"
+                    android:layout_weight="1"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
                     app:civ_border_color="#898484"
-                    app:civ_border_width="@dimen/DrawerHeader_CircleImageView_border_width" />
-
+                    app:civ_border_width="@dimen/DrawerHeader_CircleImageView_border_width"
+                    android:src="@drawable/imge_placeholder" />
+                <!--app:civ_border_color="#898484"
+                                    app:civ_border_width="@dimen/DrawerHeader_CircleImageView_border_width" -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -61,16 +64,16 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_weight="2"
-                    android:paddingLeft="4dp"
-                    android:inputType="textEmailAddress"
-                    android:singleLine="true"
+                    android:background="@drawable/rounded_edittext"
                     android:hint="Enter EmailID"
-                    android:textColorHint="#e2e2e2"
-                    android:background="@drawable/rounded_edittext" />
-
+                    android:inputType="textEmailAddress"
+                    android:paddingLeft="4dp"
+                    android:singleLine="true"
+                    android:textColorHint="#e2e2e2" />
 
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
@@ -92,17 +95,17 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_weight="2"
-                    android:inputType="numberDecimal"
-                    android:paddingLeft="4dp"
-                    android:maxLength="10"
-                    android:singleLine="true"
+                    android:background="@drawable/rounded_edittext"
                     android:hint="Enter MobileNo"
-                    android:textColorHint="#e2e2e2"
-                    android:background="@drawable/rounded_edittext" />
-
+                    android:inputType="numberDecimal"
+                    android:maxLength="10"
+                    android:paddingLeft="4dp"
+                    android:singleLine="true"
+                    android:textColorHint="#e2e2e2" />
 
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
@@ -123,24 +126,24 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_weight="1"
+                    android:background="@drawable/rounded_edittext"
+                    android:hint="First Name"
                     android:paddingLeft="4dp"
                     android:singleLine="true"
-                    android:textColorHint="#e2e2e2"
-                    android:background="@drawable/rounded_edittext"
-                    android:hint="First Name" />
+                    android:textColorHint="#e2e2e2" />
 
                 <EditText
                     android:id="@+id/lastName"
                     android:layout_width="0dp"
-                    android:paddingLeft="4dp"
-                    android:layout_marginLeft="2dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
+                    android:layout_marginLeft="2dp"
                     android:layout_weight="1"
-                    android:singleLine="true"
-                    android:textColorHint="#e2e2e2"
                     android:background="@drawable/rounded_edittext"
-                    android:hint="Last Name" />
+                    android:hint="Last Name"
+                    android:paddingLeft="4dp"
+                    android:singleLine="true"
+                    android:textColorHint="#e2e2e2" />
 
 
             </LinearLayout>
@@ -190,8 +193,7 @@
                         android:src="@drawable/drop_down" />
 
                 </RelativeLayout>
-                
-            
+
 
             </LinearLayout>
 
@@ -216,13 +218,12 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_weight="2"
-                    android:singleLine="true"
-                    android:paddingLeft="4dp"
-                    android:inputType="numberDecimal"
+                    android:background="@drawable/rounded_edittext"
                     android:hint="Enter Password"
-                    android:textColorHint="#e2e2e2"
-                    android:background="@drawable/rounded_edittext" />
-
+                    android:inputType="numberDecimal"
+                    android:paddingLeft="4dp"
+                    android:singleLine="true"
+                    android:textColorHint="#e2e2e2" />
 
 
             </LinearLayout>
@@ -275,61 +276,59 @@
             </LinearLayout>
 
 
+            <!-- <LinearLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="50dp"
+                 android:orientation="horizontal"
+                 android:padding="5dp">
 
+                 <TextView
+                     android:layout_width="0dp"
+                     android:layout_height="match_parent"
+                     android:layout_gravity="center"
+                     android:layout_weight="1"
+                     android:gravity="left|center"
+                     android:text="Send invity"
+                     android:textColor="#000" />
 
-           <!-- <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:orientation="horizontal"
-                android:padding="5dp">
+                 <RelativeLayout
+                     android:layout_width="0dp"
+                     android:layout_height="wrap_content"
+                     android:layout_marginRight="3dp"
+                     android:layout_weight="2"
+                     android:background="@drawable/spinner_border"
+                     android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:gravity="left|center"
-                    android:text="Send invity"
-                    android:textColor="#000" />
+                     <Spinner
+                         android:id="@+id/sendinvity"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:layout_centerVertical="true"
+                         android:layout_gravity="center"
+                         android:background="@android:color/transparent"
+                         android:entries="@array/spinner_item"
+                         android:gravity="center"
+                         android:padding="10dp" />
 
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="3dp"
-                    android:layout_weight="2"
-                    android:background="@drawable/spinner_border"
-                    android:orientation="horizontal">
+                     <ImageView
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:layout_alignParentRight="true"
+                         android:layout_centerVertical="true"
+                         android:layout_gravity="center"
+                         android:padding="5sp"
+                         android:src="@drawable/drop_down" />
 
-                    <Spinner
-                        android:id="@+id/sendinvity"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_gravity="center"
-                        android:background="@android:color/transparent"
-                        android:entries="@array/spinner_item"
-                        android:gravity="center"
-                        android:padding="10dp" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_gravity="center"
-                        android:padding="5sp"
-                        android:src="@drawable/drop_down" />
-
-                </RelativeLayout>
-            </LinearLayout>-->
+                 </RelativeLayout>
+             </LinearLayout>-->
             <Button
-                android:layout_marginTop="20dp"
-                android:layout_width="match_parent"
-                android:text="Submit"
                 android:id="@+id/submit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textColor="#000"
-                android:layout_height="wrap_content" />
+                android:layout_marginTop="20dp"
+                android:text="Submit"
+                android:textColor="#000" />
 
 
         </LinearLayout>

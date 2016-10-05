@@ -35,6 +35,7 @@ import com.mytask.taskmanager.Pojo.Task;
 import com.mytask.taskmanager.Pojo.TaskUser;
 import com.mytask.taskmanager.R;
 
+import com.mytask.taskmanager.activity.MainActivity;
 import com.mytask.taskmanager.activity.Tasks;
 import com.mytask.taskmanager.activity.TasksAdapter;
 import com.mytask.taskmanager.services.AsynHttpPost;
@@ -83,7 +84,8 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
     String employeeId;
     JSONObject obj;
     String audioURI = "";
-PreferenceUtil util ;
+    PreferenceUtil util;
+
     public static TaskDetails newInstance() {
 
         Bundle args = new Bundle();
@@ -210,177 +212,184 @@ PreferenceUtil util ;
         TaskList = new ArrayList<>();
         /**/
 
-            if (rType == 888) {
-                try {
-                    JSONArray array = new JSONArray(s);
-                    JSONObject obj = array.getJSONObject(0);
+        if (rType == 888) {
+            try {
+                JSONArray array = new JSONArray(s);
+                JSONObject obj = array.getJSONObject(0);
 
-                    String result = obj.getString("Result");
-                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("CurrentVideo", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor curentEdit = sharedPreferences.edit();
-                    curentEdit.putString("video", ProjectVariables.NOVIDEO);
-                    curentEdit.commit();
+                String result = obj.getString("Result");
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("CurrentVideo", Context.MODE_PRIVATE);
+                SharedPreferences.Editor curentEdit = sharedPreferences.edit();
+                curentEdit.putString("video", ProjectVariables.NOVIDEO);
+                curentEdit.commit();
 
-                    SharedPreferences sharedPreferences1 = getActivity().getSharedPreferences("CurrentImage", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor curentEdit1 = sharedPreferences1.edit();
-                    curentEdit1.putString("Image", ProjectVariables.NOIMAGE);
-                    curentEdit1.commit();
+                SharedPreferences sharedPreferences1 = getActivity().getSharedPreferences("CurrentImage", Context.MODE_PRIVATE);
+                SharedPreferences.Editor curentEdit1 = sharedPreferences1.edit();
+                curentEdit1.putString("Image", ProjectVariables.NOIMAGE);
+                curentEdit1.commit();
 
 
-                    SharedPreferences sharedPrefer = getActivity().getSharedPreferences("CurrentAudio", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor curentE = sharedPrefer.edit();
-                    curentE.putString("Audio", ProjectVariables.NOAUDIO);
-                    curentE.commit();
+                SharedPreferences sharedPrefer = getActivity().getSharedPreferences("CurrentAudio", Context.MODE_PRIVATE);
+                SharedPreferences.Editor curentE = sharedPrefer.edit();
+                curentE.putString("Audio", ProjectVariables.NOAUDIO);
+                curentE.commit();
 
-                    Toast.makeText(getActivity(), result, Toast.LENGTH_LONG).show();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    mSwipeRefreshLayout.setRefreshing(false);
-                }
-            }
-
-            if (rType == 999) {
-                ArrayList<Comments> current = new ArrayList<>();
-                try {
-                    String comm, userroles, videoPlay, image, audio;
-
-                    JSONArray array = new JSONArray(s);
-                    for (int c = 0; c < array.length(); c++) {
-                        Comments c1 = new Comments();
-                        JSONObject obj = array.getJSONObject(c);
-                        comm = obj.getString("Comments");
-                        userroles = obj.getString("UserRole");
-                        videoPlay = obj.getString("video");
-                        image = obj.getString("image");
-                        audio = obj.getString("Audio");
-                        c1.setComments(comm);
-                        c1.setUserRole(userroles);
-                        c1.setVideo(videoPlay);
-                        c1.setImage(image);
-                        c1.setAudio(audio);
-                        current.add(c1);
-                    }
-                    //if (array.length() > 0)
-                    AppUtil.setCurrentPojo(current);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    AppUtil.setCurrentPojo(current);
-                    // AppUtil.setCurrentComments(new ArrayList<String>());
-                }
-
-            } else if (rType == 123) {
-                if (adapter1 != null) {
-                    adapter1.notifyDataSetChanged();
-                    TaskList = new ArrayList<>();
-                }
-                try {
-                    JSONArray array = new JSONArray(s);
-                    for (int i = 0; i < array.length(); i++) {
-                        JSONObject obj = array.getJSONObject(i);
-                        String aed = obj.getString(ProjectVariables.ACTENDDATE);
-                        String asd = obj.getString(ProjectVariables.ACTSDATE);
-                        String esd = obj.getString(ProjectVariables.EXPSTARTDAE);
-                        String eed = obj.getString(ProjectVariables.EXPENDDATE);
-                        String tkd = obj.getString(ProjectVariables.TASKDES);
-                        String tfid = obj.getString(ProjectVariables.TASKFROMID);
-                        String thead = obj.getString(ProjectVariables.TASKHEAD);
-                        String tstat = obj.getString(ProjectVariables.TASKSTAT);
-                        String ttoid = obj.getString(ProjectVariables.TASKOID);
-                        String prty = obj.getString(ProjectVariables.PRIORITY);
-                        String startTime = obj.getString(ProjectVariables.STARTTIME);
-                        String endTime = obj.getString(ProjectVariables.ENDTIME);
-                        String video = obj.getString("video");
-                        String comments = obj.getString("Comments");
-                        String taskId = obj.getString("Cid");
-                        int cid = Integer.parseInt(taskId);
-
-                        Task t = new Task();
-                        t.setTaskId(cid);
-                        t.setTaskComment(comments);
-                        t.setActEndDate(aed);
-                        t.setActStartDate(asd);
-                        t.setExpEndDate(eed);
-                        t.setExpStartDate(esd);
-                        t.setTaskDes(tkd);
-                        t.setTaskFromId(tfid);
-                        t.setTaskHeading(thead);
-                        t.setTaskStatus(tstat);
-                        t.setTaskToId(ttoid);
-                        t.setPriority(prty);
-                        t.setVideo(video);
-                        t.setStartTime(startTime);
-                        t.setEndTime(endTime);
-                        TaskList.add(t);
-
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-
-                    Toast.makeText(getActivity(), s.toString(), Toast.LENGTH_LONG).show();
-                }
+                Toast.makeText(getActivity(), result, Toast.LENGTH_LONG).show();
+            } catch (JSONException e) {
+                e.printStackTrace();
                 mSwipeRefreshLayout.setRefreshing(false);
-                adapter1 = new USERTaskDetailsAdapter(getActivity(), TaskDetails.this, R.layout.task_row, TaskList, "add");
-                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                recyclerView.setItemAnimator(new DefaultItemAnimator());
-                recyclerView.setHasFixedSize(true);
-                recyclerView.setAdapter(adapter1);
-
-
-            } else if (rType == 11) {
-
-                users = new ArrayList<>();
-                try {
-                    JSONArray array = new JSONArray(s);
-
-                    for (int i = 0; i < array.length(); i++) {
-
-                        JSONObject obj = array.getJSONObject(i);
-
-                        TaskUser user = new TaskUser();
-                        user.setFirstName(obj.getString(ProjectVariables.FNAME));
-                        user.setUid(obj.getString(ProjectVariables.UID));
-
-                        users.add(user);
-                    }
-
-
-                    String[] us = new String[users.size()];
-                    for (int i = 0; i < users.size(); i++) {
-                        us[i] = users.get(i).getFirstName();
-                    }
-
-                    ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, us); //selected item will look like a spinner set from XML
-                    spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    employeename.setAdapter(spinnerArrayAdapter);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            } else if (rType == 143) {
-                try {
-                    JSONArray array = new JSONArray(s);
-                    for (int i = 0;i<array.length();i++) {
-
-                        JSONObject obj = array.getJSONObject(i);
-                        String result = obj.getString("Result");
-                        Toast.makeText(getActivity(), result.toString(), Toast.LENGTH_LONG).show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            } else if (rType == 154) {
-                try {
-                    JSONArray array = new JSONArray(s);
-                    for (int i = 0;i<array.length();i++) {
-
-                        JSONObject obj = array.getJSONObject(i);
-                        String result = obj.getString("Result");
-
-                        Toast.makeText(getActivity(), result.toString(), Toast.LENGTH_LONG).show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
             }
+        }
+
+        if (rType == 999) {
+            ArrayList<Comments> current = new ArrayList<>();
+            try {
+                String comm, userroles, videoPlay, image, audio, profile;
+
+                JSONArray array = new JSONArray(s);
+                for (int c = 0; c < array.length(); c++) {
+                    Comments c1 = new Comments();
+                    JSONObject obj = array.getJSONObject(c);
+                    comm = obj.getString("Comments");
+                    userroles = obj.getString("UserRole");
+                    videoPlay = obj.getString("video");
+                    image = obj.getString("image");
+                    audio = obj.getString("Audio");
+                    profile = obj.getString("UImage");
+                    c1.setComments(comm);
+                    c1.setUserRole(userroles);
+                    c1.setVideo(videoPlay);
+                    c1.setImage(image);
+                    c1.setAudio(audio);
+                    c1.setProfile(profile);
+                    current.add(c1);
+                }
+                //if (array.length() > 0)
+                AppUtil.setCurrentPojo(current);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                AppUtil.setCurrentPojo(current);
+                // AppUtil.setCurrentComments(new ArrayList<String>());
+            }
+
+        } else if (rType == 123) {
+            if (adapter1 != null) {
+                adapter1.notifyDataSetChanged();
+                TaskList = new ArrayList<>();
+            }
+            try {
+                JSONArray array = new JSONArray(s);
+                for (int i = 0; i < array.length(); i++) {
+                    JSONObject obj = array.getJSONObject(i);
+                    String aed = obj.getString(ProjectVariables.ACTENDDATE);
+                    String asd = obj.getString(ProjectVariables.ACTSDATE);
+                    String esd = obj.getString(ProjectVariables.EXPSTARTDAE);
+                    String eed = obj.getString(ProjectVariables.EXPENDDATE);
+                    String tkd = obj.getString(ProjectVariables.TASKDES);
+                    String tfid = obj.getString(ProjectVariables.TASKFROMID);
+                    String thead = obj.getString(ProjectVariables.TASKHEAD);
+                    String tstat = obj.getString(ProjectVariables.TASKSTAT);
+                    String ttoid = obj.getString(ProjectVariables.TASKOID);
+                    String prty = obj.getString(ProjectVariables.PRIORITY);
+                    String startTime = obj.getString(ProjectVariables.STARTTIME);
+                    String endTime = obj.getString(ProjectVariables.ENDTIME);
+                    String video = obj.getString("video");
+                    String comments = obj.getString("Comments");
+                    String taskId = obj.getString("Cid");
+                    String uname = obj.getString("Uname");
+                    String uimage = obj.getString("UImage");
+
+                    int cid = Integer.parseInt(taskId);
+
+                    Task t = new Task();
+                    t.setTaskId(cid);
+                    t.setTaskComment(comments);
+                    t.setActEndDate(aed);
+                    t.setActStartDate(asd);
+                    t.setExpEndDate(eed);
+                    t.setExpStartDate(esd);
+                    t.setTaskDes(tkd);
+                    t.setTaskFromId(tfid);
+                    t.setTaskHeading(thead);
+                    t.setTaskStatus(tstat);
+                    t.setTaskToId(ttoid);
+                    t.setPriority(prty);
+                    t.setVideo(video);
+                    t.setStartTime(startTime);
+                    t.setEndTime(endTime);
+                    t.setUname(uname);
+                    t.setProfile(uimage);
+                    TaskList.add(t);
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+
+                Toast.makeText(getActivity(), s.toString(), Toast.LENGTH_LONG).show();
+            }
+            mSwipeRefreshLayout.setRefreshing(false);
+            adapter1 = new USERTaskDetailsAdapter(getActivity(), TaskDetails.this, R.layout.task_row, TaskList, "add");
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setAdapter(adapter1);
+
+
+        } else if (rType == 11) {
+
+            users = new ArrayList<>();
+            try {
+                JSONArray array = new JSONArray(s);
+
+                for (int i = 0; i < array.length(); i++) {
+
+                    JSONObject obj = array.getJSONObject(i);
+
+                    TaskUser user = new TaskUser();
+                    user.setFirstName(obj.getString(ProjectVariables.FNAME));
+                    user.setUid(obj.getString(ProjectVariables.UID));
+
+                    users.add(user);
+                }
+
+
+                String[] us = new String[users.size()];
+                for (int i = 0; i < users.size(); i++) {
+                    us[i] = users.get(i).getFirstName();
+                }
+
+                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, us); //selected item will look like a spinner set from XML
+                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                employeename.setAdapter(spinnerArrayAdapter);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else if (rType == 143) {
+            try {
+                JSONArray array = new JSONArray(s);
+                for (int i = 0; i < array.length(); i++) {
+
+                    JSONObject obj = array.getJSONObject(i);
+                    String result = obj.getString("Result");
+                    Toast.makeText(getActivity(), result.toString(), Toast.LENGTH_LONG).show();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else if (rType == 154) {
+            try {
+                JSONArray array = new JSONArray(s);
+                for (int i = 0; i < array.length(); i++) {
+
+                    JSONObject obj = array.getJSONObject(i);
+                    String result = obj.getString("Result");
+
+                    Toast.makeText(getActivity(), result.toString(), Toast.LENGTH_LONG).show();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 

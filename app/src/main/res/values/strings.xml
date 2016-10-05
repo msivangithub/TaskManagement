@@ -185,4 +185,5 @@
     </string>
     <string name="title_activity_setting">SettingActivity</string>
     <string name="title_activity_users_profile">UsersProfileActivity</string>
+    <string name="title_activity_user_task_details">UserTaskDetailsActivity</string>
 </resources>

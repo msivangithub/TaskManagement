@@ -78,7 +78,11 @@
         <activity
             android:name=".activity.UsersProfileActivity"
             android:label="@string/title_activity_users_profile"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.UserTaskDetailsActivity"
+            android:label="@string/title_activity_user_task_details"
+            android:theme="@style/AppTheme"/>
     </application>
 
 </manifest>

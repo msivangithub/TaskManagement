@@ -20,6 +20,28 @@ public class Task {
     private String priority;
     private String StartTime;
     private String EndTime;
+    private String Uname;
+    private String profile;
+
+
+
+    public String getUname() {
+        return Uname;
+    }
+
+    public void setUname(String uname) {
+        Uname = uname;
+    }
+
+    public String getProfile() {
+        return profile;
+    }
+
+    public void setProfile(String profile) {
+        this.profile = profile;
+    }
+
+
 
     public String getStartTime() {
         return StartTime;

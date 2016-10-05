@@ -23,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.futuremind.recyclerviewfastscroll.SectionTitleProvider;
 import com.mytask.taskmanager.activity.RecordAudioActivity;
 import com.mytask.taskmanager.activity.UserActivity;
 import com.mytask.taskmanager.util.PositionClickListener;
@@ -42,7 +43,7 @@ import java.util.ArrayList;
 /**
  * Created by GhanaShyam on 8/30/2016.
  */
-public class AllUsersAdapter extends RecyclerView.Adapter<AllUsersAdapter.MyViewHolder> implements RestfulListener {
+public class AllUsersAdapter extends RecyclerView.Adapter<AllUsersAdapter.MyViewHolder> implements RestfulListener, SectionTitleProvider {
 
     public static final String EMAIL = "name";
     public static final String IMAGE = "image";
@@ -80,6 +81,11 @@ public class AllUsersAdapter extends RecyclerView.Adapter<AllUsersAdapter.MyView
 
     }
 
+    @Override
+    public String getSectionTitle(int position) {
+        return String.valueOf(taskUserArrayList.get(position).getFirstName().charAt(0));
+    }
+
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView user, roles;
@@ -94,6 +100,7 @@ public class AllUsersAdapter extends RecyclerView.Adapter<AllUsersAdapter.MyView
             mImageMenu = (ImageButton) itemView.findViewById(R.id.Button_menu);
             imageView = (ImageView) itemView.findViewById(R.id.profiles_imageView);
             user_details = (LinearLayout) itemView.findViewById(R.id.user_details);
+
           /*  user_details.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -133,9 +140,9 @@ public class AllUsersAdapter extends RecyclerView.Adapter<AllUsersAdapter.MyView
                     Intent intent = new Intent(context, UserActivity.class);
                     intent.putExtra(EMAIL, taskUserArrayList.get(getAdapterPosition()).getEmailid());
                     intent.putExtra(IMAGE, taskUserArrayList.get(getAdapterPosition()).getImage());
-                    intent.putExtra(FNAME,taskUserArrayList.get(getAdapterPosition()).getFirstName());
-                    intent.putExtra(PHONE,taskUserArrayList.get(getAdapterPosition()).getPhone());
-                    intent.putExtra(CITY,taskUserArrayList.get(getAdapterPosition()).getCity());
+                    intent.putExtra(FNAME, taskUserArrayList.get(getAdapterPosition()).getFirstName());
+                    intent.putExtra(PHONE, taskUserArrayList.get(getAdapterPosition()).getPhone());
+                    intent.putExtra(CITY, taskUserArrayList.get(getAdapterPosition()).getCity());
                     Activity act = (Activity) context;
                     act.startActivity(intent);
                 }
@@ -153,15 +160,19 @@ public class AllUsersAdapter extends RecyclerView.Adapter<AllUsersAdapter.MyView
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
+
         final TaskUser taskUser = taskUserArrayList.get(position);
         holder.user.setText(taskUser.getFirstName());
         holder.roles.setText(taskUser.getUserLevel());
+        Log.e("ImagePath = ", ProjectVariables.IMAGE_PATH + taskUserArrayList.get(position).getImage());
         Picasso.with(context)
-                .load(ProjectVariables.IMAGE_PATH + taskUser.getImage())
-                .placeholder(R.drawable.imge_placeholder)   // optional
-                .error(R.drawable.imge_placeholder)      // optional
-                .resize(300, 300)
+                .load(ProjectVariables.IMAGE_PATH + taskUserArrayList.get(position).getImage())
+                .placeholder(R.drawable.profile_sample)   // optional
+                .error(R.drawable.profile_sample)      // optional
+                .resize(300 ,300)
                 .into(holder.imageView);
+
+
     }
 
     private void showPopupMenu(View view, int position) {

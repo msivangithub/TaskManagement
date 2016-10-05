@@ -16,8 +16,16 @@ public class Comments {
     private String video;
     private String Image;
     private String Audio;
+    private String profile;
 
 
+    public String getProfile() {
+        return profile;
+    }
+
+    public void setProfile(String profile) {
+        this.profile = profile;
+    }
 
     public String getAudio() {
         return Audio;

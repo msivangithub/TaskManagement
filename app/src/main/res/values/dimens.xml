@@ -7,7 +7,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
-    <dimen name="image_width">110dp</dimen>
+    <dimen name="image_width">120dp</dimen>
     <dimen name="image_small_width">32dp</dimen>
     <!--Drawer_header-->
     <dimen name="DrawerHeader_paddin">10dp</dimen>
@@ -95,8 +95,17 @@
     <dimen name="taskRow_layout_height">45dp</dimen>
     <dimen name="taskRow_layout_margin">5dp</dimen>
     <dimen name="taskRow_textSize">22sp</dimen>
-    <dimen name="taskRow_padding">10dp</dimen>
+    <dimen name="taskRow_padding">5dp</dimen>
     <dimen name="taskRow_header_textSize">12sp</dimen>
     <dimen name="app_bar_height">200dp</dimen>
+
+
+    <!--TaskCreation-->
+    <dimen name="taskCreation_padding">10dp</dimen>
+    <dimen name="taskCreation_textSize">15dp</dimen>
+    <dimen name="layout_marginTop">20dp</dimen>
+    <dimen name="image_layout_width">48dp</dimen>
+    <dimen name="image_layout_height">48dp</dimen>
+    <dimen name="profile_width">300dp</dimen>
 
 </resources>

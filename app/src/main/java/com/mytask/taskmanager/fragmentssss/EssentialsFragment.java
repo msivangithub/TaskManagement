@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -14,6 +15,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -52,6 +54,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -212,10 +215,13 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
                     @Override
                     public void onClick(View v) {
                         d.dismiss();
-                        Intent intent = new Intent();
-                        intent.setType("image/*");
+                        Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(i, PICK_IMAGE);
+
+                        /*Intent intent = new Intent();
+                        intent.setType("image*//*");
                         intent.setAction(Intent.ACTION_GET_CONTENT);
-                        startActivityForResult(Intent.createChooser(intent, "Choose Picture"), PICK_IMAGE);
+                        startActivityForResult(Intent.createChooser(intent, "Choose Picture"), PICK_IMAGE);*/
                     }
                 });
 
@@ -256,8 +262,8 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
                         obj.accumulate("AppName", "TaskManager");
                         obj.accumulate("City", cityname);
                         obj.accumulate("UserLevel", userRolesName);
-                        obj.accumulate("Desc1",PreferenceUtil.getInstance().getString(getActivity(),"Uid","Uid"));
-                        obj.accumulate("Desc2",PreferenceUtil.getInstance().getString(getActivity(),"FirstName","firstname"));
+                        obj.accumulate("Desc1", PreferenceUtil.getInstance().getString(getActivity(), "Uid", "Uid"));
+                        obj.accumulate("Desc2", PreferenceUtil.getInstance().getString(getActivity(), "FirstName", "firstname"));
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -331,6 +337,7 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
 
         return valid;
     }
+
     private static int calculateInSampleSize(
             BitmapFactory.Options options, int reqWidth, int reqHeight) {
         // Raw height and width of image
@@ -372,12 +379,13 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
         return BitmapFactory.decodeStream(iStream, null, options);
     }
 
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == PICK_IMAGE) {
-                Uri selectedimg = data.getData();
+            if (requestCode == PICK_IMAGE  && null != data) {
+               final Uri selectedimg = data.getData();
                 imageURI = selectedimg.toString();
                 User user = new User();
                 user.userName = "user1";
@@ -387,14 +395,28 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
                 post1.text = requestCode + "";
                 PostsDatabaseHelper databaseHelper = PostsDatabaseHelper.getInstance(getActivity());
                 databaseHelper.addPost(post1);
+
                 try {
                     pd = new ProgressDialog(getActivity());
                     pd.setMessage("Uploading......");
-                    //image.setImageBitmap(decodeSampledBitmapFromUri(getActivity(),selectedimg,200,200));
+                    String[] filePathColumn = { MediaStore.Images.Media.DATA };
+                    Cursor cursor = getActivity().getContentResolver().query(selectedimg,
+                            filePathColumn, null, null, null);
+                    // Move to first row
+                    cursor.moveToFirst();
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    imageURI = cursor.getString(columnIndex);
+                    cursor.close();
+
+                   // image.setImageBitmap(decodeSampledBitmapFromUri(getActivity(), selectedimg, 300, 300));
                     image.setImageBitmap(MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedimg));
+
                     imageURI = "Image_" + getRandomNumberInRange(1, 10000) + ".jpg";
+                    Log.e("ImageName", imageURI.toString());
+
                     UploadTask task = new UploadTask(null, imageURI, selectedimg);
                     task.execute();
+
                 } catch (IOException e) {
                     e.printStackTrace();
                     Log.e("Error Occred for ", e.getMessage().toString());
@@ -409,6 +431,7 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
                 pd = new ProgressDialog(getActivity());
                 pd.setMessage("Uploading......");
                 image.setImageBitmap(BitmapFactory.decodeFile(new File(Environment.getExternalStorageDirectory(), imageURI).getAbsolutePath()));
+
                 pd.show();
                 User user = new User();
                 user.userName = "user1";
@@ -464,13 +487,16 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
             }
 
         }
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             pdDialog = new ProgressDialog(getActivity());
             pdDialog.setMessage("Uploading......");
+            pdDialog.setCanceledOnTouchOutside(false);
             pdDialog.show();
         }
+
         @Override
         protected void onPostExecute(String s) {
             pdDialog.dismiss();

@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#fff"
-    android:padding="10sp">
+    android:padding="@dimen/taskCreation_padding">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -20,32 +20,33 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
-                android:layout_marginTop="20dp"
                 android:gravity="center"
                 android:text="Task Heading"
                 android:textColor="#000"
+                android:textSize="@dimen/taskCreation_textSize"
                 android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/taskHeader"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="bottom"
                 android:background="@drawable/rounded_edittext"
                 android:gravity="bottom"
                 android:hint="Select type of task?"
-                android:padding="10dp"
-                android:textSize="14sp" />
+                android:padding="@dimen/taskCreation_padding"
+                android:textSize="@dimen/taskCreation_textSize" />
 
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="@dimen/layout_marginTop"
                 android:gravity="center"
                 android:text="Task description"
                 android:textColor="#000"
+                android:textSize="@dimen/taskCreation_textSize"
                 android:textStyle="bold" />
 
             <EditText
@@ -56,8 +57,8 @@
                 android:background="@drawable/rounded_edittext"
                 android:gravity="bottom"
                 android:hint="What neds to be done?"
-                android:padding="10dp"
-                android:textSize="14sp" />
+                android:padding="@dimen/taskCreation_padding"
+                android:textSize="@dimen/taskCreation_textSize" />
 
 
             <TextView
@@ -65,24 +66,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="@dimen/layout_marginTop"
                 android:gravity="center"
                 android:text="Who Should Do This?"
                 android:textColor="#000"
-                android:textSize="14sp"
+                android:textSize="@dimen/taskCreation_textSize"
                 android:textStyle="bold" />
 
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:background="@drawable/spinner_border"
                 android:orientation="horizontal">
 
                 <Spinner
                     android:id="@+id/TaskUsers"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_gravity="center"
                     android:background="@android:color/transparent"
@@ -105,12 +105,13 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:orientation="vertical"
-                android:padding="5dp">
+                android:padding="@dimen/taskCreation_padding">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="From Date and From Time" />
+                    android:text="From Date and From Time"
+                    android:textSize="@dimen/taskCreation_textSize"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -134,6 +135,7 @@
                     <ImageButton
                         android:id="@+id/fromDateImage"
                         android:layout_width="0dp"
+                        android:padding="@dimen/taskCreation_padding"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="2"
@@ -155,6 +157,7 @@
                     <ImageButton
                         android:id="@+id/fromTimeImage"
                         android:layout_width="0dp"
+                        android:padding="@dimen/taskCreation_padding"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="2"
@@ -165,7 +168,8 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="To Date and To Time" />
+                    android:text="To Date and To Time"
+                    android:textSize="@dimen/taskCreation_textSize"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -189,6 +193,7 @@
                     <ImageButton
                         android:id="@+id/toDateImage"
                         android:layout_width="0dp"
+                        android:padding="@dimen/taskCreation_padding"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"
@@ -214,6 +219,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"
+                        android:padding="@dimen/taskCreation_padding"
                         android:background="@color/white"
                         android:src="@drawable/time" />
                 </LinearLayout>

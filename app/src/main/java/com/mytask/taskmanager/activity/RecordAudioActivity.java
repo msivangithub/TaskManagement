@@ -6,11 +6,13 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -30,7 +32,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class RecordAudioActivity extends Activity {
+public class RecordAudioActivity extends Activity implements MediaPlayer.OnPreparedListener {
     Button play, stop, record, upload, download;
     private MediaRecorder myAudioRecorder;
     private String outputFile = null;
@@ -48,6 +50,9 @@ public class RecordAudioActivity extends Activity {
     private String extensiom = ".3gp";
     MediaPlayer m;
     ProgressDialog pdForVideoUpload;
+    private int progressStatus = 0;
+    private Handler handler = new Handler();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +68,7 @@ public class RecordAudioActivity extends Activity {
         stop.setEnabled(false);
         play.setEnabled(false);
         upload.setEnabled(false);
-
+        m = new MediaPlayer();
 
         record.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,9 +78,11 @@ public class RecordAudioActivity extends Activity {
                 outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + fileName;
 
                 myAudioRecorder = new MediaRecorder();
+
                 myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
                 myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
                 myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
+
                 myAudioRecorder.setOutputFile(outputFile);
                 try {
                     try {
@@ -99,15 +106,18 @@ public class RecordAudioActivity extends Activity {
         stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                try {
+                    myAudioRecorder.stop();
+                    myAudioRecorder.release();
+                    myAudioRecorder = null;
+                } catch (RuntimeException e) {
+                    e.printStackTrace();
+                }
 
-                myAudioRecorder.stop();
-                myAudioRecorder.release();
-                myAudioRecorder = null;
                 record.setEnabled(false);
                 stop.setEnabled(false);
                 play.setEnabled(true);
                 upload.setEnabled(true);
-
                 Toast.makeText(getApplicationContext(), "Audio recorded successfully", Toast.LENGTH_LONG).show();
             }
         });
@@ -121,16 +131,22 @@ public class RecordAudioActivity extends Activity {
                 upload.setEnabled(true);
                 m = new MediaPlayer();
 
+                m.setAudioStreamType(AudioManager.STREAM_MUSIC);
                 try {
+                    if (m != null && m.isPlaying()) {
+                        m.stop();
+                        m.release();
+
+                    }
                     m.setDataSource(outputFile);
+                    m.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                        @Override
+                        public void onPrepared(MediaPlayer mediaPlayer) {
+                            m.start();
 
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                try {
-                    m.prepare();
+                        }
+                    });
+                    m.prepareAsync();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -157,16 +173,24 @@ public class RecordAudioActivity extends Activity {
         });
 
     }
+
+    @Override
+    public void onPrepared(MediaPlayer mediaPlayer) {
+        m.start();
+    }
+
     private class UploadTask extends AsyncTask<Void, Void, String> {
         InputStream f;
         String v;
-
 
         @Override
         protected void onPreExecute() {
             pdForVideoUpload = new ProgressDialog(RecordAudioActivity.this);
             pdForVideoUpload.setMessage("Uploading Audio file......");
+            pdForVideoUpload.setCanceledOnTouchOutside(false);
             pdForVideoUpload.show();
+           // showProgressDialogHorizontal();
+
         }
 
         public UploadTask(InputStream file, String videoName) {
@@ -208,34 +232,39 @@ public class RecordAudioActivity extends Activity {
         }
     }
 
+    private void showProgressDialogHorizontal() {
+
+        pdForVideoUpload = new ProgressDialog(RecordAudioActivity.this);
+        pdForVideoUpload.setTitle("Please Wait..");
+        pdForVideoUpload.setMessage("Uploading Audio file......");
+        pdForVideoUpload.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        pdForVideoUpload.setCancelable(false);
+        pdForVideoUpload.setMax(100);
+        pdForVideoUpload.show();
+        new Thread(new Runnable() {
+            public void run() {
+                while (progressStatus < 100) {
+                    try{
+                        // Here I'm making thread sleep to show progress
+                        Thread.sleep(200);
+                        progressStatus += 2;
+                    } catch (InterruptedException e){
+                        e.printStackTrace();
+                    }
+                    // Update the progress bar
+                    handler.post(new Runnable() {
+                        public void run() {
+                            pdForVideoUpload.setProgress(progressStatus);
+                        }
+                    });
+                }
+                pdForVideoUpload.dismiss();
+            }
+        }).start();
+    }
 
 
     private void initPermissions() {
-        if (ContextCompat.checkSelfPermission(RecordAudioActivity.this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(RecordAudioActivity.this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-
-                // Show an expanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
-            } else {
-
-                // No explanation needed, we can request the permission.
-
-                ActivityCompat.requestPermissions(RecordAudioActivity.this,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        1);
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }
-        }
         if (ContextCompat.checkSelfPermission(RecordAudioActivity.this,
                 Manifest.permission.RECORD_AUDIO)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -254,6 +283,31 @@ public class RecordAudioActivity extends Activity {
 
                 ActivityCompat.requestPermissions(RecordAudioActivity.this,
                         new String[]{Manifest.permission.RECORD_AUDIO},
+                        1);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
+        if (ContextCompat.checkSelfPermission(RecordAudioActivity.this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(RecordAudioActivity.this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(RecordAudioActivity.this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         2);
 
                 // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
@@ -286,46 +340,22 @@ public class RecordAudioActivity extends Activity {
                 // result of the request.
             }
         }
-        if (ContextCompat.checkSelfPermission(RecordAudioActivity.this,
-                Manifest.permission.ACCESS_NETWORK_STATE)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(RecordAudioActivity.this,
-                    Manifest.permission.ACCESS_NETWORK_STATE)) {
-
-                // Show an expanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
-            } else {
-
-                // No explanation needed, we can request the permission.
-
-                ActivityCompat.requestPermissions(RecordAudioActivity.this,
-                        new String[]{Manifest.permission.ACCESS_NETWORK_STATE},
-                        4);
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }
-        }
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         switch (requestCode) {
             case 1:
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
-                    Toast.makeText(getApplicationContext(), "Audio Permission granted", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Permission granted", Toast.LENGTH_SHORT).show();
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
-                    Toast.makeText(getApplicationContext(), "Audio Permission denied", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Permission denied", Toast.LENGTH_SHORT).show();
                 }
                 return;
 
