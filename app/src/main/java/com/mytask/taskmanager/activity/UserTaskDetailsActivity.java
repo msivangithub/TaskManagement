@@ -73,8 +73,6 @@ public class UserTaskDetailsActivity extends AppCompatActivity implements Restfu
     public static final String TASK_ID = "task_id";
 
 
-
-
     TextView mTaskHeading, mTask, mAsignby, mStart, mEnd, mStarttime, mEndtime, mUname, mStatus;
     String taskHeading, task, asignby, start, end, starttime, endtime, uname, profile, status, taskID;
     ImageView mProfile;
