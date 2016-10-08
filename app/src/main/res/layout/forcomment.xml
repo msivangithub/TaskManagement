@@ -4,10 +4,7 @@
 
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/tools"
     android:orientation="vertical">
-
-
     <android.support.v7.widget.CardView
 
         android:layout_width="match_parent"
@@ -36,6 +33,7 @@
                 android:orientation="horizontal"
                 android:padding="7dp">
                 <de.hdodenhof.circleimageview.CircleImageView
+                    xmlns:app="http://schemas.android.com/tools"
                     android:id="@+id/profile"
                     android:layout_width="40dp"
                     android:layout_height="40dp"

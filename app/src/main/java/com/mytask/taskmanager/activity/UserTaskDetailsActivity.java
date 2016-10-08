@@ -26,9 +26,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -71,10 +74,11 @@ public class UserTaskDetailsActivity extends AppCompatActivity implements Restfu
     public static final String PROFILE = "profile";
     public static final String STATUS = "status";
     public static final String TASK_ID = "task_id";
+    public static final String TASK_FROMID = "task_fromid";
 
 
     TextView mTaskHeading, mTask, mAsignby, mStart, mEnd, mStarttime, mEndtime, mUname, mStatus;
-    String taskHeading, task, asignby, start, end, starttime, endtime, uname, profile, status, taskID;
+    String taskHeading, task, asignby, start, end, starttime, endtime, uname, profile, status, taskID, taskfromid;
     ImageView mProfile;
     List<Task> billToBillArrayList;
     Context _context;
@@ -83,6 +87,7 @@ public class UserTaskDetailsActivity extends AppCompatActivity implements Restfu
     RestfulListener listener;
     LinearLayout mImage, mVideo;
     String UserRole = "";
+
     private int lastPosition = -1;
     Task t;
     SwipeRefreshLayout mSwipeRefreshLayout;
@@ -99,11 +104,15 @@ public class UserTaskDetailsActivity extends AppCompatActivity implements Restfu
     static final String FTP_USER = "myRetail";
     static final String FTP_PASS = "vKsj30!9";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_task_details);
 
+
+
+        UserRole = PreferenceUtil.getInstance().getString(UserTaskDetailsActivity.this, ProjectVariables.USER_ROLE, "4");
 
         listener = UserTaskDetailsActivity.this;
         _context = UserTaskDetailsActivity.this;
@@ -111,6 +120,8 @@ public class UserTaskDetailsActivity extends AppCompatActivity implements Restfu
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) // Habilitar up button
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
     }
 
 
@@ -139,6 +150,8 @@ public class UserTaskDetailsActivity extends AppCompatActivity implements Restfu
             uname = intent.getStringExtra(UNAME);
             status = intent.getStringExtra(STATUS);
             taskIDs = intent.getIntExtra(TASK_ID, 0);
+            asignby = intent.getStringExtra(ASIGNBY);
+            taskfromid = intent.getStringExtra(TASK_FROMID);
         }
         mTaskHeading.setText(taskHeading);
         mTask.setText(task);
@@ -151,7 +164,6 @@ public class UserTaskDetailsActivity extends AppCompatActivity implements Restfu
 
         CollapsingToolbarLayout collapser = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         collapser.setExpandedTitleColor(Color.parseColor("#880E4F"));
-        collapser.setTitleEnabled(false);
         collapser.setTitle(uname);
 
         Picasso.with(this)
@@ -308,7 +320,18 @@ public class UserTaskDetailsActivity extends AppCompatActivity implements Restfu
                                 if (!audio.equalsIgnoreCase(ProjectVariables.NOAUDIO))
                                     obj.accumulate("Audio", audio);
 
-                                obj.accumulate("TaskToId", PreferenceUtil.getInstance().getString(_context, "currentUser", "000"));
+                                if (UserRole.equalsIgnoreCase("1")) {
+
+                                    obj.accumulate("TaskToId", PreferenceUtil.getInstance().getString(_context, "currentUser", "current"));
+
+                                } else if (UserRole.equalsIgnoreCase("5") || UserRole.equalsIgnoreCase("6") || UserRole.equalsIgnoreCase("4")) {
+
+                                    obj.accumulate("TaskToId", asignby);
+
+                                } else {
+
+                                    obj.accumulate("TaskToId", asignby);
+                                }
                                 obj.accumulate("TaskFromId", PreferenceUtil.getInstance().getString(_context, "Uid", "c001"));
 
 
@@ -325,13 +348,9 @@ public class UserTaskDetailsActivity extends AppCompatActivity implements Restfu
 
                     }
                 });
-
             }
         });
-
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -530,4 +549,5 @@ public class UserTaskDetailsActivity extends AppCompatActivity implements Restfu
 
         }
     }
+
 }

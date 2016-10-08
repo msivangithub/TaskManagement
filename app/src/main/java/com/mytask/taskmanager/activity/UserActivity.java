@@ -41,6 +41,7 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
     public static final String FNAME = "fname";
     public static final String PHONE = "phone";
     public static final String CITY = "city";
+
     ImageView imageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,14 +83,19 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
                 .into(imageView);
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_email);
+        if (fab != null) {
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                  /*  Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();*/
+                    Intent emailID  = new Intent(UserActivity.this,ComposeEmailActivity.class);
+                    emailID.putExtra(EMAIL,email);
+                    startActivity(emailID);
+                }
+            });
+        }
     }
 
     @Override

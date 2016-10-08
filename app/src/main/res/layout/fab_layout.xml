@@ -12,7 +12,7 @@
         android:layout_margin="@dimen/fab_margin"
         android:src="@android:drawable/ic_menu_compass"
         android:visibility="invisible"
-        app:backgroundTint="@color/black"
+        app:backgroundTint="@color/pink_100"
         app:fabSize="mini" />
 
     <android.support.design.widget.FloatingActionButton
@@ -23,7 +23,7 @@
         android:layout_margin="@dimen/fab_margin"
         android:src="@android:drawable/ic_menu_myplaces"
         android:visibility="invisible"
-        app:backgroundTint="@color/black"
+        app:backgroundTint="@color/pink_100"
         app:fabSize="mini" />
 
     <android.support.design.widget.FloatingActionButton
@@ -34,6 +34,6 @@
         android:layout_margin="@dimen/fab_margin"
         android:src="@android:drawable/ic_menu_share"
         android:visibility="invisible"
-        app:backgroundTint="@color/black"
+        app:backgroundTint="@color/pink_100"
         app:fabSize="mini" />
 </FrameLayout>

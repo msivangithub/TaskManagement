@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -70,6 +72,7 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
     private ArrayList<UserRoles> userRolesArrayList = new ArrayList<>();
     private static final int PICK_IMAGE = 100;
     private static final int CAMERA_IMAGE = 200;
+    private final int RESULT_CROP = 400;
     ImageView image;
     LinearLayout companyNames;
     String imageURI = "";
@@ -215,8 +218,24 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
                     @Override
                     public void onClick(View v) {
                         d.dismiss();
-                        Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                        startActivityForResult(i, PICK_IMAGE);
+                        Intent intent = new Intent();
+                        // call android default gallery
+                        intent.setType("image/*");
+                        intent.setAction(Intent.ACTION_GET_CONTENT);
+                        // ******** code for crop image
+                        intent.putExtra("aspectX", 0);
+                        intent.putExtra("aspectY", 0);
+                        intent.putExtra("outputX", 200);
+                        intent.putExtra("outputY", 150);
+                        try {
+                            intent.putExtra("return-data", true);
+                            startActivityForResult(Intent.createChooser(intent,"Complete action using"), PICK_IMAGE);
+
+                        } catch (ActivityNotFoundException e) {
+                            String errorMessage = "your device doesn't support the crop action!";
+                            Toast toast = Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT);
+                            toast.show();
+                        }
 
                         /*Intent intent = new Intent();
                         intent.setType("image*//*");
@@ -234,6 +253,11 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
                         Uri u = Uri.fromFile(f);
                         Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, u);
+                        intent.putExtra("crop", "true");
+                        intent.putExtra("aspectX", 0);
+                        intent.putExtra("aspectY", 0);
+                        intent.putExtra("outputX", 200);
+                        intent.putExtra("outputY", 150);
                         startActivityForResult(intent, CAMERA_IMAGE);
                     }
                 });
@@ -292,7 +316,6 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
         toast.setView(toastlayout);
         toast.show();
     }
-
 
     private boolean validation1() {
         boolean valid = true;

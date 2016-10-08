@@ -71,6 +71,8 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
     public static final String PROFILE = "profile";
     public static final String STATUS = "status";
     public static final String TASK_ID = "task_id";
+    public static final String TASK_FROMID = "task_fromid";
+
 
     List<Task> billToBillArrayList;
     Context _context;
@@ -147,6 +149,7 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
                     intent.putExtra(PROFILE, billToBillArrayList.get(getAdapterPosition()).getProfile());
                     intent.putExtra(STATUS, billToBillArrayList.get(getAdapterPosition()).getTaskStatus());
                     intent.putExtra(TASK_ID, billToBillArrayList.get(getAdapterPosition()).getTaskId());
+                    intent.putExtra(TASK_FROMID ,billToBillArrayList.get(getAdapterPosition()).getTaskToId());
 
                     Activity act = (Activity) _context;
                     act.startActivity(intent);

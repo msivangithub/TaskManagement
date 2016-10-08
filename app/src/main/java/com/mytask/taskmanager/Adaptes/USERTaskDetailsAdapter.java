@@ -82,6 +82,8 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
     public static final String PROFILE = "profile";
     public static final String STATUS = "status";
     public static final String TASK_ID = "task_id";
+    public static final String TASK_FROMID = "task_fromid";
+
     List<Task> billToBillArrayList;
     Context _context;
     String _type;
@@ -156,6 +158,7 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
                 public void onClick(View view) {
 
                     Intent intent = new Intent(_context, UserTaskDetailsActivity.class);
+
                     intent.putExtra(TASK_HEADING, billToBillArrayList.get(getAdapterPosition()).getTaskHeading());
                     intent.putExtra(TASK, billToBillArrayList.get(getAdapterPosition()).getTaskDes());
                     intent.putExtra(ASIGNBY, billToBillArrayList.get(getAdapterPosition()).getTaskFromId());
@@ -167,6 +170,7 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
                     intent.putExtra(PROFILE, billToBillArrayList.get(getAdapterPosition()).getProfile());
                     intent.putExtra(STATUS, billToBillArrayList.get(getAdapterPosition()).getTaskStatus());
                     intent.putExtra(TASK_ID, billToBillArrayList.get(getAdapterPosition()).getTaskId());
+                    intent.putExtra(TASK_FROMID ,billToBillArrayList.get(getAdapterPosition()).getTaskToId());
 
                     Activity act = (Activity) _context;
                     act.startActivity(intent);

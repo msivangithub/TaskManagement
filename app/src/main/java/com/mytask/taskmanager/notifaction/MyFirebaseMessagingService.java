@@ -151,7 +151,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             } catch (Exception e) {
                 e.printStackTrace();
-                Log.e("Etrtr", e.getMessage().toString());
+                Log.e("Notifaction Error", e.getMessage().toString());
             }
         }
     }

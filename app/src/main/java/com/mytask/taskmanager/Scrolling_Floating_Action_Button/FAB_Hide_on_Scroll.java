@@ -1,4 +1,5 @@
-package com.mytask.taskmanager.util;
+package com.mytask.taskmanager.Scrolling_Floating_Action_Button;
+
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;

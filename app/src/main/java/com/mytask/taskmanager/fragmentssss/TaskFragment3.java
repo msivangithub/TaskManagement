@@ -7,8 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -23,7 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -71,7 +68,7 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
      ***********/
     static final String FTP_PASS = "vKsj30!9";
     private Object currentdate;
-    LinearLayout mImage, mVideo,recordAudio;
+    LinearLayout mImage, mVideo, recordAudio;
     String imageURI = "";
     String audioURI = "";
     private static final int MAX_PROGRESS = 100;
@@ -154,7 +151,7 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
                     @Override
                     public void onClick(View view) {
                         d.dismiss();
-                       startActivity(new Intent(getActivity(), RecordAudioActivity.class));
+                        startActivity(new Intent(getActivity(), RecordAudioActivity.class));
 
                     }
                 });
@@ -312,18 +309,18 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
     }
 
     public void clearAputils() {
-       // AppUtil.setActEndDate("");
-       // AppUtil.setExpEndDate("");
-       // AppUtil.setExpStartDate("");
-      //  AppUtil.setActStartDate("");
+        //  AppUtil.setActEndDate("");
+        //  AppUtil.setExpEndDate("");
+        //  AppUtil.setExpStartDate("");
+        //  AppUtil.setActStartDate("");
         AppUtil.setPriority("");
-        AppUtil.setTaskDes("");
-        AppUtil.setTaskFromId("");
-        AppUtil.setTaskHeading("");
-      //  AppUtil.setTaskStatus("");
-        AppUtil.setTaskToId("");
-     //   AppUtil.getStartFromTime();
-    //    AppUtil.getStartToTime();
+        //  AppUtil.setTaskDes("");
+        //  AppUtil.setTaskFromId("");
+        //  AppUtil.setTaskHeading("");
+        //  AppUtil.setTaskStatus("");
+        //  AppUtil.setTaskToId("");
+        //   AppUtil.getStartFromTime();
+        //    AppUtil.getStartToTime();
     }
 
     @Override
