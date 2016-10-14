@@ -12,6 +12,7 @@ import android.widget.EditText;
 import com.mytask.taskmanager.R;
 
 public class ComposeEmailActivity extends AppCompatActivity {
+
     public static final String EMAIL = "name";
     EditText edtTo;
     EditText edtSubject;
@@ -23,8 +24,6 @@ public class ComposeEmailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compose_email);
 
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) // Habilitar up button
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -37,19 +36,24 @@ public class ComposeEmailActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.email_main, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_send) {
-
-            composeEmail();
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case android.R.id.home:
+                super.onBackPressed();
+                return true;
+            case R.id.action_send1:
+                composeEmail();
+                break;
         }
-        return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(menuItem);
     }
+
 
     public void composeEmail() {
         String[] addresses = {email.toString()};

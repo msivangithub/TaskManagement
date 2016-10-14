@@ -1,20 +1,13 @@
 package com.mytask.taskmanager.Adaptes;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.net.Uri;
-import android.provider.MediaStore;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.view.ActionMode;
 import android.support.v7.view.menu.MenuPopupHelper;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -23,39 +16,27 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
-import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.MediaController;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.VideoView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
-import com.mytask.taskmanager.Pojo.Comments;
+import com.lb.recyclerview_fast_scroller.RecyclerViewFastScroller;
+
 import com.mytask.taskmanager.Pojo.Task;
 import com.mytask.taskmanager.R;
-import com.mytask.taskmanager.activity.RecordAudioActivity;
 import com.mytask.taskmanager.activity.Tasks;
-import com.mytask.taskmanager.activity.UserActivity;
 import com.mytask.taskmanager.activity.UserTaskDetailsActivity;
 import com.mytask.taskmanager.services.AsynHttpPost;
 import com.mytask.taskmanager.services.RestfulListener;
-import com.mytask.taskmanager.util.AppUtil;
 import com.mytask.taskmanager.util.PreferenceUtil;
 import com.mytask.taskmanager.util.ProjectVariables;
 import com.mytask.taskmanager.util.RefreshLisener;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -68,7 +49,7 @@ import java.util.Random;
 /**
  * Created by NEWSYSTEM1 on 6/9/2016.
  */
-public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetailsAdapter.MyViewHolder> implements RestfulListener {
+public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetailsAdapter.MyViewHolder> implements RestfulListener ,RecyclerViewFastScroller.BubbleTextGetter {
 
 
     public static final String TASK_HEADING = "task_heading";
@@ -123,6 +104,14 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
     @Override
     public void getData(String s, String status, int rType) {
 
+    }
+
+    @Override
+    public String getTextToShowInBubble(int pos) {
+        if (billToBillArrayList.get(pos).getTaskHeading().length() > 0) {
+            return Character.toString(billToBillArrayList.get(pos).getTaskHeading().charAt(0));
+        }
+        return null;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -495,7 +484,7 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
             String firstLetter = String.valueOf(billToBillArrayList.get(position).getTaskHeading().charAt(0));
             ColorGenerator generator = ColorGenerator.MATERIAL; // or use DEFAULT
            // int color = generator.getColor(billToBillArrayList.get(position));
-             int color = generator.getRandomColor();
+            int color = generator.getRandomColor();
             TextDrawable drawable = TextDrawable.builder()
                     .buildRound(firstLetter, color); // radius in px
             viewHolder.icon_entry.setImageDrawable(drawable);

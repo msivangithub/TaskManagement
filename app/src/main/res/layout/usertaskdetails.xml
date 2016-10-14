@@ -32,7 +32,7 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -50,13 +50,21 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:cacheColorHint="#aca9a9"
-                    android:divider="#bab9b9"
-                    android:elevation="2dp"
-                    android:footerDividersEnabled="true"
-                    android:scrollbars="vertical" />
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:paddingRight="@dimen/activity_horizontal_margin"
+                    android:paddingTop="@dimen/activity_vertical_margin"
+                    android:elevation="2dp" />
 
             </android.support.v4.widget.SwipeRefreshLayout>
-        </LinearLayout>
+            <com.lb.recyclerview_fast_scroller.RecyclerViewFastScroller
+                android:id="@+id/fastscroller"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                />
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

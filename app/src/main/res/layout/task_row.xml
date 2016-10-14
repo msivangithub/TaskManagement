@@ -123,16 +123,7 @@
                     android:gravity="center"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/asignBy"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:gravity="center"
-                        android:singleLine="true"
-                        android:text="name"
-                        android:textColor="@color/pink_900"
-                        android:textSize="@dimen/taskRow_header_textSize" />
+
 
                     <ImageButton
                         android:id="@+id/Button_menu"
@@ -143,7 +134,15 @@
                         android:layout_gravity="right"
                         android:background="@drawable/btn_feed_action"
                         android:src="@drawable/ic_more_grey_48" />
-
+                    <TextView
+                        android:id="@+id/asignBy"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:text="name"
+                        android:textColor="@color/pink_900"
+                        android:textSize="@dimen/taskRow_header_textSize" />
                 </LinearLayout>
             </LinearLayout>
             <!-- <View

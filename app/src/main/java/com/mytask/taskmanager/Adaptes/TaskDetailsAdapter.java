@@ -35,6 +35,7 @@ import android.widget.VideoView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
+import com.lb.recyclerview_fast_scroller.RecyclerViewFastScroller;
 import com.mytask.taskmanager.Pojo.Comments;
 import com.mytask.taskmanager.Pojo.Task;
 import com.mytask.taskmanager.R;
@@ -58,7 +59,7 @@ import java.util.Random;
 /**
  * Created by NEWSYSTEM1 on 6/9/2016.
  */
-public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.MyViewHolder> implements RestfulListener {
+public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.MyViewHolder> implements RestfulListener ,RecyclerViewFastScroller.BubbleTextGetter{
 
     public static final String TASK_HEADING = "task_heading";
     public static final String TASK = "task";
@@ -110,6 +111,14 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
     @Override
     public void getData(String s, String status, int rType) {
 
+    }
+
+    @Override
+    public String getTextToShowInBubble(int pos) {
+        if (billToBillArrayList.get(pos).getTaskHeading().length() > 0) {
+            return Character.toString(billToBillArrayList.get(pos).getTaskHeading().charAt(0));
+        }
+        return null;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

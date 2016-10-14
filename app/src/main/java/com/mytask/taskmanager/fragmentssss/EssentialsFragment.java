@@ -64,6 +64,10 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.soundcloud.android.crop.Crop;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+
 /**
  * Created by GhanaShyam on 7/9/2016.
  */
@@ -71,9 +75,11 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
     private ArrayList<TaskBranches> branches = new ArrayList<>();
     private ArrayList<UserRoles> userRolesArrayList = new ArrayList<>();
     private static final int PICK_IMAGE = 100;
+    private static final int REQUEST_CODE_ATTACH_PHOTO = 901;
     private static final int CAMERA_IMAGE = 200;
     private final int RESULT_CROP = 400;
-    ImageView image;
+    ImageView profile_camera;
+    CircleImageView image;
     LinearLayout companyNames;
     String imageURI = "";
     String ImageName = "";
@@ -83,7 +89,7 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
     private String directory;
     String selectedImage;
     TextView click, camera, sdCard;
-
+    private Uri imageChangeUri;
     private Spinner mSpinnerCompanyId, mSpinnerCounter;
     String companyID = "";
     String cityname = "";
@@ -139,7 +145,8 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
 
         companyNames = (LinearLayout) v.findViewById(R.id.companyNames);
         mMobileNo = (EditText) v.findViewById(R.id.Mobile);
-        image = (ImageView) v.findViewById(R.id.display_image);
+        image = (CircleImageView) v.findViewById(R.id.display_image);
+        profile_camera = (ImageView) v.findViewById(R.id.profile_camera);
         mEmail = (EditText) v.findViewById(R.id.emailAndMobile);
         mfirstName = (EditText) v.findViewById(R.id.firstName);
         mlastName = (EditText) v.findViewById(R.id.lastName);
@@ -195,7 +202,7 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
             }
         });
 
-        image.setOnClickListener(new View.OnClickListener() {
+        profile_camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -218,25 +225,10 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
                     @Override
                     public void onClick(View v) {
                         d.dismiss();
-                        Intent intent = new Intent();
-                        // call android default gallery
-                        intent.setType("image/*");
-                        intent.setAction(Intent.ACTION_GET_CONTENT);
-                        // ******** code for crop image
-                        intent.putExtra("aspectX", 0);
-                        intent.putExtra("aspectY", 0);
-                        intent.putExtra("outputX", 200);
-                        intent.putExtra("outputY", 150);
-                        try {
-                            intent.putExtra("return-data", true);
-                            startActivityForResult(Intent.createChooser(intent,"Complete action using"), PICK_IMAGE);
-
-                        } catch (ActivityNotFoundException e) {
-                            String errorMessage = "your device doesn't support the crop action!";
-                            Toast toast = Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT);
-                            toast.show();
-                        }
-
+                        Intent getContentIntent = new Intent(Intent.ACTION_PICK,
+                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(getContentIntent, PICK_IMAGE);
+                        // ******** code for crop imag
                         /*Intent intent = new Intent();
                         intent.setType("image*//*");
                         intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -361,68 +353,29 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
         return valid;
     }
 
-    private static int calculateInSampleSize(
-            BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        // Raw height and width of image
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-
-            final int halfHeight = height / 2;
-            final int halfWidth = width / 2;
-
-            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
-            // height and width larger than the requested height and width.
-            while ((halfHeight / inSampleSize) >= reqHeight
-                    && (halfWidth / inSampleSize) >= reqWidth) {
-                inSampleSize *= 2;
-            }
-        }
-
-        return inSampleSize;
-    }
-
-    public static Bitmap decodeSampledBitmapFromUri(Context context, Uri imageUri, int reqWidth, int reqHeight) throws FileNotFoundException {
-
-        // Get input stream of the image
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        InputStream iStream = context.getContentResolver().openInputStream(imageUri);
-
-        // First decode with inJustDecodeBounds=true to check dimensions
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeStream(iStream, null, options);
-
-        // Calculate inSampleSize
-        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-
-        // Decode bitmap with inSampleSize set
-        options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeStream(iStream, null, options);
-    }
-
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == PICK_IMAGE  && null != data) {
-               final Uri selectedimg = data.getData();
-                imageURI = selectedimg.toString();
-                User user = new User();
-                user.userName = "user1";
-                user.profilePictureUrl = imageURI;
-                Post post1 = new Post();
-                post1.user = user;
-                post1.text = requestCode + "";
-                PostsDatabaseHelper databaseHelper = PostsDatabaseHelper.getInstance(getActivity());
-                databaseHelper.addPost(post1);
+        Uri selectedFileUri = null;
 
+        if (resultCode == Activity.RESULT_OK ) {
+            if (requestCode == PICK_IMAGE && null != data) {
                 try {
+                    final Uri selectedimg = data.getData();
+                    imageURI = selectedimg.toString();
+                    User user = new User();
+                    user.userName = "user1";
+                    user.profilePictureUrl = imageURI;
+                    Post post1 = new Post();
+                    post1.user = user;
+                    post1.text = requestCode + "";
+                    PostsDatabaseHelper databaseHelper = PostsDatabaseHelper.getInstance(getActivity());
+                    databaseHelper.addPost(post1);
+
+
                     pd = new ProgressDialog(getActivity());
                     pd.setMessage("Uploading......");
-                    String[] filePathColumn = { MediaStore.Images.Media.DATA };
+                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
                     Cursor cursor = getActivity().getContentResolver().query(selectedimg,
                             filePathColumn, null, null, null);
                     // Move to first row
@@ -431,8 +384,8 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
                     imageURI = cursor.getString(columnIndex);
                     cursor.close();
 
-                   // image.setImageBitmap(decodeSampledBitmapFromUri(getActivity(), selectedimg, 300, 300));
-                    image.setImageBitmap(MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedimg));
+                    // image.setImageBitmap(decodeSampledBitmapFromUri(getActivity(), selectedimg, 300, 300));
+                   image.setImageBitmap(MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedimg));
 
                     imageURI = "Image_" + getRandomNumberInRange(1, 10000) + ".jpg";
                     Log.e("ImageName", imageURI.toString());
@@ -471,6 +424,11 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
             }
         }
 
+    }
+
+    private void beginCrop(Uri selectedFileUri) {
+        Uri destination = Uri.fromFile(new File(getActivity().getCacheDir(), "new_group_profile.jpeg"));
+        Crop.of(selectedFileUri, destination).asSquare().start(getActivity());
     }
 
     private class UploadTask extends AsyncTask<Void, Void, String> {

@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-feature android:name="android.hardware.camera" />
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
@@ -86,7 +86,10 @@
         <activity
             android:name=".activity.ComposeEmailActivity"
             android:label="@string/title_activity_user_task_details"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme_"  />
+        <activity android:name=".activity.TaskCommentActivity"
+            android:label="@string/TaskCommentActivity"
+            android:theme="@style/AppTheme_"/>
     </application>
 
 </manifest>

@@ -35,6 +35,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.adeel.library.easyFTP;
+import com.lb.recyclerview_fast_scroller.RecyclerViewFastScroller;
 import com.mytask.taskmanager.Adaptes.USERTaskDetailsAdapter;
 import com.mytask.taskmanager.Pojo.Comments;
 import com.mytask.taskmanager.Pojo.Task;
@@ -103,6 +104,7 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
     Animation show_fab_3;
     Animation hide_fab_3;
     CoordinatorLayout rootLayout;
+    RecyclerViewFastScroller fastScroller;
 
     public static TaskDetails newInstance() {
 
@@ -183,10 +185,33 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
         TaskList = new ArrayList<>();
         selectedUsers = new ArrayList<>();
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
+        /*RecyclerViewFastScroller Designing*/
+        fastScroller = (RecyclerViewFastScroller) view.findViewById(R.id.fastscroller);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false) {
+            @Override
+            public void onLayoutChildren(final RecyclerView.Recycler recycler, final RecyclerView.State state) {
+                super.onLayoutChildren(recycler, state);
+                //TODO if the items are filtered, considered hiding the fast scroller here
+                final int firstVisibleItemPosition = findFirstVisibleItemPosition();
+                if (firstVisibleItemPosition != 0) {
+                    // this avoids trying to handle un-needed calls
+                    if (firstVisibleItemPosition == -1)
+                        //not initialized, or no items shown, so hide fast-scroller
+                        fastScroller.setVisibility(View.GONE);
+                    return;
+                }
+                final int lastVisibleItemPosition = findLastVisibleItemPosition();
+                int itemsShown = lastVisibleItemPosition - firstVisibleItemPosition + 1;
+                //if all items are shown, hide the fast-scroller
+                fastScroller.setVisibility(adapter1.getItemCount() > itemsShown ? View.VISIBLE : View.GONE);
+            }
+        });
+        fastScroller.setRecyclerView(recyclerView);
+        fastScroller.setViewsToUse(R.layout.recycler_view_fast_scroller__fast_scroller, R.id.fastscroller_bubble, R.id.fastscroller_handle);
+/*************************************************************/
         employeename = (Spinner) view.findViewById(R.id.id_employeenames);
         // status = (Spinner) view.findViewById(R.id.id_status);
         statusAdapter = new TasksAdapter(getActivity(), android.R.layout.simple_spinner_item, mytasks);
-
         /*PullRefersh in TaskDetails */
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swifeRefresh);
         mSwipeRefreshLayout.setColorSchemeColors(Color.RED, Color.GREEN, Color.BLUE, Color.CYAN);
@@ -578,6 +603,7 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
             Toast.makeText(getActivity(), s, Toast.LENGTH_LONG).show();
         }
     }
+
     private void expandFAB() {
 
         //Floating Action Button 1

@@ -15,6 +15,7 @@ import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,6 +29,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -91,6 +93,13 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
         return commentsList.size();
     }
 
+    public void add( ArrayList<Comments> message) {
+        commentsList.addAll(message);
+    }
+
+
+
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView comment, roles;
         ImageButton play, image, audio;
@@ -102,7 +111,6 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
             super(itemView);
             comment = (TextView) itemView.findViewById(R.id.insidecomment);
             roles = (TextView) itemView.findViewById(R.id.user_roles);
-            play = (ImageButton) itemView.findViewById(R.id.playVideo);
             audio = (ImageButton) itemView.findViewById(R.id.play_Audio);
             image = (ImageButton) itemView.findViewById(R.id.image);
             mProfile = (ImageView) itemView.findViewById(R.id.profile);

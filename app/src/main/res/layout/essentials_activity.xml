@@ -1,9 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="5dp">
+    android:background="#ffffff"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/display_image"
+            android:layout_width="@dimen/image_width"
+            android:layout_height="@dimen/image_width"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/profile_sample" />
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile_camera"
+            android:layout_width="@dimen/image_smal_width"
+            android:layout_height="@dimen/image_smal_width"
+            android:layout_above="@+id/channelName"
+            android:layout_alignEnd="@+id/display_image"
+            android:layout_alignRight="@+id/display_image"
+            android:clickable="true"
+            android:src="@drawable/applozic_ic_action_camera_new" />
+
+        <TextView
+            android:id="@+id/channelName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/display_image"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:text="" />
+    </RelativeLayout>
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -13,35 +48,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="5dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/display_image"
-                    android:layout_width="@dimen/image_width"
-                    android:layout_height="@dimen/image_width"
-                    android:layout_weight="1"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    app:civ_border_color="#898484"
-                    app:civ_border_width="@dimen/DrawerHeader_CircleImageView_border_width"
-                    android:src="@drawable/imge_placeholder" />
-                <!--app:civ_border_color="#898484"
-                                    app:civ_border_width="@dimen/DrawerHeader_CircleImageView_border_width" -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:onClick="pickAImage"
-                    android:text="Upload Photo"
-                    android:textColor="@color/colorPrimary" />
-            </LinearLayout>
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -70,7 +77,6 @@
                     android:paddingLeft="4dp"
                     android:singleLine="true"
                     android:textColorHint="#e2e2e2" />
-
 
             </LinearLayout>
 
@@ -225,7 +231,6 @@
                     android:singleLine="true"
                     android:textColorHint="#e2e2e2" />
 
-
             </LinearLayout>
 
             <LinearLayout
@@ -275,52 +280,6 @@
 
             </LinearLayout>
 
-
-            <!-- <LinearLayout
-                 android:layout_width="match_parent"
-                 android:layout_height="50dp"
-                 android:orientation="horizontal"
-                 android:padding="5dp">
-
-                 <TextView
-                     android:layout_width="0dp"
-                     android:layout_height="match_parent"
-                     android:layout_gravity="center"
-                     android:layout_weight="1"
-                     android:gravity="left|center"
-                     android:text="Send invity"
-                     android:textColor="#000" />
-
-                 <RelativeLayout
-                     android:layout_width="0dp"
-                     android:layout_height="wrap_content"
-                     android:layout_marginRight="3dp"
-                     android:layout_weight="2"
-                     android:background="@drawable/spinner_border"
-                     android:orientation="horizontal">
-
-                     <Spinner
-                         android:id="@+id/sendinvity"
-                         android:layout_width="match_parent"
-                         android:layout_height="wrap_content"
-                         android:layout_centerVertical="true"
-                         android:layout_gravity="center"
-                         android:background="@android:color/transparent"
-                         android:entries="@array/spinner_item"
-                         android:gravity="center"
-                         android:padding="10dp" />
-
-                     <ImageView
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"
-                         android:layout_alignParentRight="true"
-                         android:layout_centerVertical="true"
-                         android:layout_gravity="center"
-                         android:padding="5sp"
-                         android:src="@drawable/drop_down" />
-
-                 </RelativeLayout>
-             </LinearLayout>-->
             <Button
                 android:id="@+id/submit"
                 android:layout_width="match_parent"
@@ -333,4 +292,5 @@
 
         </LinearLayout>
     </ScrollView>
+
 </LinearLayout>

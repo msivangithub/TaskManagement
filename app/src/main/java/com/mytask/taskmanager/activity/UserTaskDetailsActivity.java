@@ -20,6 +20,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -87,7 +88,7 @@ public class UserTaskDetailsActivity extends AppCompatActivity implements Restfu
     RestfulListener listener;
     LinearLayout mImage, mVideo;
     String UserRole = "";
-
+    CommentsAdapter cAdapter;
     private int lastPosition = -1;
     Task t;
     SwipeRefreshLayout mSwipeRefreshLayout;
@@ -99,6 +100,7 @@ public class UserTaskDetailsActivity extends AppCompatActivity implements Restfu
     int taskIDs;
     ProgressDialog pdForVideoUpload;
     String imageURI = "";
+    RecyclerView commentsrecyclerview;
 
     static final String FTP_HOST = "myaccountsretail.com";
     static final String FTP_USER = "myRetail";
@@ -110,8 +112,6 @@ public class UserTaskDetailsActivity extends AppCompatActivity implements Restfu
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_task_details);
 
-
-
         UserRole = PreferenceUtil.getInstance().getString(UserTaskDetailsActivity.this, ProjectVariables.USER_ROLE, "4");
 
         listener = UserTaskDetailsActivity.this;
@@ -121,13 +121,11 @@ public class UserTaskDetailsActivity extends AppCompatActivity implements Restfu
         if (getSupportActionBar() != null) // Habilitar up button
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
     }
-
-
     @Override
     protected void onStart() {
         super.onStart();
+        //initializing view objects
         mTaskHeading = (TextView) findViewById(R.id.task_heading);
         mTask = (TextView) findViewById(R.id.task);
         // mAsignby = (TextView)findViewById(R.id.assign_By);
@@ -182,15 +180,18 @@ public class UserTaskDetailsActivity extends AppCompatActivity implements Restfu
         }
         AsynHttpPost post = new AsynHttpPost(_context, 0, 325, ProjectVariables.TASK_COMMENTS, listener, obj, "");
         post.execute();
-
         FloatingActionButton fab1 = (FloatingActionButton) findViewById(R.id.fab);
         assert fab1 != null;
         fab1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                final RecyclerView Comments;
-                final String[] status = {""};
+                Intent intent = new Intent(_context, TaskCommentActivity.class);
+                intent.putExtra(TASK_ID, taskIDs);
+                intent.putExtra(ASIGNBY, asignby);
+                startActivity(intent);
+
+                /*final String[] status = {""};
                 final Dialog updateDialog = new Dialog(UserTaskDetailsActivity.this);
                 updateDialog.setTitle("Task Replay");
                 updateDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -203,15 +204,15 @@ public class UserTaskDetailsActivity extends AppCompatActivity implements Restfu
                 updateDialog.show();
                 ImageButton edt_close = (ImageButton) updateDialog.findViewById(R.id.edt_close);
 
-                Comments = (RecyclerView) updateDialog.findViewById(R.id.TaskComment);
+                commentsrecyclerview = (RecyclerView) updateDialog.findViewById(R.id.TaskComment);
                 ArrayList<Comments> currentPojo = new ArrayList<Comments>();
                 currentPojo = AppUtil.getCurrentPojo();
                 if (currentPojo.size() > 0) {
-                    CommentsAdapter cAdapter = new CommentsAdapter(currentPojo, _context);
-                    Comments.setLayoutManager(new LinearLayoutManager(_context));
-                    Comments.setItemAnimator(new DefaultItemAnimator());
-                    Comments.setHasFixedSize(true);
-                    Comments.setAdapter(cAdapter);
+                    cAdapter = new CommentsAdapter(currentPojo, _context);
+                    commentsrecyclerview.setLayoutManager(new LinearLayoutManager(_context));
+                    commentsrecyclerview.setItemAnimator(new DefaultItemAnimator());
+                    commentsrecyclerview.setHasFixedSize(true);
+                    commentsrecyclerview.setAdapter(cAdapter);
 
                 }
 
@@ -297,6 +298,7 @@ public class UserTaskDetailsActivity extends AppCompatActivity implements Restfu
                 submit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
                         SharedPreferences sharedPreferences = _context.getSharedPreferences("CurrentVideo", Context.MODE_PRIVATE);
                         video = sharedPreferences.getString("video", "novideo");
                         SharedPreferences sharedPreferences1 = _context.getSharedPreferences("CurrentImage", Context.MODE_PRIVATE);
@@ -347,8 +349,9 @@ public class UserTaskDetailsActivity extends AppCompatActivity implements Restfu
                         }
 
                     }
-                });
+                });*/
             }
+
         });
     }
 
@@ -421,9 +424,11 @@ public class UserTaskDetailsActivity extends AppCompatActivity implements Restfu
                     c1.setAudio(audio);
                     c1.setProfile(profile);
                     current.add(c1);
+
                 }
                 //if (array.length() > 0)
                 AppUtil.setCurrentPojo(current);
+
             } catch (JSONException e) {
                 e.printStackTrace();
                 AppUtil.setCurrentPojo(current);
@@ -431,6 +436,7 @@ public class UserTaskDetailsActivity extends AppCompatActivity implements Restfu
             }
         }
     }
+
 
     public String getAbsolutePath(Uri uri) {
         String[] projection = {MediaStore.MediaColumns.DATA};
@@ -444,7 +450,7 @@ public class UserTaskDetailsActivity extends AppCompatActivity implements Restfu
             return null;
     }
 
-    @Override
+  /*  @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // Toast.makeText(getApplicationContext(), "Main activity result", Toast.LENGTH_LONG).show();
@@ -548,6 +554,6 @@ public class UserTaskDetailsActivity extends AppCompatActivity implements Restfu
             Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
 
         }
-    }
+    }*/
 
 }

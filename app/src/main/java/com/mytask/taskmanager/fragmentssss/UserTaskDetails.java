@@ -29,6 +29,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.lb.recyclerview_fast_scroller.RecyclerViewFastScroller;
 import com.mytask.taskmanager.Adaptes.ShowDetailsAdapter;
 import com.mytask.taskmanager.Adaptes.TaskDetailsAdapter;
 import com.mytask.taskmanager.Pojo.Comments;
@@ -85,7 +86,7 @@ public class UserTaskDetails extends Fragment implements View.OnClickListener, R
     Animation show_fab_3;
     Animation hide_fab_3;
     CoordinatorLayout rootLayout;
-
+    RecyclerViewFastScroller fastScroller;
     public static UserTaskDetails newInstance() {
 
         Bundle args = new Bundle();
@@ -169,6 +170,30 @@ public class UserTaskDetails extends Fragment implements View.OnClickListener, R
         status = (Spinner) view.findViewById(R.id.id_status);
         statusAdapter = new TasksAdapter(getActivity(), android.R.layout.simple_spinner_item, mytasks);
         status.setAdapter(statusAdapter);
+
+        fastScroller = (RecyclerViewFastScroller) view.findViewById(R.id.fastscroller);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false) {
+            @Override
+            public void onLayoutChildren(final RecyclerView.Recycler recycler, final RecyclerView.State state) {
+                super.onLayoutChildren(recycler, state);
+                //TODO if the items are filtered, considered hiding the fast scroller here
+                final int firstVisibleItemPosition = findFirstVisibleItemPosition();
+                if (firstVisibleItemPosition != 0) {
+                    // this avoids trying to handle un-needed calls
+                    if (firstVisibleItemPosition == -1)
+                        //not initialized, or no items shown, so hide fast-scroller
+                        fastScroller.setVisibility(View.GONE);
+                    return;
+                }
+                final int lastVisibleItemPosition = findLastVisibleItemPosition();
+                int itemsShown = lastVisibleItemPosition - firstVisibleItemPosition + 1;
+                //if all items are shown, hide the fast-scroller
+                fastScroller.setVisibility(adapter1.getItemCount() > itemsShown ? View.VISIBLE : View.GONE);
+            }
+        });
+        fastScroller.setRecyclerView(recyclerView);
+        fastScroller.setViewsToUse(R.layout.recycler_view_fast_scroller__fast_scroller, R.id.fastscroller_bubble, R.id.fastscroller_handle);
+
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swifeRefresh);
         mSwipeRefreshLayout.setColorSchemeColors(Color.RED, Color.GREEN, Color.BLUE, Color.CYAN);
