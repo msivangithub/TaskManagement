@@ -15,6 +15,7 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.adeel.library.easyFTP;
@@ -75,7 +77,7 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
     private int progressStatus = 0;
     private Handler handler = new Handler();
     private boolean isCanceled;
-
+    TextView html;
     public static TaskFragment3 newInstance(addbutton ab) {
         Bundle args = new Bundle();
         _ab = ab;

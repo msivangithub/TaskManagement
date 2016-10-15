@@ -1,8 +1,10 @@
 package com.mytask.taskmanager.LoginSetup;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.text.method.HideReturnsTransformationMethod;
@@ -44,12 +46,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     UserRoles roles = new UserRoles();
     AlertDialogManager dialogManager = new AlertDialogManager();
+    CheckBox rember;
+    String defaultRembere;
 
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        // SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        // defaultRembere = preferences.getString("remberpass", null);
 /*
         if (getIntent().getExtras() != null) {
             for (String key : getIntent().getExtras().keySet()) {
@@ -63,6 +70,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void setListeners() {
+        rember.setOnClickListener(this);
         signUp.setOnClickListener(this);
         loginButton.setOnClickListener(this);
         forgotPassword.setOnClickListener(this);
@@ -96,8 +104,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
     private void initViews() {
+        rember = (CheckBox) findViewById(R.id.remember);
         String defaultUserName = "";
-        PreferenceUtil util = PreferenceUtil.getInstance();
+        final PreferenceUtil util = PreferenceUtil.getInstance();
         defaultUserName = util.getString(LoginActivity.this, ProjectVariables.USERNAME, "0");
         phoneNo = (EditText) findViewById(R.id.login_emailid);
         if (!defaultUserName.equalsIgnoreCase("0")) {
@@ -108,6 +117,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         forgotPassword = (TextView) findViewById(R.id.forgot_password);
         signUp = (Button) findViewById(R.id.createAccount);
+        rember.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked){
+                    defaultRembere = util.getString(LoginActivity.this, ProjectVariables.PASSWORD, "0");
+                    if (!defaultRembere.equalsIgnoreCase("0")) {
+                        password.setText(String.valueOf(defaultRembere));
+                    }
+                    }else {
+                    password.setText("");
+
+                }
+            }
+        });
 
         show_hide_password = (CheckBox) findViewById(R.id.show_hide_password);
         show_hide_password.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -156,8 +179,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 getLogin();
 
-                break;
         }
+
 
     }
 
@@ -239,6 +262,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     util.saveString(LoginActivity.this, ProjectVariables.USERNAME, userPhone);
                     util.saveString(LoginActivity.this, "ProfileImage", Image);
                     util.saveString(LoginActivity.this, "PhoneNo", phone);
+                    util.saveString(LoginActivity.this, ProjectVariables.PASSWORD, passText);
                     util.saveString(LoginActivity.this, "City", city);
                     util.saveString(LoginActivity.this, ProjectVariables.COMPNAME, jsonObject.getString(ProjectVariables.COMPNAME));
                     util.saveString(LoginActivity.this, "BranchName", BranchName);

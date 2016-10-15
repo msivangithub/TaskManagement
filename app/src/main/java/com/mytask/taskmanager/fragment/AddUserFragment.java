@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,10 +37,9 @@ public class AddUserFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         View v = inflater.inflate(R.layout.activity_add_user_fragment, container, false);
-        getActivity().setTitle("Task Creation");
 
+        getActivity().setTitle(Html.fromHtml("<font face=\"times new roman\" size:10px color='#ffffff'>Add User</font>"));
         /*toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setSupportActionBar(toolbar);
@@ -58,7 +58,7 @@ public class AddUserFragment extends Fragment {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
         adapter.addFragment(new EssentialsFragment(), "Essentials");
 //        adapter.addFragment(new DetailsFragment(), "Details");
-//        adapter.addFragment(new AddressFragment(), "Address");
+//        adapter.addFragment(new AddressFragment(), "Address");Essentials
 //        adapter.addFragment(new ProfileFragment(), "Profile");
 //        adapter.addFragment(new SocialFragment(), "Social");
        // adapter.addFragment(new PermissionsFragment(), "Permissions");

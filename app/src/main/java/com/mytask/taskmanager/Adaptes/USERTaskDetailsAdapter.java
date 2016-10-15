@@ -10,6 +10,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -461,6 +463,7 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
     @Override
     public void onBindViewHolder(final MyViewHolder viewHolder, final int position) {
         final int pos = position;
+        Spanned html = Html.fromHtml("<font face=\"times new roman\" size:10px color='#ffffff'</font>");
         t = billToBillArrayList.get(position);
         viewHolder.task.setText(t.getTaskDes());
         viewHolder.task_header.setText(t.getTaskHeading());

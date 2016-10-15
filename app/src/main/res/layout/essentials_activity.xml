@@ -284,11 +284,11 @@
                 android:id="@+id/submit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:text="Submit"
-                android:textColor="#000" />
-
+                android:layout_gravity="center_horizontal"
+                android:elevation="10dp"
+                android:text="SUBMIT"
+                android:background="@drawable/button_background"
+                android:textColor="@color/white" />
 
         </LinearLayout>
     </ScrollView>

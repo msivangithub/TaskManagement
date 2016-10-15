@@ -7,7 +7,7 @@
     <dimen name="activity_vertical_margin">5dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
-    <dimen name="image_width">130dp</dimen>
+    <dimen name="image_width">120dp</dimen>
     <dimen name="image_smal_width">50dp</dimen>
     <dimen name="image_small_width">32dp</dimen>
     <!--Drawer_header-->

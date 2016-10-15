@@ -9,8 +9,8 @@
       <solid android:color="#FF0288D1"/>
 
       <size
-        android:height="32dp"
-        android:width="4dp"/>
+        android:height="35dp"
+        android:width="5dp"/>
     </shape>
   </item>
   <item >
@@ -19,11 +19,11 @@
 
       <corners android:radius="2dp"/>
 
-      <solid android:color="@color/black"/>
+      <solid android:color="@color/pink_900"/>
 
       <size
-        android:height="32dp"
-        android:width="4dp"/>
+        android:height="35dp"
+        android:width="5dp"/>
     </shape>
   </item>
 

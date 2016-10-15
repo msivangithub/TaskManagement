@@ -19,6 +19,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -109,7 +110,6 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
     public static TaskDetails newInstance() {
 
         Bundle args = new Bundle();
-
         TaskDetails fragment = new TaskDetails();
         fragment.setArguments(args);
         return fragment;
@@ -119,7 +119,7 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_task_details, container, false);
-        getActivity().setTitle("Task Details");
+        getActivity().setTitle(Html.fromHtml("<font face=\"times new roman\" size:10px color='#ffffff'>Task Details</font>"));
         setHasOptionsMenu(true);
         rootLayout = (CoordinatorLayout) view.findViewById(R.id.coordinatorLayout);
 
@@ -156,21 +156,18 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
                 Toast.makeText(getActivity().getApplication(), "Floating Action Button 1", Toast.LENGTH_SHORT).show();
             }
         });
-
         fab2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getActivity().getApplication(), "Floating Action Button 2", Toast.LENGTH_SHORT).show();
             }
         });
-
         fab3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getActivity().getApplication(), "Floating Action Button 3", Toast.LENGTH_SHORT).show();
             }
         });
-
         pdForVideoUpload = new ProgressDialog(getActivity());
         pdForVideoUpload.setTitle("Please wait.......");
         users = new ArrayList<>();
@@ -194,7 +191,7 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
                 //TODO if the items are filtered, considered hiding the fast scroller here
                 final int firstVisibleItemPosition = findFirstVisibleItemPosition();
                 if (firstVisibleItemPosition != 0) {
-                    // this avoids trying to handle un-needed calls
+                    //this avoids trying to handle un-needed calls
                     if (firstVisibleItemPosition == -1)
                         //not initialized, or no items shown, so hide fast-scroller
                         fastScroller.setVisibility(View.GONE);
@@ -208,7 +205,7 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
         });
         fastScroller.setRecyclerView(recyclerView);
         fastScroller.setViewsToUse(R.layout.recycler_view_fast_scroller__fast_scroller, R.id.fastscroller_bubble, R.id.fastscroller_handle);
-/*************************************************************/
+        /*************************************************************/
         employeename = (Spinner) view.findViewById(R.id.id_employeenames);
         // status = (Spinner) view.findViewById(R.id.id_status);
         statusAdapter = new TasksAdapter(getActivity(), android.R.layout.simple_spinner_item, mytasks);

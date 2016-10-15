@@ -65,6 +65,8 @@
                 android:textColor="@color/red_900"
                 android:textSize="20sp"
                 android:textStyle="bold" />
+
+
         </RadioGroup>
     </LinearLayout>
 

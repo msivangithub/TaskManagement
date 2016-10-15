@@ -20,6 +20,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,6 +29,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -43,6 +45,7 @@ import com.mytask.taskmanager.services.RestfulListener;
 import com.mytask.taskmanager.util.AppUtil;
 import com.mytask.taskmanager.util.PreferenceUtil;
 import com.mytask.taskmanager.util.ProjectVariables;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,6 +56,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 public class TaskCommentActivity extends AppCompatActivity implements RestfulListener {
+
     RelativeLayout notificationCount1;
     RecyclerView commentsrecyclerview;
     CommentsAdapter cAdapter;
@@ -67,6 +71,7 @@ public class TaskCommentActivity extends AppCompatActivity implements RestfulLis
     int taskIDs;
     public static final String TASK_ID = "task_id";
     public static final String ASIGNBY = "asignby";
+    public static final String PROFILE = "profile";
     String UserRole = "";
     String taskHeading, task, asignby, start, end, starttime, endtime, uname, profile, taskID, taskfromid;
     RestfulListener listener;
@@ -76,14 +81,17 @@ public class TaskCommentActivity extends AppCompatActivity implements RestfulLis
     static final String FTP_HOST = "myaccountsretail.com";
     static final String FTP_USER = "myRetail";
     static final String FTP_PASS = "vKsj30!9";
+    Toolbar toolbarWidget;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_comment);
-
+        setTitle(Html.fromHtml("<font face=\"times new roman\" size:10px color='#ffffff'>Task Reply</font>"));
         UserRole = PreferenceUtil.getInstance().getString(TaskCommentActivity.this, ProjectVariables.USER_ROLE, "4");
         _context = TaskCommentActivity.this;
         listener = TaskCommentActivity.this;
+
+
         if (getSupportActionBar() != null) // Habilitar up button
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -91,12 +99,14 @@ public class TaskCommentActivity extends AppCompatActivity implements RestfulLis
         if (null != intent) {
             taskIDs = intent.getIntExtra(TASK_ID, 0);
             asignby = intent.getStringExtra(ASIGNBY);
+            profile = intent.getStringExtra(PROFILE);
         }
         comment = (EditText) findViewById(R.id.taskComments);
         statusSpinner = (Spinner) findViewById(R.id.taskSpinner);
         submit = (Button) findViewById(R.id.task_submit);
         record = (ImageButton) findViewById(R.id.record);
         commentsrecyclerview = (RecyclerView) findViewById(R.id.TaskComment);
+
 
         ArrayList<Comments> currentPojo = new ArrayList<Comments>();
         currentPojo = AppUtil.getCurrentPojo();
@@ -108,6 +118,7 @@ public class TaskCommentActivity extends AppCompatActivity implements RestfulLis
             commentsrecyclerview.setAdapter(cAdapter);
 
         }
+
 
         record.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -221,8 +232,8 @@ public class TaskCommentActivity extends AppCompatActivity implements RestfulLis
                     if (AppUtil.isNetworkAvailable(TaskCommentActivity.this)) {
                         AsynHttpPost post = new AsynHttpPost(_context, 0, 887, ProjectVariables.TASK_UPDATE, listener, obj, "");
                         post.execute();
-                    }else {
-                        Toast.makeText(_context,ProjectVariables.PLEASE_CHECK_YOUR_NETWORK_CONNECTION, Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(_context, ProjectVariables.PLEASE_CHECK_YOUR_NETWORK_CONNECTION, Toast.LENGTH_LONG).show();
                     }
                 } else {
                     Toast.makeText(_context, "Please enter comment about your task", Toast.LENGTH_LONG).show();
@@ -262,7 +273,7 @@ public class TaskCommentActivity extends AppCompatActivity implements RestfulLis
                 e.printStackTrace();
 
             }
-        }else if (rType == 325) {
+        } else if (rType == 325) {
 
             ArrayList<Comments> current = new ArrayList<>();
             try {
@@ -318,6 +329,7 @@ public class TaskCommentActivity extends AppCompatActivity implements RestfulLis
 
         return super.onOptionsItemSelected(menuItem);
     }
+
     public String getAbsolutePath(Uri uri) {
         String[] projection = {MediaStore.MediaColumns.DATA};
         @SuppressWarnings("deprecation")
@@ -329,6 +341,7 @@ public class TaskCommentActivity extends AppCompatActivity implements RestfulLis
         } else
             return null;
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

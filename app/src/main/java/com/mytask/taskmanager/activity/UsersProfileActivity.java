@@ -115,7 +115,7 @@ public class UsersProfileActivity extends AppCompatActivity implements AppBarLay
         protected Bitmap doInBackground(String... params) {
             //http://makeindiakart.com/taskfiles/Image_1290.jpg
             Bitmap Bitmapicon = BitmapFactory.decodeResource(UsersProfileActivity.this.getResources(),
-                    R.drawable.imge_placeholder);
+                    R.drawable.profile_sample);
             try {
                 String MainUrl = ProjectVariables.IMAGE_PATH;
                 URL url = new URL(MainUrl + PreferenceUtil.getInstance().getString(UsersProfileActivity.this, "ProfileImage", "Image_5756.jpg"));

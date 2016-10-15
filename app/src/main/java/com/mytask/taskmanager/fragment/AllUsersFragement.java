@@ -6,14 +6,13 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.futuremind.recyclerviewfastscroll.FastScroller;
 import com.mytask.taskmanager.Adaptes.AllUsersAdapter;
-import com.mytask.taskmanager.Adaptes.FastScrollAdapter;
 import com.mytask.taskmanager.Pojo.TaskUser;
 import com.mytask.taskmanager.R;
 import com.mytask.taskmanager.services.AsynHttpPost;
@@ -35,7 +34,7 @@ public class AllUsersFragement extends Fragment implements RestfulListener {
     JSONArray jsonArray;
     AllUsersAdapter allUsersAdapter;
     FastScrollRecyclerView recyclerView;
-    FastScrollAdapter fastScrollAdapter;
+
     RestfulListener listener;
 
     public static AllUsersFragement newInstance() {
@@ -51,6 +50,7 @@ public class AllUsersFragement extends Fragment implements RestfulListener {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_all_users_fragement, container, false);
+        getActivity().setTitle(Html.fromHtml("<font face=\"times new roman\" size:10px color='#ffffff'>All Users</font>"));
          mRecycleruserDelete = (RecyclerView) view.findViewById(R.id.userdelete);
 
         listener = this;
@@ -58,7 +58,6 @@ public class AllUsersFragement extends Fragment implements RestfulListener {
         AsynHttpPost post = new AsynHttpPost(getActivity(), 0, 190, ProjectVariables.USERS + PreferenceUtil.getInstance().getString(getActivity(), "UserRole", "user") + "," + PreferenceUtil.getInstance().getString(getActivity(), "Compname", "companyname"), this, null, "");
         post.execute();
         setHasOptionsMenu(true);
-        getActivity().setTitle("All Users");
         return view;
     }
 

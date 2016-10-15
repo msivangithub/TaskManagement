@@ -82,6 +82,18 @@
                     android:text="@string/show_pwd"
                     android:textColor="@color/white"
                     android:textSize="@dimen/loginScreen_CheckBox_textSize" />
+                <CheckBox
+                    android:id="@+id/remember"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:padding="5dp"
+                    android:textColor="@color/white"
+                    android:buttonTint="@color/white"
+                    android:text="Remember"
+                    android:textSize="@dimen/loginScreen_CheckBox_textSize"
+                    android:visibility="visible" />
 
                 <TextView
                     android:id="@+id/forgot_password"

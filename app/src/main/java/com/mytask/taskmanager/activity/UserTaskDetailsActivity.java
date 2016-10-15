@@ -161,7 +161,7 @@ public class UserTaskDetailsActivity extends AppCompatActivity implements Restfu
         mStatus.setText(status);
 
         CollapsingToolbarLayout collapser = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
-        collapser.setExpandedTitleColor(Color.parseColor("#880E4F"));
+        collapser.setExpandedTitleColor(Color.parseColor("#000000"));
         collapser.setTitle(uname);
 
         Picasso.with(this)
@@ -189,6 +189,7 @@ public class UserTaskDetailsActivity extends AppCompatActivity implements Restfu
                 Intent intent = new Intent(_context, TaskCommentActivity.class);
                 intent.putExtra(TASK_ID, taskIDs);
                 intent.putExtra(ASIGNBY, asignby);
+                intent.putExtra(PROFILE,profile);
                 startActivity(intent);
 
                 /*final String[] status = {""};
@@ -437,7 +438,6 @@ public class UserTaskDetailsActivity extends AppCompatActivity implements Restfu
         }
     }
 
-
     public String getAbsolutePath(Uri uri) {
         String[] projection = {MediaStore.MediaColumns.DATA};
         @SuppressWarnings("deprecation")
@@ -449,111 +449,4 @@ public class UserTaskDetailsActivity extends AppCompatActivity implements Restfu
         } else
             return null;
     }
-
-  /*  @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        // Toast.makeText(getApplicationContext(), "Main activity result", Toast.LENGTH_LONG).show();
-        if (resultCode == Activity.RESULT_OK) {
-            //  Toast.makeText(getApplicationContext(), "Main activity result1"+requestCode, Toast.LENGTH_LONG).show();
-            if (requestCode == 667) {
-                Uri selectedimg = data.getData();
-                String origanImage = getAbsolutePath(selectedimg);
-                String[] imageArray = origanImage.split("/");
-
-                int length = imageArray.length;
-
-                String convertedImage = imageArray[length - 1];
-
-                SharedPreferences sharedPreferences = getSharedPreferences("CurrentVideo", MODE_PRIVATE);
-                SharedPreferences.Editor curentEdit = sharedPreferences.edit();
-                curentEdit.putString("video", convertedImage);
-                curentEdit.commit();
-
-                Toast.makeText(getApplicationContext(), "Video Recorded " + convertedImage, Toast.LENGTH_LONG).show();
-
-                UploadTask u = null;
-
-                try {
-                    u = new UploadTask(getContentResolver().openInputStream(selectedimg), convertedImage);
-                    u.execute();
-                } catch (FileNotFoundException e) {
-
-                }
-            } else if (requestCode == 202) {
-
-                Uri selectedimg = data.getData();
-                imageURI = getAbsolutePath(selectedimg);
-
-                String[] imageArray = imageURI.split("/");
-
-                int length = imageArray.length;
-                String convertedImage = imageArray[length - 1];
-
-                SharedPreferences sharedPreferences = getSharedPreferences("CurrentImage", MODE_PRIVATE);
-                SharedPreferences.Editor curentEdit = sharedPreferences.edit();
-                curentEdit.putString("Image", convertedImage);
-                curentEdit.commit();
-                UploadTask u = null;
-
-                try {
-                    u = new UploadTask(getContentResolver().openInputStream(selectedimg), convertedImage);
-                    u.execute();
-                } catch (FileNotFoundException e) {
-
-                }
-            }
-        }
-    }
-
-    private class UploadTask extends AsyncTask<Void, Void, String> {
-        InputStream f;
-        String v;
-
-
-        @Override
-        protected void onPreExecute() {
-            pdForVideoUpload = new ProgressDialog(UserTaskDetailsActivity.this);
-            pdForVideoUpload.setMessage("Uploading....");
-            pdForVideoUpload.setCanceledOnTouchOutside(false);
-            pdForVideoUpload.show();
-            // showProgressDialogHorizontal();
-
-        }
-
-        public UploadTask(InputStream file, String videoName) {
-            f = file;
-            v = videoName;
-        }
-
-        @Override
-        protected String doInBackground(Void... voids) {
-            //uploadFile(f);
-            try {
-                easyFTP ftp = new easyFTP();
-                ftp.connect(FTP_HOST, FTP_USER, FTP_PASS);
-                boolean status = false;
-                status = ftp.setWorkingDirectory("/makeindiakart.com/taskfiles");
-                //InputStream targetStream = getResources().openRawResource(+R.drawable.ic_launcher);
-                InputStream targetStream = f;
-                ftp.uploadFile(targetStream, v);
-                Log.e("Status", status + "");
-                pdForVideoUpload.dismiss();
-                return new String("Upload Successful");
-
-            } catch (Exception e) {
-                pdForVideoUpload.dismiss();
-                String t = "Failure : " + e.getLocalizedMessage();
-                return t;
-            }
-
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
-
-        }
-    }*/
-
 }

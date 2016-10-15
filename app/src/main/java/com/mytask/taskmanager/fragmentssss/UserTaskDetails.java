@@ -13,6 +13,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -100,7 +101,8 @@ public class UserTaskDetails extends Fragment implements View.OnClickListener, R
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.user_task_details, container, false);
-        getActivity().setTitle("Task Details");
+
+        getActivity().setTitle(Html.fromHtml("<font face=\"times new roman\" size:10px color='#ffffff'>Task Details</font>"));
         setHasOptionsMenu(true);
 
         rootLayout = (CoordinatorLayout) view.findViewById(R.id.coordinatorLayout);

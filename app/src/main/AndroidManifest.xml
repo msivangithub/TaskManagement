@@ -42,8 +42,8 @@
         </activity>
         <activity
             android:name=".LoginSetup.LoginActivity"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation">
-            >
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:theme="@style/AppTheme">
         </activity>
         <activity
             android:name=".LoginSetup.OtpConfirmationActivity"
@@ -88,7 +88,6 @@
             android:label="@string/title_activity_user_task_details"
             android:theme="@style/AppTheme_"  />
         <activity android:name=".activity.TaskCommentActivity"
-            android:label="@string/TaskCommentActivity"
             android:theme="@style/AppTheme_"/>
     </application>
 

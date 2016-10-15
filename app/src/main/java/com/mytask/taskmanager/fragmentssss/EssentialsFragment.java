@@ -18,6 +18,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -102,7 +103,7 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
     LinearLayout mGallery, mCamera;
     private Spinner essentialBranches, mUserRoles;
     EditText mPassword, mMobileNo, mEmail, mfirstName, mlastName;
-
+    String passwords ;
     String email, firstname, secondname, phonenumber, password;
     JSONArray jsonArray;
     JSONObject jsonObject;
@@ -151,7 +152,7 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
         mfirstName = (EditText) v.findViewById(R.id.firstName);
         mlastName = (EditText) v.findViewById(R.id.lastName);
         mPassword = (EditText) v.findViewById(R.id.add_password);
-
+        passwords = mPassword.getText().toString();
         essentialBranches = (Spinner) v.findViewById(R.id.txt_exxentinalBranches);
         mSubmit = (Button) v.findViewById(R.id.submit);
         mUserRoles = (Spinner) v.findViewById(R.id.user_roles);
@@ -269,7 +270,7 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
                         obj.accumulate("Compname", companyID);
                         obj.accumulate("Image", imageURI);
                         obj.accumulate("PhoneNo", mMobileNo.getText().toString());
-                        obj.accumulate("Password", mPassword.getText().toString());
+                        obj.accumulate("Password",passwords);
                         obj.accumulate("IMEID", "1254788");
                         obj.accumulate("Macid", "456789");
                         obj.accumulate("android", "98445");
@@ -280,6 +281,11 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
                         obj.accumulate("UserLevel", userRolesName);
                         obj.accumulate("Desc1", PreferenceUtil.getInstance().getString(getActivity(), "Uid", "Uid"));
                         obj.accumulate("Desc2", PreferenceUtil.getInstance().getString(getActivity(), "FirstName", "firstname"));
+
+                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putString("remberpass", passwords);
+                        editor.apply();
 
                     } catch (Exception e) {
                         e.printStackTrace();
