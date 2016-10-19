@@ -136,7 +136,7 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
             mTaskTime = (TextView) convertView.findViewById(R.id.taskTime);
             mAsignBy = (TextView) convertView.findViewById(R.id.asignBy);
             //check = (CheckBox) convertView.findViewById(R.id.check);
-            icon_entry = (ImageView) itemView.findViewById(R.id.icon_entry);
+            icon_entry = (ImageView) convertView.findViewById(R.id.icon_entry);
             mImageMenu = (ImageButton) convertView.findViewById(R.id.Button_menu);
             mImageMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -493,7 +493,7 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
             viewHolder.icon_entry.setImageDrawable(drawable);
         }
 
-        //setAnimation(viewHolder.itemView, position);
+       // setAnimation(viewHolder.itemView, position);
 
         Log.e("UserRole", UserRole);
         if (UserRole.equalsIgnoreCase("3")) {

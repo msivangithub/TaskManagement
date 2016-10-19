@@ -80,7 +80,7 @@ public class TaskReportAdapter extends RecyclerView.Adapter<TaskReportAdapter.My
         if (position % 2 == 0) {
             viewHolder.itemView.setBackgroundColor(Color.parseColor("#ffffff"));
         } else {
-            viewHolder.itemView.setBackgroundColor(Color.parseColor("#FCE4EC"));
+            viewHolder.itemView.setBackgroundColor(Color.parseColor("#DCEDC8"));
         }
 
     }

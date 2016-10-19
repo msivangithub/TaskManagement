@@ -165,7 +165,13 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
         fab3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity().getApplication(), "Floating Action Button 3", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT, "https://play.google" +
+                        ".com/store/apps/details?id=" + getActivity().getApplicationContext().getPackageName());
+                intent.putExtra(Intent.EXTRA_SUBJECT, "Check out this app!");
+                startActivity(Intent.createChooser(intent, "Share"));
+                //Toast.makeText(getActivity().getApplication(), "Floating Action Button 3", Toast.LENGTH_SHORT).show();
             }
         });
         pdForVideoUpload = new ProgressDialog(getActivity());
@@ -182,6 +188,7 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
         TaskList = new ArrayList<>();
         selectedUsers = new ArrayList<>();
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
+
         /*RecyclerViewFastScroller Designing*/
         fastScroller = (RecyclerViewFastScroller) view.findViewById(R.id.fastscroller);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false) {
@@ -205,6 +212,7 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
         });
         fastScroller.setRecyclerView(recyclerView);
         fastScroller.setViewsToUse(R.layout.recycler_view_fast_scroller__fast_scroller, R.id.fastscroller_bubble, R.id.fastscroller_handle);
+
         /*************************************************************/
         employeename = (Spinner) view.findViewById(R.id.id_employeenames);
         // status = (Spinner) view.findViewById(R.id.id_status);

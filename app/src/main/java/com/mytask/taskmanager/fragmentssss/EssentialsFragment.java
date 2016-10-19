@@ -29,6 +29,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -139,6 +140,7 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.essentials_activity, container, false);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         getActivity().setTitle("Add User");
         setHasOptionsMenu(true);
         initPermissions();
@@ -270,7 +272,7 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
                         obj.accumulate("Compname", companyID);
                         obj.accumulate("Image", imageURI);
                         obj.accumulate("PhoneNo", mMobileNo.getText().toString());
-                        obj.accumulate("Password",passwords);
+                        obj.accumulate("Password", mPassword.getText().toString());
                         obj.accumulate("IMEID", "1254788");
                         obj.accumulate("Macid", "456789");
                         obj.accumulate("android", "98445");
@@ -282,10 +284,7 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
                         obj.accumulate("Desc1", PreferenceUtil.getInstance().getString(getActivity(), "Uid", "Uid"));
                         obj.accumulate("Desc2", PreferenceUtil.getInstance().getString(getActivity(), "FirstName", "firstname"));
 
-                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                        SharedPreferences.Editor editor = preferences.edit();
-                        editor.putString("remberpass", passwords);
-                        editor.apply();
+
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -507,7 +506,7 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.upload:
+            case R.id.action_settings:
 
             default:
                 break;

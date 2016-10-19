@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -70,6 +71,7 @@ public class TaskFragment1 extends Fragment implements RestfulListener {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.task_fragment1, container, false);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         setHasOptionsMenu(true);
         TaskHeader = (EditText) view.findViewById(R.id.taskHeader);
         users_Spinner = (Spinner) view.findViewById(R.id.TaskUsers);

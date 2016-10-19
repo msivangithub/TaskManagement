@@ -99,7 +99,7 @@ public class TaskCommentActivity extends AppCompatActivity implements RestfulLis
         if (null != intent) {
             taskIDs = intent.getIntExtra(TASK_ID, 0);
             asignby = intent.getStringExtra(ASIGNBY);
-            profile = intent.getStringExtra(PROFILE);
+
         }
         comment = (EditText) findViewById(R.id.taskComments);
         statusSpinner = (Spinner) findViewById(R.id.taskSpinner);

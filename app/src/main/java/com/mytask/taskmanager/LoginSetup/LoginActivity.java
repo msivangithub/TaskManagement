@@ -57,13 +57,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         // SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         // defaultRembere = preferences.getString("remberpass", null);
-/*
-        if (getIntent().getExtras() != null) {
-            for (String key : getIntent().getExtras().keySet()) {
-                String value = getIntent().getExtras().getString(key);
-                Log.d(TAG, "Key: " + key + " Value: " + value);
-            }
-        }*/
+
         util = PreferenceUtil.getInstance();
         initViews();
         setListeners();

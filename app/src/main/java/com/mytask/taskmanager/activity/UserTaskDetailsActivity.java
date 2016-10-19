@@ -189,7 +189,6 @@ public class UserTaskDetailsActivity extends AppCompatActivity implements Restfu
                 Intent intent = new Intent(_context, TaskCommentActivity.class);
                 intent.putExtra(TASK_ID, taskIDs);
                 intent.putExtra(ASIGNBY, asignby);
-                intent.putExtra(PROFILE,profile);
                 startActivity(intent);
 
                 /*final String[] status = {""};
