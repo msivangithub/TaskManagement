@@ -13,6 +13,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.provider.Settings;
 
 import com.mytask.taskmanager.Pojo.Comments;
 import com.mytask.taskmanager.Pojo.Task;
@@ -241,7 +242,18 @@ public class AppUtil {
         }
         return false;
     }
+    public static boolean CheckEnableGPS(Context context){
 
+        String provider = Settings.Secure.getString(context.getContentResolver(),
+                Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+        if(!provider.equals("")){
+            //GPS Enabled
+            return true;
+        }else{
+            return false;
+        }
+
+    }
     public static ArrayList<Task> removedTasks(ArrayList<Task> tasks, int id) {
         ArrayList<Task> returnedTasks = new ArrayList<>();
         for (int task = 0; task < tasks.size(); task++) {

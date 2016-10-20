@@ -19,7 +19,7 @@ public class ProjectVariables {
     public static final String PLEASE_CHECK_YOUR_NETWORK_CONNECTION = "please check your network connection";
     public static final String MASTER_URL = "http://makeindiakart.com/Master.svc/";
     // public static final String URL = "http://makeindiakart.com/Master.svc/";
-
+    public static final String PLEASE_ENABLE_BOTH_INTERENT_AND_GPS_IN_YOUR_MOBILE = "Please enable both interent and GPS in your mobile";
 
     /*Project Base URL*/
     //public static final String URL = "http://makeindiakart.com/TaskManger.svc/";
