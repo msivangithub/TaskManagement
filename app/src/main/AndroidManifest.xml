@@ -28,6 +28,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDcvBgau1as93ktTdz-iGO3_PaHamOZz-U" />
         <activity
             android:name=".LoginSetup.SplashScreen"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation">

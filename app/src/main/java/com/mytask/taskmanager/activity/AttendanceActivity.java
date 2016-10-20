@@ -18,6 +18,8 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -33,6 +35,12 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.mytask.taskmanager.Locations.AppLocationService;
 import com.mytask.taskmanager.Locations.LocationAddress;
 import com.mytask.taskmanager.R;
@@ -47,7 +55,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class AttendanceActivity extends AppCompatActivity {
+public class AttendanceActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     public static final String TAG = AttendanceActivity.class.getSimpleName();
     TextView mUserName, mDate, mTime, mFromDate, mToDate, mLatitude, mLongitude, mLocation;
@@ -64,19 +72,32 @@ public class AttendanceActivity extends AppCompatActivity {
     AppLocationService appLocationService;
     double latitude;
     double longitude;
+    String locationAddress;
+    private GoogleMap mMap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attendance);
+        initPermissions();
         appLocationService = new AppLocationService(AttendanceActivity.this);
-
-        getCurrentLocation();
-        getCurrentAddress();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) // Habilitar up button
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+       /* FragmentManager myFragmentManager = getSupportFragmentManager();
+        SupportMapFragment mapFragment = (SupportMapFragment) myFragmentManager.findFragmentById(R.id.mapFragment);
+        GoogleMap mMap = mapFragment.getMap();
+
+        // Add a marker in Sydney and move the camera
+        LatLng sydney = new LatLng(-35, 152);
+        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker near Sidney"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));*/
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.mapFragment);
+        mapFragment.getMapAsync(AttendanceActivity.this);
 
         mUserName = (TextView) findViewById(R.id.Username);
         mDate = (TextView) findViewById(R.id.currentDate);
@@ -128,8 +149,8 @@ public class AttendanceActivity extends AppCompatActivity {
         AppLocationService  gps = new AppLocationService(AttendanceActivity.this);
         if(gps.canGetLocation()) {
 
-            double latitude = gps.getLatitude();
-            double longitude = gps.getLongitude();
+            latitude = gps.getLatitude();
+            longitude = gps.getLongitude();
 
             String result = "Latitude: " + latitude +
                    " Longitude: " + longitude;
@@ -205,8 +226,8 @@ public class AttendanceActivity extends AppCompatActivity {
                 Location location = appLocationService
                         .getLocation();
                 if (location != null) {
-                    double latitude = location.getLatitude();
-                    double longitude = location.getLongitude();
+                    latitude = location.getLatitude();
+                    longitude = location.getLongitude();
                     LocationAddress locationAddress = new LocationAddress();
                     locationAddress.getAddressFromLocation(latitude, longitude,
                             getApplicationContext(), new GeocoderHandler());
@@ -268,9 +289,7 @@ public class AttendanceActivity extends AppCompatActivity {
 
     }
 
-    private void getCurrentLocation() {
 
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -289,10 +308,19 @@ public class AttendanceActivity extends AppCompatActivity {
         return (super.onOptionsItemSelected(menuItem));
     }
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        // Add a marker in Sydney and move the camera
+        LatLng sydney = new LatLng(latitude, longitude);
+        mMap.addMarker(new MarkerOptions().position(sydney).title(locationAddress));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    }
+
     private class GeocoderHandler extends Handler {
         @Override
         public void handleMessage(Message message) {
-            String locationAddress;
+
             switch (message.what) {
                 case 1:
                     Bundle bundle = message.getData();
@@ -302,6 +330,49 @@ public class AttendanceActivity extends AppCompatActivity {
                     locationAddress = null;
             }
             mLongitude.setText(String.valueOf(locationAddress));
+        }
+    }
+
+    private void initPermissions() {
+        if (ContextCompat.checkSelfPermission(AttendanceActivity.this,
+                Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(AttendanceActivity.this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(AttendanceActivity.this,
+                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                        1);
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
+        if (ContextCompat.checkSelfPermission(AttendanceActivity.this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(AttendanceActivity.this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(AttendanceActivity.this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        2);
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
         }
     }
 }
