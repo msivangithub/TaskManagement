@@ -80,7 +80,6 @@ public class AttendanceActivity extends AppCompatActivity implements OnMapReadyC
         setContentView(R.layout.activity_attendance);
         initPermissions();
         appLocationService = new AppLocationService(AttendanceActivity.this);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) // Habilitar up button
