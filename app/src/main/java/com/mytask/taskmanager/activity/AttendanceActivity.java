@@ -84,7 +84,6 @@ public class AttendanceActivity extends AppCompatActivity implements OnMapReadyC
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) // Habilitar up button
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
        /* FragmentManager myFragmentManager = getSupportFragmentManager();
         SupportMapFragment mapFragment = (SupportMapFragment) myFragmentManager.findFragmentById(R.id.mapFragment);
         GoogleMap mMap = mapFragment.getMap();
