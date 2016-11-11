@@ -96,13 +96,12 @@ public class AttendanceActivity extends AppCompatActivity {
         mLinearLayoutApplyleve = (LinearLayout) findViewById(R.id.applyLeve_linearlayout);
         mLinearLayoutAbsent = (LinearLayout) findViewById(R.id.absent_linearlayout);
         mLinearLayoutPresent = (LinearLayout) findViewById(R.id.present_linearlayout);
-
         mLongitude = (TextView) findViewById(R.id.getLongitude);
         mLocation = (TextView) findViewById(R.id.currentlocation);
-
         mLinearLayoutApplyleve.setVisibility(View.GONE);
         mLinearLayoutAbsent.setVisibility(View.GONE);
         mLinearLayoutPresent.setVisibility(View.GONE);
+
 
 /*Date format*/
         final Calendar c = Calendar.getInstance();
