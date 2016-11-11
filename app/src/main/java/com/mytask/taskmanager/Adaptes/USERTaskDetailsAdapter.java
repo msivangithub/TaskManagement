@@ -39,6 +39,7 @@ import com.mytask.taskmanager.services.RestfulListener;
 import com.mytask.taskmanager.util.PreferenceUtil;
 import com.mytask.taskmanager.util.ProjectVariables;
 import com.mytask.taskmanager.util.RefreshLisener;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -84,6 +85,7 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
     String ImageName = "";
 
     public USERTaskDetailsAdapter(Context context, RestfulListener rl, int taskId, List<Task> billToBillArrayList, String type) {
+
         this.billToBillArrayList = billToBillArrayList;
         _context = context;
         _type = type;
@@ -100,7 +102,7 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
 
     @Override
     public int getItemCount() {
-        return billToBillArrayList.size();
+        return billToBillArrayList == null ? 0 : billToBillArrayList.size();
     }
 
     @Override
@@ -110,7 +112,7 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
 
     @Override
     public String getTextToShowInBubble(int pos) {
-        if (billToBillArrayList.get(pos).getTaskHeading().length() > 0) {
+        if (billToBillArrayList.get(pos).getTaskHeading().length() != 0) {
             return Character.toString(billToBillArrayList.get(pos).getTaskHeading().charAt(0));
         }
         return null;
@@ -165,312 +167,25 @@ public class USERTaskDetailsAdapter extends RecyclerView.Adapter<USERTaskDetails
 
                     Activity act = (Activity) _context;
                     act.startActivity(intent);
+                    act.overridePendingTransition(R.anim.right_enter, R.anim.left_out);
                 }
             });
 
-              /*   taskrow.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v){
-                    Log.e("UserRole", UserRole);
-                    final Dialog d = new Dialog(_context);
-                    //d.setTitle("Task Details");
 
-                    d.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    d.setContentView(R.layout.show_task_detils_row);
-                    d.setContentView(R.layout.show_task_detils_row);
-                    WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                    lp.copyFrom(d.getWindow().getAttributes());
-                    lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                    lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-                    d.show();
-                    d.getWindow().setAttributes(lp);
-                    JSONObject obj = new JSONObject();
-                    try {
-                        obj.accumulate("Cid", billToBillArrayList.get(getAdapterPosition()).getTaskId() + "");
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    AsynHttpPost post = new AsynHttpPost(_context, 0, 999, ProjectVariables.TASK_COMMENTS, listener, obj, "");
-                    post.execute();
-
-                    final TextView task, taskHead, asignBy, start, end, status, startTime, endTime ,Uname;
-                    final ImageView mProfile;
-                    final RecyclerView Comment;
-                    task = (TextView) d.findViewById(R.id.txt_show_desc);
-                    taskHead = (TextView) d.findViewById(R.id.txt_show_task_head);
-                    asignBy = (TextView) d.findViewById(R.id.txt_show_assignBy);
-                    start = (TextView) d.findViewById(R.id.txt_show_start);
-                    end = (TextView) d.findViewById(R.id.txt_show_endDate);
-                    startTime = (TextView) d.findViewById(R.id.startTime);
-                    endTime = (TextView) d.findViewById(R.id.endTime);
-                    status = (TextView) d.findViewById(R.id.TaskStatus);
-                    Uname = (TextView)d.findViewById(R.id.uname);
-                    mProfile = (ImageView)d.findViewById(R.id.profile_taskdetails);
-
-                    Button pComments = (Button) d.findViewById(R.id.previousComments);
-                    Comment = (RecyclerView) d.findViewById(R.id.TaskComment);
-                    //  Comment.setDivider(new ColorDrawable(Color.parseColor("#000000")));
-                    // Comment.setText(t.getTaskComment());
-                    pComments.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            ArrayList<Comments> currentPojo = new ArrayList<Comments>();
-                            currentPojo = AppUtil.getCurrentPojo();
-                            if (currentPojo.size() > 0) {
-                                CommentsAdapter cAdapter = new CommentsAdapter(currentPojo, _context);
-                                Comment.setLayoutManager(new LinearLayoutManager(_context));
-                                Comment.setItemAnimator(new DefaultItemAnimator());
-                                Comment.setHasFixedSize(true);
-                                Comment.setAdapter(cAdapter);
-                            }
-                        }
-                    });
-                    task.setText(billToBillArrayList.get(getAdapterPosition()).getTaskDes());
-                    taskHead.setText(billToBillArrayList.get(getAdapterPosition()).getTaskHeading());
-                    asignBy.setText(billToBillArrayList.get(getAdapterPosition()).getTaskFromId());
-                    start.setText(billToBillArrayList.get(getAdapterPosition()).getExpStartDate());
-                    end.setText(billToBillArrayList.get(getAdapterPosition()).getExpEndDate());
-                    status.setText(billToBillArrayList.get(getAdapterPosition()).getTaskStatus());
-                    startTime.setText(billToBillArrayList.get(getAdapterPosition()).getStartTime());
-                    endTime.setText(billToBillArrayList.get(getAdapterPosition()).getEndTime());
-                    Uname.setText(billToBillArrayList.get(getAdapterPosition()).getUname());
-                    Picasso.with(_context)
-                            .load(ProjectVariables.IMAGE_PATH + billToBillArrayList.get(getAdapterPosition()).getProfile())
-                            .placeholder(R.drawable.profile_sample)   // optional
-                            .error(R.drawable.profile_sample)      // optional
-                            .resize(200 ,200)
-                            .into(mProfile);
-
-                    Button mShowvideo = (Button) d.findViewById(R.id.showvideo);
-                    mShowvideo.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-
-                            Dialog showVideo = new Dialog(_context);
-                            showVideo.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                            showVideo.setContentView(R.layout.showvideo);
-                            WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                            lp.copyFrom(showVideo.getWindow().getAttributes());
-                            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                            lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-                            showVideo.show();
-                            VideoView videoview = (VideoView) showVideo.findViewById(R.id.videoPreview);
-                            MediaController mediaController = new MediaController(_context);
-                            mediaController.setAnchorView(videoview);
-                            String MainUrl = "http://makeindiakart.com/taskfiles/";
-                            MainUrl = MainUrl + billToBillArrayList.get(getAdapterPosition()).getVideo();
-                            Uri video = Uri.parse(MainUrl);
-                            videoview.setMediaController(mediaController);
-                            videoview.setVideoURI(video);
-                            videoview.start();
-
-                        }
-                    });
-                    ImageButton button = (ImageButton) d.findViewById(R.id.show_close);
-
-                    button.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            d.dismiss();
-                        }
-                    });
-
-                    *//*
-                    Task Replay Button in Adapter
-                     *//*
-                    Button task_edt = (Button) d.findViewById(R.id.id_task_edt);
-                    task_edt.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            d.dismiss();
-                            final RecyclerView Comments;
-                            final String[] status = {""};
-                            final Dialog updateDialog = new Dialog(_context);
-                            updateDialog.setTitle("Task Replay");
-                            updateDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                            updateDialog.setContentView(R.layout.task_editor);
-                            WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                            lp.copyFrom(updateDialog.getWindow().getAttributes());
-                            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                            lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-                            updateDialog.getWindow().setAttributes(lp);
-                            updateDialog.show();
-                            ImageButton edt_close = (ImageButton) updateDialog.findViewById(R.id.edt_close);
-
-                            Comments = (RecyclerView) updateDialog.findViewById(R.id.TaskComment);
-                            ArrayList<Comments> currentPojo = new ArrayList<Comments>();
-                            currentPojo = AppUtil.getCurrentPojo();
-                            if (currentPojo.size() > 0) {
-                                CommentsAdapter cAdapter = new CommentsAdapter(currentPojo, _context);
-                                Comments.setLayoutManager(new LinearLayoutManager(_context));
-                                Comments.setItemAnimator(new DefaultItemAnimator());
-                                Comments.setHasFixedSize(true);
-                                Comments.setAdapter(cAdapter);
-
-                            }
-
-                            edt_close.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    updateDialog.dismiss();
-                                }
-                            });
-                            final EditText comment = (EditText) updateDialog.findViewById(R.id.taskComments);
-                            Spinner statusSpinner = (Spinner) updateDialog.findViewById(R.id.taskSpinner);
-                            Button submit = (Button) updateDialog.findViewById(R.id.task_submit);
-                            *//**
-             *Click the Capture Video and Capture Image Using Alear Dialog
-             *//*
-                            ImageButton record = (ImageButton) updateDialog.findViewById(R.id.record);
-
-
-                            record.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    final Dialog d = new Dialog(_context);
-                                    d.setContentView(R.layout.image_video);
-                                    d.setTitle("Select video or Image.....!");
-                                    d.show();
-                                    mImage = (LinearLayout) d.findViewById(R.id.getImage);
-                                    mVideo = (LinearLayout) d.findViewById(R.id.getVideo);
-                                    LinearLayout recordAudio = (LinearLayout) d.findViewById(R.id.getAudio);
-                                    Button CAncel = (Button) d.findViewById(R.id.CAncel);
-                                    CAncel.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            d.dismiss();
-                                        }
-                                    });
-
-                                    recordAudio.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            d.dismiss();
-                                            _context.startActivity(new Intent(_context, RecordAudioActivity.class));
-
-                                        }
-                                    });
-                                *//*Click the AleartDialog video popsition*//*
-                                    mVideo.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            d.dismiss();
-                                            Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-                                            takeVideoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 60);
-                                            Activity act = (Activity) _context;
-                                            act.startActivityForResult(takeVideoIntent, 667);
-                                        }
-                                    });
-                                 *//*Click the AleartDialog image popsition*//*
-                                    mImage.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            d.dismiss();
-                                            Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                                            Activity act = (Activity) _context;
-                                            act.startActivityForResult(intent, 202);
-                                        }
-                                    });
-                                }
-                            });
-                        *//*Spinner drop Down in task replay Adapter*//*
-                            statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                                @Override
-                                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                    if (position == 0)
-                                        status[0] = "Pending";
-                                    if (position == 1)
-                                        status[0] = "Progress";
-                                    if (position == 2)
-                                        status[0] = "Completed";
-                                }
-
-                                @Override
-                                public void onNothingSelected(AdapterView<?> parent) {
-
-                                }
-                            });
-
-
-                                 *//*   mSwipeRefreshLayout.setRefreshing(false);
-                                    ArrayList<Comments> currentPojo = new ArrayList<Comments>();
-                                    currentPojo = AppUtil.getCurrentPojo();
-                                    if (currentPojo.size() > 0) {
-                                        CommentsAdapter cAdapter = new CommentsAdapter(currentPojo, _context);
-                                        Comments.setLayoutManager(new LinearLayoutManager(_context));
-                                        Comments.setItemAnimator(new DefaultItemAnimator());
-                                        Comments.setHasFixedSize(true);
-                                        Comments.setAdapter(cAdapter);
-                                    }
-                                }
-                            });*//*
-
-                        *//*task replay Adapter Screen get the comments , status and capture image or video then click SUBMIT Button*//*
-                            submit.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-
-                                    SharedPreferences sharedPreferences = _context.getSharedPreferences("CurrentVideo", Context.MODE_PRIVATE);
-                                    video = sharedPreferences.getString("video", "novideo");
-                                    SharedPreferences sharedPreferences1 = _context.getSharedPreferences("CurrentImage", Context.MODE_PRIVATE);
-                                    image = sharedPreferences1.getString("Image", "noimage");
-                                    SharedPreferences sharedPreferen = _context.getSharedPreferences("CurrentAudio", Context.MODE_PRIVATE);
-                                    audio = sharedPreferen.getString("Audio", "noaudio");
-                                    task_comment = comment.getText().toString();
-                                    if (!(task_comment.equalsIgnoreCase("") && task_comment.isEmpty()) && !(status[0].equalsIgnoreCase("") && status[0].isEmpty())) {
-                                        JSONObject obj = new JSONObject();
-                                        try {
-                                            obj.accumulate("Cid", billToBillArrayList.get(getAdapterPosition()).getTaskId() + "");
-                                            obj.accumulate("TaskStatus", status[0]);
-                                            obj.accumulate("Comments", task_comment);
-
-                                            if (!video.equalsIgnoreCase(ProjectVariables.NOVIDEO))
-                                                obj.accumulate("video", video);
-
-                                            if (!image.equalsIgnoreCase(ProjectVariables.NOIMAGE))
-                                                obj.accumulate("Image", image);
-
-                                            if (!audio.equalsIgnoreCase(ProjectVariables.NOAUDIO))
-                                                obj.accumulate("Audio", audio);
-
-                                            obj.accumulate("TaskToId", PreferenceUtil.getInstance().getString(_context, "currentUser", "000"));
-                                            obj.accumulate("TaskFromId", PreferenceUtil.getInstance().getString(_context, "Uid", "c001"));
-
-
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-
-                                        AsynHttpPost post = new AsynHttpPost(_context, 0, 888, ProjectVariables.TASK_UPDATE, listener, obj, "");
-                                        post.execute();
-                                        updateDialog.dismiss();
-
-                                    } else {
-                                        Toast.makeText(_context, "Please enter comment about your task", Toast.LENGTH_LONG).show();
-                                    }
-
-                                }
-                            });
-                        }
-                    });
-                    d.show();
-                }
-            });*/
         }
     }
 
     @Override
     public void onBindViewHolder(final MyViewHolder viewHolder, final int position) {
         final int pos = position;
-        Spanned html = Html.fromHtml("<font face=\"times new roman\" size:10px color='#ffffff'</font>");
+
         t = billToBillArrayList.get(position);
         viewHolder.task.setText(t.getTaskDes());
         viewHolder.task_header.setText(t.getTaskHeading());
         viewHolder.mTaskDate.setText(t.getActStartDate());
         viewHolder.mTaskTime.setText(t.getStartTime());
         viewHolder.mAsignBy.setText(t.getUname());
-       /* Picasso.with(_context)
+      /*  Picasso.with(_context)
                 .load(ProjectVariables.IMAGE_PATH + billToBillArrayList.get(position).getProfile())
                 .placeholder(R.drawable.profile_sample)   // optional
                 .error(R.drawable.profile_sample)      // optional

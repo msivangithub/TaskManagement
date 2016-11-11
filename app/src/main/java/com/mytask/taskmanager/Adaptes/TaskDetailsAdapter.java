@@ -162,6 +162,7 @@ public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.
 
                     Activity act = (Activity) _context;
                     act.startActivity(intent);
+                    act.overridePendingTransition(R.anim.right_enter, R.anim.left_out);
                 }
             });
 

@@ -104,7 +104,7 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
     LinearLayout mGallery, mCamera;
     private Spinner essentialBranches, mUserRoles;
     EditText mPassword, mMobileNo, mEmail, mfirstName, mlastName;
-    String passwords ;
+    String passwords;
     String email, firstname, secondname, phonenumber, password;
     JSONArray jsonArray;
     JSONObject jsonObject;
@@ -285,7 +285,6 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
                         obj.accumulate("Desc2", PreferenceUtil.getInstance().getString(getActivity(), "FirstName", "firstname"));
 
 
-
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -363,7 +362,7 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
         super.onActivityResult(requestCode, resultCode, data);
         Uri selectedFileUri = null;
 
-        if (resultCode == Activity.RESULT_OK ) {
+        if (resultCode == Activity.RESULT_OK) {
             if (requestCode == PICK_IMAGE && null != data) {
                 try {
                     final Uri selectedimg = data.getData();
@@ -390,7 +389,7 @@ public class EssentialsFragment extends Fragment implements RestfulListener {
                     cursor.close();
 
                     // image.setImageBitmap(decodeSampledBitmapFromUri(getActivity(), selectedimg, 300, 300));
-                   image.setImageBitmap(MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedimg));
+                    image.setImageBitmap(MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedimg));
 
                     imageURI = "Image_" + getRandomNumberInRange(1, 10000) + ".jpg";
                     Log.e("ImageName", imageURI.toString());

@@ -64,7 +64,6 @@ public class AsynHttpPost143 extends AsyncTask<Void, Void, String> {
         if (AppUtil.isNetworkAvailable(_con)) {
             try {
 
-
                 HttpParams httpParameters = new BasicHttpParams();
                 HttpConnectionParams.setConnectionTimeout(httpParameters,
                         ProjectVariables.APK_CONNECTION_TIMEOUT);

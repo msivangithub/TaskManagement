@@ -98,7 +98,7 @@
     <dimen name="taskRow_textSize">22sp</dimen>
     <dimen name="taskRow_padding">5dp</dimen>
     <dimen name="taskRow_header_textSize">12sp</dimen>
-    <dimen name="app_bar_height">300dp</dimen>
+    <dimen name="app_bar_height">200dp</dimen>
 
 
     <!--TaskCreation-->

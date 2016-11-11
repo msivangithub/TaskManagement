@@ -29,4 +29,11 @@
         <item name="colorPrimaryDark">@color/blue_800</item>
         <item name="colorAccent">@color/pink_900</item>
     </style>
+
+    <style name="HeaderTitleStyle" parent="@android:style/TextAppearance">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:gravity">bottom</item>
+    </style>
+
 </resources>

@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.futuremind.recyclerviewfastscroll.SectionTitleProvider;
+import com.lb.recyclerview_fast_scroller.RecyclerViewFastScroller;
 import com.mytask.taskmanager.activity.RecordAudioActivity;
 import com.mytask.taskmanager.activity.UserActivity;
 import com.mytask.taskmanager.util.PositionClickListener;
@@ -43,7 +44,7 @@ import java.util.ArrayList;
 /**
  * Created by GhanaShyam on 8/30/2016.
  */
-public class AllUsersAdapter extends RecyclerView.Adapter<AllUsersAdapter.MyViewHolder> implements RestfulListener, SectionTitleProvider {
+public class AllUsersAdapter extends RecyclerView.Adapter<AllUsersAdapter.MyViewHolder> implements RestfulListener, SectionTitleProvider ,RecyclerViewFastScroller.BubbleTextGetter {
 
     public static final String EMAIL = "name";
     public static final String IMAGE = "image";
@@ -84,6 +85,14 @@ public class AllUsersAdapter extends RecyclerView.Adapter<AllUsersAdapter.MyView
     @Override
     public String getSectionTitle(int position) {
         return String.valueOf(taskUserArrayList.get(position).getFirstName().charAt(0));
+    }
+
+    @Override
+    public String getTextToShowInBubble(int pos) {
+        if (taskUserArrayList.get(pos).getFirstName().length() != 0) {
+            return Character.toString(taskUserArrayList.get(pos).getFirstName().charAt(0));
+        }
+        return null;
     }
 
 
@@ -145,6 +154,7 @@ public class AllUsersAdapter extends RecyclerView.Adapter<AllUsersAdapter.MyView
                     intent.putExtra(CITY, taskUserArrayList.get(getAdapterPosition()).getCity());
                     Activity act = (Activity) context;
                     act.startActivity(intent);
+                    act.overridePendingTransition(R.anim.right_enter, R.anim.left_out);
                 }
             });
 

@@ -76,6 +76,7 @@
         android:layout_height="wrap_content">
 
         <Button
+            style="@style/Widget.AppCompat.Button.Colored"
             android:id="@+id/record"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -83,14 +84,14 @@
     </LinearLayout>
 
     <Button
+        style="@style/Widget.AppCompat.Button.Colored"
         android:id="@+id/adduser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/layout_marginTop"
         android:text="Submit"
-        android:textStyle="bold"
-        android:textColor="#000" />
+        android:textStyle="bold"/>
 
 
 </LinearLayout>

@@ -78,7 +78,7 @@ public class UserTaskDetailsActivity extends AppCompatActivity implements Restfu
     public static final String TASK_FROMID = "task_fromid";
 
 
-    TextView mTaskHeading, mTask, mAsignby, mStart, mEnd, mStarttime, mEndtime, mUname, mStatus;
+    TextView mTaskHeading, mTask, mAsignby, mStart, mEnd, mStarttime, mEndtime, mUname, mStatus ,head;
     String taskHeading, task, asignby, start, end, starttime, endtime, uname, profile, status, taskID, taskfromid;
     ImageView mProfile;
     List<Task> billToBillArrayList;
@@ -136,6 +136,8 @@ public class UserTaskDetailsActivity extends AppCompatActivity implements Restfu
         mUname = (TextView) findViewById(R.id.assign_By);
         mProfile = (ImageView) findViewById(R.id.profileImage);
         mStatus = (TextView) findViewById(R.id.status);
+
+
         Intent intent = getIntent();
         if (null != intent) {
             taskHeading = intent.getStringExtra(TASK_HEADING);
@@ -161,7 +163,7 @@ public class UserTaskDetailsActivity extends AppCompatActivity implements Restfu
         mStatus.setText(status);
 
         CollapsingToolbarLayout collapser = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
-        collapser.setExpandedTitleColor(Color.parseColor("#000000"));
+        collapser.setExpandedTitleColor(Color.parseColor("#ffffff"));
         collapser.setTitle(uname);
 
         Picasso.with(this)
@@ -190,6 +192,7 @@ public class UserTaskDetailsActivity extends AppCompatActivity implements Restfu
                 intent.putExtra(TASK_ID, taskIDs);
                 intent.putExtra(ASIGNBY, asignby);
                 startActivity(intent);
+                overridePendingTransition(R.anim.right_enter, R.anim.left_out);
 
                 /*final String[] status = {""};
                 final Dialog updateDialog = new Dialog(UserTaskDetailsActivity.this);

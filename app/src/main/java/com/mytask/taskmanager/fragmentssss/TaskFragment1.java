@@ -203,7 +203,7 @@ public class TaskFragment1 extends Fragment implements RestfulListener {
                         TaskFragment1.this.status = status;
                         AppUtil.setStartFromTime(hour + ":" + minute + aMpM);
                         mTextViewFromTime.setText(hour + ":" + minute + aMpM);
-                        Log.e("From Current Time:=", hour + ":" + minute + aMpM);
+                        Log.e("From Current Time :=", hour + ":" + minute + aMpM);
 
                     }
                 });

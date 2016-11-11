@@ -128,6 +128,7 @@
 
 
                 <Button
+
                     android:id="@+id/task_submit"
                     android:layout_width="@dimen/taskRow_layout_width"
                     android:layout_height="@dimen/taskRow_layout_height"

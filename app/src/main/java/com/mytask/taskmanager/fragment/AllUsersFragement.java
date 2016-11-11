@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.lb.recyclerview_fast_scroller.RecyclerViewFastScroller;
 import com.mytask.taskmanager.Adaptes.AllUsersAdapter;
 import com.mytask.taskmanager.Pojo.TaskUser;
 import com.mytask.taskmanager.R;
@@ -33,7 +34,7 @@ public class AllUsersFragement extends Fragment implements RestfulListener {
     ArrayList<TaskUser> users = new ArrayList<>();
     JSONArray jsonArray;
     AllUsersAdapter allUsersAdapter;
-    FastScrollRecyclerView recyclerView;
+    RecyclerViewFastScroller fastScroller;
 
     RestfulListener listener;
 
@@ -51,7 +52,30 @@ public class AllUsersFragement extends Fragment implements RestfulListener {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_all_users_fragement, container, false);
         getActivity().setTitle(Html.fromHtml("<font face=\"times new roman\" size:10px color='#ffffff'>All Users</font>"));
-         mRecycleruserDelete = (RecyclerView) view.findViewById(R.id.userdelete);
+        mRecycleruserDelete = (RecyclerView) view.findViewById(R.id.userdelete);
+
+          /*RecyclerViewFastScroller Designing*/
+        fastScroller = (RecyclerViewFastScroller) view.findViewById(R.id.fastscroller);
+        mRecycleruserDelete.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false) {
+            @Override
+            public void onLayoutChildren(final RecyclerView.Recycler recycler, final RecyclerView.State state) {
+                super.onLayoutChildren(recycler, state);
+                //TODO if the items are filtered, considered hiding the fast scroller here
+                final int firstVisibleItemPosition = findFirstVisibleItemPosition();
+                if (firstVisibleItemPosition != 0) {
+                    if (firstVisibleItemPosition == -1)
+                        fastScroller.setVisibility(View.GONE);
+                    return;
+                }
+                final int lastVisibleItemPosition = findLastVisibleItemPosition();
+                int itemsShown = lastVisibleItemPosition - firstVisibleItemPosition + 1;
+                //if all items are shown, hide the fast-scroller
+                fastScroller.setVisibility(allUsersAdapter.getItemCount() > itemsShown ? View.VISIBLE : View.GONE);
+            }
+        });
+        fastScroller.setRecyclerView(mRecycleruserDelete);
+        fastScroller.setViewsToUse(R.layout.recycler_view_fast_scroller__fast_scroller, R.id.fastscroller_bubble, R.id.fastscroller_handle);
+
 
         listener = this;
         //recyclerView = (FastScrollRecyclerView) view.findViewById(R.id.recycler);
@@ -89,7 +113,7 @@ public class AllUsersFragement extends Fragment implements RestfulListener {
                 recyclerView.setHasFixedSize(true);
                 recyclerView.setAdapter(fastScrollAdapter);*/
 
-                allUsersAdapter = new AllUsersAdapter(getActivity(),AllUsersFragement.this, R.layout.user_rowitems, users);
+                allUsersAdapter = new AllUsersAdapter(getActivity(), AllUsersFragement.this, R.layout.user_rowitems, users);
                 mRecycleruserDelete.setLayoutManager(new LinearLayoutManager(getActivity()));
                 mRecycleruserDelete.setItemAnimator(new DefaultItemAnimator());
                 mRecycleruserDelete.setHasFixedSize(true);
@@ -99,7 +123,7 @@ public class AllUsersFragement extends Fragment implements RestfulListener {
                 e.printStackTrace();
                 Toast.makeText(getActivity(), s, Toast.LENGTH_LONG).show();
             }
-        }else if (rType == 109) {
+        } else if (rType == 109) {
             try {
                 JSONArray array = new JSONArray(s);
                 JSONObject obj = array.getJSONObject(0);

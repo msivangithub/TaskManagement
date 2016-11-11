@@ -324,6 +324,7 @@ public class TaskCommentActivity extends AppCompatActivity implements RestfulLis
         switch (menuItem.getItemId()) {
             case android.R.id.home:
                 super.onBackPressed();
+                overridePendingTransition(R.anim.left_enter, R.anim.right_out);
                 return true;
         }
 

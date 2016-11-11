@@ -24,8 +24,9 @@ public class LocationAddress {
                 Geocoder geocoder = new Geocoder(context, Locale.getDefault());
                 String result = null;
                 try {
-                    List<Address> addressList = geocoder.getFromLocation(
-                            latitude, longitude, 1);
+
+                    List<Address> addressList = geocoder.getFromLocation(latitude, longitude, 1);
+
                     if (addressList != null && addressList.size() > 0) {
                         Address address = addressList.get(0);
                         StringBuilder sb = new StringBuilder();

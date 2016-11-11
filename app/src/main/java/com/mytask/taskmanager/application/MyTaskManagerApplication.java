@@ -4,11 +4,13 @@ import android.app.Application;
 import android.content.Context;
 
 
+import com.crashlytics.android.Crashlytics;
 import com.mytask.taskmanager.BuildConfig;
 import com.mytask.taskmanager.R;
 import com.mytask.taskmanager.acra.ACRAReportSender;
 import com.mytask.taskmanager.util.PropertyReader;
 
+import io.fabric.sdk.android.Fabric;
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
 
@@ -29,6 +31,7 @@ public class MyTaskManagerApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		Fabric.with(this, new Crashlytics());
 		setupACRA();
 	}
 

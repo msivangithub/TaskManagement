@@ -158,7 +158,7 @@ public class AsynHttpPost extends AsyncTask<Void, Void, String> {
     protected void onPreExecute() {
         super.onPreExecute();
         pd = new ProgressDialog(_con);
-        pd.setMessage("Loading Please Wait....");
+        pd.setMessage("Please Wait....");
         pd.show();
     }
 

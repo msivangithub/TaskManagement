@@ -36,6 +36,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.adeel.library.easyFTP;
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -69,6 +70,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import io.fabric.sdk.android.Fabric;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, RestfulListener {
     String UserRole = "";
@@ -100,7 +103,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
+       // logUser();
         if(checkPlayServices())
         intialVariable();
         listener = this;
@@ -219,6 +224,14 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private void logUser() {
+        // TODO: Use the current user's information
+        // You can call any combination of these three methods
+        Crashlytics.setUserIdentifier("123456");
+        Crashlytics.setUserEmail("ghanashyam.b@myaccounts.in");
+        Crashlytics.setUserName("Test User");
+    }
+
     private void intialVariable() {
 
     }
@@ -314,12 +327,13 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.Attendance) {
-           Intent attendance = new Intent(MainActivity.this,AttendanceActivity.class);
+
+      /*  if (id == R.id.Attendance) {
+            Intent attendance = new Intent(MainActivity.this,AttendanceActivity.class);
             startActivity(attendance);
+            overridePendingTransition(R.anim.right_enter, R.anim.left_out);
             return true;
-        }
+        }*/
 
         return super.onOptionsItemSelected(item);
     }

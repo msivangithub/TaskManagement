@@ -28,6 +28,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,12 +36,6 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.mytask.taskmanager.Locations.AppLocationService;
 import com.mytask.taskmanager.Locations.LocationAddress;
 import com.mytask.taskmanager.R;
@@ -50,12 +45,13 @@ import com.mytask.taskmanager.util.OnDateSetCompleted;
 import com.mytask.taskmanager.util.PreferenceUtil;
 import com.mytask.taskmanager.util.ProjectVariables;
 import com.squareup.picasso.Downloader;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class AttendanceActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class AttendanceActivity extends AppCompatActivity {
 
     public static final String TAG = AttendanceActivity.class.getSimpleName();
     TextView mUserName, mDate, mTime, mFromDate, mToDate, mLatitude, mLongitude, mLocation;
@@ -63,9 +59,10 @@ public class AttendanceActivity extends AppCompatActivity implements OnMapReadyC
     private int month, day, year;
     private int seconds, minutes, hour;
     LinearLayout mLinearLayoutApplyleve, mLinearLayoutAbsent, mLinearLayoutPresent;
-    Button mPresent, mAbsent, mApplyleave;
+    TextView mPresent, mAbsent, mApplyleave;
     private GoogleApiClient mGoogleApiClient;
-
+   ImageView imageView;
+    String image;
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     double currentLatitude;
     double currentLongitude;
@@ -73,7 +70,7 @@ public class AttendanceActivity extends AppCompatActivity implements OnMapReadyC
     double latitude;
     double longitude;
     String locationAddress;
-    private GoogleMap mMap;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,27 +81,18 @@ public class AttendanceActivity extends AppCompatActivity implements OnMapReadyC
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) // Habilitar up button
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-       /* FragmentManager myFragmentManager = getSupportFragmentManager();
-        SupportMapFragment mapFragment = (SupportMapFragment) myFragmentManager.findFragmentById(R.id.mapFragment);
-        GoogleMap mMap = mapFragment.getMap();
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-35, 152);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker near Sidney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));*/
+        image = PreferenceUtil.getInstance().getString(AttendanceActivity.this, "ProfileImage", "Image_5756.jpg");
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.mapFragment);
-        mapFragment.getMapAsync(AttendanceActivity.this);
-
+        imageView = (ImageView)findViewById(R.id.profileImage) ;
         mUserName = (TextView) findViewById(R.id.Username);
         mDate = (TextView) findViewById(R.id.currentDate);
         mTime = (TextView) findViewById(R.id.currentTime);
         mFromDate = (TextView) findViewById(R.id.fromDate);
         mToDate = (TextView) findViewById(R.id.toDate);
-        mApplyleave = (Button) findViewById(R.id.applyleve);
-        mAbsent = (Button) findViewById(R.id.absent);
-        mPresent = (Button) findViewById(R.id.present);
+        mApplyleave = (TextView) findViewById(R.id.applyleve);
+        mAbsent = (TextView) findViewById(R.id.absent);
+        mPresent = (TextView) findViewById(R.id.present);
         mLinearLayoutApplyleve = (LinearLayout) findViewById(R.id.applyLeve_linearlayout);
         mLinearLayoutAbsent = (LinearLayout) findViewById(R.id.absent_linearlayout);
         mLinearLayoutPresent = (LinearLayout) findViewById(R.id.present_linearlayout);
@@ -135,8 +123,17 @@ public class AttendanceActivity extends AppCompatActivity implements OnMapReadyC
 
         UserName = PreferenceUtil.getInstance().getString(AttendanceActivity.this, "FirstName", "User");
         CollapsingToolbarLayout collapser = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+        assert collapser != null;
         collapser.setExpandedTitleColor(Color.parseColor("#ffffff"));
         collapser.setTitle(UserName);
+
+        Picasso.with(this)
+                .load(ProjectVariables.IMAGE_PATH + image)
+                .placeholder(R.drawable.amply_background)
+                .error(R.drawable.amply_background)
+                .resize(300, 300)
+                .into(imageView);
+
 
         mUserName.setText(UserName);
         mDate.setText(currentdate);
@@ -155,7 +152,9 @@ public class AttendanceActivity extends AppCompatActivity implements OnMapReadyC
             mLocation.setText(result);
         }
 
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        assert fab != null;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -177,6 +176,9 @@ public class AttendanceActivity extends AppCompatActivity implements OnMapReadyC
                     }
                 });
                 toDatePickerFragment.show(AttendanceActivity.this.getSupportFragmentManager(), "1");
+                mFromDate.setTextColor(Color.parseColor("#558B2F"));
+                mFromDate.setTextSize(15);
+
             }
         });
         mToDate.setOnClickListener(new View.OnClickListener() {
@@ -192,6 +194,8 @@ public class AttendanceActivity extends AppCompatActivity implements OnMapReadyC
                     }
                 });
                 toDatePickerFragment.show(AttendanceActivity.this.getSupportFragmentManager(), "1");
+                mToDate.setTextColor(Color.parseColor("#558B2F"));
+                mToDate.setTextSize(15);
             }
         });
 
@@ -202,6 +206,10 @@ public class AttendanceActivity extends AppCompatActivity implements OnMapReadyC
                 mLinearLayoutAbsent.setVisibility(View.GONE);
                 mLinearLayoutPresent.setVisibility(View.GONE);
                 mLinearLayoutApplyleve.setVisibility(View.VISIBLE);
+                mApplyleave.setTextColor(Color.parseColor("#ffffff"));
+                mAbsent.setTextColor(Color.parseColor("#C8E6C9"));
+                mPresent.setTextColor(Color.parseColor("#C8E6C9"));
+
             }
         });
         mAbsent.setOnClickListener(new View.OnClickListener() {
@@ -210,7 +218,9 @@ public class AttendanceActivity extends AppCompatActivity implements OnMapReadyC
                 mLinearLayoutAbsent.setVisibility(View.VISIBLE);
                 mLinearLayoutPresent.setVisibility(View.GONE);
                 mLinearLayoutApplyleve.setVisibility(View.GONE);
-
+                mAbsent.setTextColor(Color.parseColor("#ffffff"));
+                mApplyleave.setTextColor(Color.parseColor("#C8E6C9"));
+                mPresent.setTextColor(Color.parseColor("#C8E6C9"));
 
             }
         });
@@ -220,7 +230,9 @@ public class AttendanceActivity extends AppCompatActivity implements OnMapReadyC
                 mLinearLayoutAbsent.setVisibility(View.GONE);
                 mLinearLayoutPresent.setVisibility(View.VISIBLE);
                 mLinearLayoutApplyleve.setVisibility(View.GONE);
-
+                mAbsent.setTextColor(Color.parseColor("#C8E6C9"));
+                mApplyleave.setTextColor(Color.parseColor("#C8E6C9"));
+                mPresent.setTextColor(Color.parseColor("#ffffff"));
                 Location location = appLocationService
                         .getLocation();
                 if (location != null) {
@@ -233,28 +245,6 @@ public class AttendanceActivity extends AppCompatActivity implements OnMapReadyC
                     showSettingsAlert();
                 }
 
-               /* Location gpsLocation = appLocationService
-                        .getLocation();
-
-                Location networkLocation = appLocationService
-                        .getLocation();
-                if (gpsLocation != null) {
-                    double latitude = gpsLocation.getLatitude();
-                    double longitude = gpsLocation.getLongitude();
-                    String result = "Latitude: " + gpsLocation.getLatitude()
-                            + " Longitude: " + gpsLocation.getLongitude();
-                    mLongitude.setText(result);
-                } else if (networkLocation != null) {
-                    double latitude = networkLocation.getLatitude();
-                    double longitude = networkLocation.getLongitude();
-                    String result = "Latitude:"
-                            + networkLocation.getLatitude() + "Longitude: "
-                            + networkLocation.getLongitude();
-                    mLongitude.setText(result);
-                } else {
-                    showSettingsAlert();
-                }
-*/
             }
         });
     }
@@ -282,10 +272,6 @@ public class AttendanceActivity extends AppCompatActivity implements OnMapReadyC
 
     }
 
-    private void getCurrentAddress() {
-
-
-    }
 
 
 
@@ -301,18 +287,10 @@ public class AttendanceActivity extends AppCompatActivity implements OnMapReadyC
         switch (menuItem.getItemId()) {
             case android.R.id.home:
                 super.onBackPressed();
+                overridePendingTransition(R.anim.left_enter, R.anim.right_out);
                 return true;
         }
         return (super.onOptionsItemSelected(menuItem));
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(latitude, longitude);
-        mMap.addMarker(new MarkerOptions().position(sydney).title(locationAddress));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
     private class GeocoderHandler extends Handler {
@@ -330,6 +308,7 @@ public class AttendanceActivity extends AppCompatActivity implements OnMapReadyC
             mLongitude.setText(String.valueOf(locationAddress));
         }
     }
+
 
     private void initPermissions() {
         if (ContextCompat.checkSelfPermission(AttendanceActivity.this,
@@ -373,6 +352,8 @@ public class AttendanceActivity extends AppCompatActivity implements OnMapReadyC
             }
         }
     }
+
+
 }
 
 

@@ -24,6 +24,7 @@ public class PostsDatabaseHelper extends SQLiteOpenHelper {
     // Table Names
     private static final String TABLE_POSTS = "posts";
     private static final String TABLE_USERS = "users";
+    private static final String TABLE_TASK_CREATION = "taskCreation";
 
     // Post Table Columns
     private static final String KEY_POST_ID = "id";
@@ -34,6 +35,23 @@ public class PostsDatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_USER_ID = "id";
     private static final String KEY_USER_NAME = "userName";
     private static final String KEY_USER_PROFILE_PICTURE_URL = "profilePictureUrl";
+
+    /*task Creation*/
+    private static final String KEY_CREATION_ID = "id";
+    private static final String IMEID = "ImeId";
+    private static final String TASKFROMID = "TaskFromId";
+    private static final String TASKTOID = "TaskToId";
+    private static final String EXPSTARTDATE = "ExpStartDate";
+    private static final String EXPENDDATE = "ExpEndDate";
+    private static final String ACTSTARTDATE = "ActStartDate";
+    private static final String ACTENDDATE = "ActEndDate";
+    private static final String TASKSTATUS = "TaskStatus";
+    private static final String TASKHEADING = "TaskHeading";
+    private static final String TASKDES = "TaskDes";
+    private static final String PRIORITY = "priority";
+    private static final String STARTFROMTIME = "StartFromTime";
+    private static final String STARTTOTIME = "StartToTime";
+
 
     private static PostsDatabaseHelper sInstance;
 
@@ -80,10 +98,31 @@ public class PostsDatabaseHelper extends SQLiteOpenHelper {
                 KEY_USER_NAME + " TEXT," +
                 KEY_USER_PROFILE_PICTURE_URL + " TEXT" +
                 ")";
+        String CREATE_TASK_CREATION_TABLE = "CREATE TABLE " + TABLE_TASK_CREATION +
+                "(" +
+                KEY_CREATION_ID + " INTEGER PRIMARY KEY," +
+                IMEID + " TEXT," +
+                TASKFROMID + " TEXT," +
+                TASKTOID + " TEXT," +
+                EXPSTARTDATE + " TEXT," +
+                EXPENDDATE + " TEXT," +
+                ACTSTARTDATE + " TEXT," +
+                ACTENDDATE + " TEXT," +
+                TASKSTATUS + " TEXT," +
+                TASKHEADING + " TEXT," +
+                TASKDES + " TEXT," +
+                PRIORITY + " TEXT," +
+                STARTFROMTIME + " TEXT," +
+                STARTTOTIME + " TEXT," +
+                ")";
+
 
         db.execSQL(CREATE_POSTS_TABLE);
         db.execSQL(CREATE_USERS_TABLE);
+        db.execSQL(CREATE_TASK_CREATION_TABLE);
     }
+
+
 
     // Called when the database needs to be upgraded.
     // This method will only be called if a database already exists on disk with the same DATABASE_NAME,
@@ -94,6 +133,7 @@ public class PostsDatabaseHelper extends SQLiteOpenHelper {
             // Simplest implementation is to drop all old tables and recreate them
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_POSTS);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_TASK_CREATION);
             onCreate(db);
         }
     }

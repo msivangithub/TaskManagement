@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.adeel.library.easyFTP;
+import com.mytask.taskmanager.Databases.PostsDatabaseHelper;
 import com.mytask.taskmanager.R;
 import com.mytask.taskmanager.activity.RecordAudioActivity;
 import com.mytask.taskmanager.services.AsynHttpPost;
@@ -79,6 +80,7 @@ public class TaskFragment3 extends Fragment implements RestfulListener {
     private Handler handler = new Handler();
     private boolean isCanceled;
     TextView html;
+
     public static TaskFragment3 newInstance(addbutton ab) {
         Bundle args = new Bundle();
         _ab = ab;

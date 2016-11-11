@@ -31,6 +31,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -106,6 +107,7 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
     Animation hide_fab_3;
     CoordinatorLayout rootLayout;
     RecyclerViewFastScroller fastScroller;
+    LinearLayout mInternet;
 
     public static TaskDetails newInstance() {
 
@@ -198,9 +200,7 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
                 //TODO if the items are filtered, considered hiding the fast scroller here
                 final int firstVisibleItemPosition = findFirstVisibleItemPosition();
                 if (firstVisibleItemPosition != 0) {
-                    //this avoids trying to handle un-needed calls
                     if (firstVisibleItemPosition == -1)
-                        //not initialized, or no items shown, so hide fast-scroller
                         fastScroller.setVisibility(View.GONE);
                     return;
                 }
@@ -238,6 +238,7 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
                             AsynHttpPost143 posts = new AsynHttpPost143(getActivity(), 0, 123, ProjectVariables.getTasksByUserId, listener, obj, "");
                             posts.execute();
                         } else {
+
                             ToastMessegNetwork();
                         }
                     }
@@ -274,7 +275,7 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
             }
         });
 
-        AsynHttpPost post = new AsynHttpPost(getActivity(), 0, 11, ProjectVariables.USERS + PreferenceUtil.getInstance().getString(getActivity(), "UserRole", "user") + "," + PreferenceUtil.getInstance().getString(getActivity(), "Compname", "companyname"), this, null, "");
+        AsynHttpPost post = new AsynHttpPost(getActivity(), 0, 11, ProjectVariables.USERS + PreferenceUtil.getInstance().getString(getActivity(), "UserRole", "user") + "," + PreferenceUtil.getInstance().getString(getActivity(), "Compname", "companyname"), listener, obj, "");
         post.execute();
         return view;
     }
@@ -394,8 +395,12 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
                     String video = obj.getString("video");
                     String comments = obj.getString("Comments");
                     String taskId = obj.getString("Cid");
-                    String uname = obj.getString("Uname");
-                    String uimage = obj.getString("UImage");
+                   // String uname = obj.getString("Uname");
+                   // String uimage = obj.getString("UImage");
+
+                    String uname = obj.getString("Cid");
+                    String uimage = obj.getString("Cid");
+
 
                     int cid = Integer.parseInt(taskId);
 
@@ -420,7 +425,7 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
                     TaskList.add(t);
 
                 }
-            } catch (JSONException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
 
                 Toast.makeText(getActivity(), s.toString(), Toast.LENGTH_LONG).show();
@@ -431,7 +436,6 @@ public class TaskDetails extends Fragment implements View.OnClickListener, Restf
             recyclerView.setItemAnimator(new DefaultItemAnimator());
             recyclerView.setHasFixedSize(true);
             recyclerView.setAdapter(adapter1);
-
             recyclerView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
