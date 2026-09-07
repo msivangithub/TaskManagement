@@ -8,7 +8,6 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/login_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
@@ -34,14 +33,6 @@
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
                 android:textSize="@dimen/loginScreen_EditText_textSize" />
-
-
-            <!--<View
-             android:hint="@string/email1"
-                android:layout_width="fill_parent"
-                android:layout_height="2px"
-                android:background="@color/white_greyish" />-->
-
 
             <EditText
                 android:id="@+id/login_password"
@@ -71,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:paddingBottom="5dp"
-                android:paddingTop="8dp">
+                android:paddingTop="18dp">
 
                 <CheckBox
                     android:id="@+id/show_hide_password"
@@ -88,7 +79,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="left"
-                    android:padding="5dp"
                     android:textColor="@color/white"
                     android:buttonTint="@color/white"
                     android:text="Remember"
@@ -174,7 +164,6 @@
         android:visibility="gone" />
 
     <ImageView
-        android:id="@+id/imageView3"
         android:layout_width="@dimen/loginScreen_ImageView_width"
         android:layout_height="@dimen/loginScreen_ImageView_height"
         android:layout_alignParentBottom="true"

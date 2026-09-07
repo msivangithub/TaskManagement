@@ -27,7 +27,7 @@
             android:id="@+id/profile"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/profile_sample"
+            android:background="@drawable/profile_sample"
             app:civ_border_color="@color/grey_50"
             app:civ_border_width="@dimen/DrawerHeader_CircleImageView_border_width" />
 
@@ -51,6 +51,9 @@
                 android:lines="@android:integer/config_longAnimTime"
                 android:singleLine="true"
                 android:text="comments"
+                android:scrollHorizontally="true"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:ellipsize="marquee"
                 android:textColor="#000" />
 
             <TextView
@@ -66,7 +69,6 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/deleteTask"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

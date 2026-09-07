@@ -1,6 +1,5 @@
 <resources>
-    <string name="app_name">MyTaskManager</string>
-
+    <string name="app_name">MyTask Manager</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="enter_confirmation">Enter the confirmation code we texted to </string>
@@ -9,15 +8,7 @@
     <string name="lbl_enter_otp">Enter OTP</string>
     <string name="action_Attendance">Attendance</string>
     <string name="action_settings">Setting</string>
-    <string name="crash_toast_text">Crash</string>
-    <string name="TaskCommentActivity">Task Reply</string>
     <dimen name="margin_small">8dp</dimen>
-    <string-array name="spinner_company">
-        <item>All</item>
-        <item>MyAccounts online Software pvt.Ltd</item>
-        <item>MyAccounts online Software pvt.Ltd</item>
-        <item>MyAccounts online Software pvt.Ltd</item>
-    </string-array>
 
     <string-array name="spinner_item">
         <item> --Select Company-- </item>
@@ -31,13 +22,35 @@
         <item>Kolkata</item>
         <item>Pune</item>
         <item>Guntur</item>
-
     </string-array>
 
-    <string-array name="spinner">
-        <item>No</item>
-        <item>Yes</item>
+    <string-array name="priority">
+        <item>None</item>
+        <item>Low</item>
+        <item>Medium</item>
+        <item>High</item>
+    </string-array>
 
+
+    <string-array name="datesofvisit">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
+    <string-array name="status">
+        <item>All</item>
+        <item>Pending</item>
+        <item>Completed</item>
+    </string-array>
+
+
+    <string-array name="repeat">
+        <item>-- Select Repeat Task --</item>
+        <item>Daily</item>
+        <item>Weekly</item>
+        <item>Monthly</item>
     </string-array>
 
     <string name="email">Email Id</string>
@@ -46,12 +59,8 @@
     <string name="show_pwd">Show Password</string>
     <string name="hide_pwd">Hide Password</string>
     <string name="forgot">Forgot password?</string>
-    <string name="closebutton">Close Button for Activity</string>
     <string name="newUser">Sign Up</string>
-    <string name="fullName">Full Name</string>
     <string name="mobileNumber">Mobile Number</string>
-    <string name="location">Location</string>
-    <string name="confirmPassword">Confirm Password</string>
     <string name="terms_conditions">I agree all Terms and Conditions.</string>
     <string name="register">REGISTER</string>
     <string name="already_user">LOGIN</string>
@@ -59,32 +68,9 @@
     <string name="submit">SUBMIT</string>
     <string name="back">BACK</string>
     <string name="email1">Email Id</string>
-    <string name="welcome"> </string>
-    <string name="select">Select-UserRoles</string>
-
-    <string name="RegistrationActivity">Registration</string>
-    <string name="EditProfileNames">EditProfile</string>
-    <string name="LoginActivity">Login</string>
-    <string name="MySettingsActivity">MySettings</string>
-    <string name="ContactUsActivity">Contact Us</string>
-    <string name="Sendotp_for_Verification"><u>Send OTP For Verification</u></string>
-
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in</string>
-    <string name="action_sign_up">Sign Up or register</string>
-    <string name="action_sign_in_short">Sign in</string>
 
     <string name="company_name">Company Name</string>Branch Name
-    <string name="branchname">Branch Name</string>
-    <string name="address1">Address1</string>
-    <string name="address2">Address2</string>
-    <string name="address3">Address3</string>
     <string name="city">City</string>
-    <string name="title_activity_dash_board">DashBoard</string>
- <string name="lorem">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vehicula sem a malesuada rhoncus. Pellentesque ut dolor a dui porttitor porta lacinia non libero. Nunc volutpat arcu quis quam convallis molestie. Etiam ac tristique sem, id commodo justo. Phasellus congue tincidunt lectus, at dignissim ligula maximus eu. Quisque interdum nunc eget tellus bibendum suscipit. Phasellus feugiat ultricies posuere. Nullam porta accumsan velit, ut rutrum massa fermentum eu. Nunc ac bibendum nunc. Mauris eu ultricies ipsum. Ut id dolor dui. Pellentesque dictum dui vel tempus maximus. Vivamus non nisi quis libero scelerisque pretium. Ut eu tristique justo. Sed pellentesque placerat quam, ut ultricies turpis feugiat a. Aliquam a volutpat risus.
-    </string>
     <string-array name="statusSpinner">
 
         <item>Pending</item>
@@ -93,110 +79,133 @@
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">DashBoard fragment</string>
     <string name="company_id">Comapny ID</string>
-    <string name="title_activity_user">UserActivity</string>
 
     <string name="title_activity_setting">SettingActivity</string>
     <string name="title_activity_users_profile">UsersProfileActivity</string>
     <string name="title_activity_user_task_details">UserTaskDetailsActivity</string>
 
 
-    <string name="nice_html">
-    <![CDATA[
-    <p>This is a html-formatted string with <b>bold</b> and <i>italic</i> text</p>
-    <p>This is another paragraph of the same string.</p>
-    ]]>
-    </string>
     <string name="title_activity_attendance">AttendanceActivity</string>
-    <string name="large_text">
-        "Material is the metaphor.\n\n"
 
-        "A material metaphor is the unifying theory of a rationalized space and a system of motion."
-        "The material is grounded in tactile reality, inspired by the study of paper and ink, yet "
-        "technologically advanced and open to imagination and magic.\n"
-        "Surfaces and edges of the material provide visual cues that are grounded in reality. The "
-        "use of familiar tactile attributes helps users quickly understand affordances. Yet the "
-        "flexibility of the material creates new affordances that supercede those in the physical "
-        "world, without breaking the rules of physics.\n"
-        "The fundamentals of light, surface, and movement are key to conveying how objects move, "
-        "interact, and exist in space and in relation to each other. Realistic lighting shows "
-        "seams, divides space, and indicates moving parts.\n\n"
 
-        "Bold, graphic, intentional.\n\n"
+    <!--Content_Section_ Incharges-->
 
-        "The foundational elements of print based design typography, grids, space, scale, color, "
-        "and use of imagery guide visual treatments. These elements do far more than please the "
-        "eye. They create hierarchy, meaning, and focus. Deliberate color choices, edge to edge "
-        "imagery, large scale typography, and intentional white space create a bold and graphic "
-        "interface that immerse the user in the experience.\n"
-        "An emphasis on user actions makes core functionality immediately apparent and provides "
-        "waypoints for the user.\n\n"
+    <string name="Advance_Payment_List">Advance Payment List</string>
+    <string name="Clear_Advance_Payment_List">Clear Advance Payment List</string>
+    <string name="Travelling_Purchase_Advance">Travelling Purchase Advance</string>
+    <string name="Travelling_Charges_will_add_in_salary_Book_Advance">Travelling Charges will add in salary Book Advance</string>
+    <string name="Unopen_Parcels_Total_value_List">Unopen Parcels Total / value List</string>
+    <string name="Pending_LR_s_Total_Value_List">Pending LR,s Total / Value List</string>
+    <string name="Pending_Orders_Listt">Pending Orders List</string>
+    <string name="Stock_Purchase_Sale">Stock/Purchase/Sale/Requirement/Pending Parcel and payment Every Month First week</string>
+    <string name="Dates_of_Visit_to_SDPT">Dates of Visit to SDPT</string>
+    <string name="JGTL">JGTL</string>
+    <string name="Discount_Bills_List">Discount Bills List(Shankar/Ganesh or Assistants(Every Month First week list)</string>
+    <string name="Godown_Racks_Counters_Check_Daily_Morning">Godown // Racks // Counters Check Daily Morning</string>
+    <string name="Stock_Report">Stock Report as per My Accounts and as per Eshwar</string>
+    <string name="Every_Month_Discount">Every Month Discount</string>
+    <string name="Slow_Stock_Report">Slow Stock Report</string>
+    <string name="Minimum_Stock_Quantity">Minimum Stock Quantity</string>
+    <string name="Improvement_in_Sales">Improvement in Sales</string>
+    <string name="Market_Survey_by_other_Branch_Staff">Market Survey by other Branch Staff</string>
+    <string name="Last_Month_Date">Last Month Date :</string>
+    <string name="This_Month_Date">This Month Date :</string>
+    <string name="Monthly_Report_Compulsary_before_First_Week">Monthly Report Compulsary before First Week</string>
+    <string name="Incentive_Every_15th_To_18th_list">Incentive Every 15th To 18th list</string>
+    <string name="Starting_Folding_and_Setting_7pm_in_All_Section">Starting Folding and Setting 7pm in All Section</string>
 
-        "Motion provides meaning.\n\n"
+    <!--Content_Feeding_Paper-->
+    <string name="Dress_Material">Dress Material</string>
+    <string name="Half_Sarees">Half Sarees</string>
+    <string name="Free_Size">Free Size S/S</string>
+    <string name="Kurthies">Kurthies</string>
+    <string name="Tops">Tops</string>
+    <string name="Short_Tops">Short Tops</string>
+    <string name="Jeans_L">Jeans L</string>
+    <string name="Girls_3240">S.S Girls (32*40)</string>
+    <string name="Western_32_36">Western (32*36)</string>
+    <string name="Jeans_G">Jeans G</string>
+    <string name="Legging_G">Legging G</string>
+    <string name="Half_Sarees_G">Half Sarees G</string>
+    <string name="Frocks_16_30">Frocks (16*30)</string>
+    <string name="Western_16_30">Western (16*30)</string>
+    <string name="Tops_G">Tops G</string>
+    <string name="Nighties_L">Nighties L</string>
+    <string name="F_Nighties">F.Nighties</string>
+    <string name="Night_Suit">Night Suit</string>
+    <string name="N_P_L">N/P L</string>
+    <string name="N_P_Boys">N/P Boys</string>
+    <string name="Shorts">3/4 Shorts</string>
+    <string name="Bra">Bra</string>
+    <string name="Panties">Panties</string>
+    <string name="K_Baby_Bed">K-Baby Bed</string>
+    <string name="K_Baby_Blanket">K-Baby Blanket</string>
+    <string name="K_Baby_Towel">K-Baby Towel</string>
+    <string name="K_Baby_Carry_Bag">K-Baby Carry Bag</string>
+    <string name="K_Baby_Socks_and_Glouse">K-Baby Socks and Glouse</string>
+    <string name="Banians">Banians</string>
+    <string name="Underwear">Underwear</string>
+    <string name="Towels_HL">Towels HL</string>
+    <string name="Towels_Turkish">Towels Turkish</string>
+    <string name="Door_Curtain">Door Curtain</string>
+    <string name="Blankets">Blankets</string>
+    <string name="Purses">Purses</string>
+    <string name="Bed_Sheets">Bed Sheets</string>
+    <string name="Chaddars">Chaddars</string>
+    <string name="Jeans">Jeans</string>
+    <string name="Cotton_Pants">Cotton Pants</string>
+    <string name="Shirts_Cargo">Shirts (Cargo)</string>
+    <string name="Formal_Shirts">Formal Shirts</string>
+    <string name="T_Shirts">T-Shirts</string>
+    <string name="Branded_Jeans">Branded Jeans</string>
+    <string name="Branded_Shirts">Branded Shirts</string>KP/Partywear/Suits
+    <string name="KP_Partywear_Suits">KP/Partywear/Suits</string>
+    <string name="Burmadas">Burmadas</string>
+    <string name="Shirts_Panamerica_Scapes">Shirts (Panamerica (Scapes))</string>
 
-        "Motion respects and reinforces the user as the prime mover. Primary user actions are "
-        "inflection points that initiate motion, transforming the whole design.\n"
-        "All action takes place in a single environment. Objects are presented to the user without "
-        "breaking the continuity of experience even as they transform and reorganize.\n"
-        "Motion is meaningful and appropriate, serving to focus attention and maintain continuity. "
-        "Feedback is subtle yet clear. Transitions are efﬁcient yet coherent.\n\n"
 
-        "3D world.\n\n"
+    <!--Content_Daily_Reports-->
+    <string name="Sale">Sale</string>
+    <string name="Checking_Counter_Amount_and_Pcs">Checking Counter Amount and Pcs</string>
+    <string name="Unpaid">Unpaid</string>
+    <string name="Rg">Rg</string>
+    <string name="Axis">Axis</string>
+    <string name="Hdfc">Hdfc</string>
+    <string name="Cash_On_Hand">Cash On Hand</string>
+    <string name="Opening_Cash">Opening Cash</string>
+    <string name="Bank_Deposit">Bank Deposit</string>
+    <string name="Cash_Short">Cash Short</string>
+    <string name="Synd_odh"> Synd odh</string>
+    <string name="Unpaid_Parcels_Amount">Unpaid Parcels Amount</string>
+    <string name="Night_Cash_Opening_Cash"> Night Cash // Opening Cash</string>
+    <string name="Daily_Units_Power_Fuel"> Daily Units Power / Fuel</string>
+    <string name="Daily_Extra_Staff">Daily Extra Staff</string>
+    <string name="Week_Off_Holiday">Week Off Holiday</string>
+    <string name="Daily_Absent_Staff">Daily Absent Staff</string>
+    <string name="Daily_Present_Total">Daily Present / Total</string>
+    <string name="Tex_Present_Staff_and_Custo">Tea x Present Staff and Custo.</string>
+    <string name="Spl_Less">Spl Less</string>
+    <string name="Daily_Water_Jars">Daily Water Jars</string>
+    <string name="Plastic_Covers_Jut_Bags_Amt">Plastic Covers/Jute Bags Amt</string>
+    <string name="How_many_staff_shop_open_Dvlp">How many staff shop open/Dvlp </string>
+    <string name="Prayer">Prayer</string>
+    <string name="Compounding_Late_Coming">Compounding // Late Coming</string>
+    <string name="Tiffin_Box">Tiffin Box</string>
+    <string name="Staff_Low_Sale_Remainder">Staff Low Sale Remainder</string>
+    <string name="Gate_Pass_with_receipt_number">Gate Pass with receipt number</string>
+    <string name="Cancel_Bills_Sign_with_Photos">Cancel Bills Sign with Photos</string>
+    <string name="Alterness_Check">Alterness Check ( Meterage S/S, inward qty, secu. Alert</string>
+    <string name="Maintaince_Sheet">Maintaince Sheet</string>
+    <string name="Night_Watchman_Call_Alert">Night Watchman Call Alert</string>
+    <string name="Ph_Call_Shop_Open_Dvlp">Ph.Call Shop Open/Dvlp</string>
+    <string name="DB_and_SB_Entry">DB and SB Entry</string>
+    <string name="Visiting_with_report">Visiting  with report</string>
+    <string name="Eye_Hospital_OP_and_Surgeries">Eye Hospital OP and Surgeries"</string>
+    <string name="Blood_Bank_Stock">Blood Bank Stock</string>
+    <string name="Dental_Hospital">Dental Hospital</string>
 
-        "The material environment is a 3D space, which means all objects have x, y, and z "
-        "dimensions. The z-axis is perpendicularly aligned to the plane of the display, with the "
-        "positive z-axis extending towards the viewer. Every sheet of material occupies a single "
-        "position along the z-axis and has a standard 1dp thickness.\n"
-        "On the web, the z-axis is used for layering and not for perspective. The 3D world is "
-        "emulated by manipulating the y-axis.\n\n"
-
-        "Light and shadow.\n\n"
-
-        "Within the material environment, virtual lights illuminate the scene. Key lights create "
-        "directional shadows, while ambient light creates soft shadows from all angles.\n"
-        "Shadows in the material environment are cast by these two light sources. In Android "
-        "development, shadows occur when light sources are blocked by sheets of material at "
-        "various positions along the z-axis. On the web, shadows are depicted by manipulating the "
-        "y-axis only. The following example shows the card with a height of 6dp.\n\n"
-
-        "Resting elevation.\n\n"
-
-        "All material objects, regardless of size, have a resting elevation, or default elevation "
-        "that does not change. If an object changes elevation, it should return to its resting "
-        "elevation as soon as possible.\n\n"
-
-        "Component elevations.\n\n"
-
-        "The resting elevation for a component type is consistent across apps (e.g., FAB elevation "
-        "does not vary from 6dp in one app to 16dp in another app).\n"
-        "Components may have different resting elevations across platforms, depending on the depth "
-        "of the environment (e.g., TV has a greater depth than mobile or desktop).\n\n"
-
-        "Responsive elevation and dynamic elevation offsets.\n\n"
-
-        "Some component types have responsive elevation, meaning they change elevation in response "
-        "to user input (e.g., normal, focused, and pressed) or system events. These elevation "
-        "changes are consistently implemented using dynamic elevation offsets.\n"
-        "Dynamic elevation offsets are the goal elevation that a component moves towards, relative "
-        "to the component’s resting state. They ensure that elevation changes are consistent "
-        "across actions and component types. For example, all components that lift on press have "
-        "the same elevation change relative to their resting elevation.\n"
-        "Once the input event is completed or cancelled, the component will return to its resting "
-        "elevation.\n\n"
-
-        "Avoiding elevation interference.\n\n"
-
-        "Components with responsive elevations may encounter other components as they move between "
-        "their resting elevations and dynamic elevation offsets. Because material cannot pass "
-        "through other material, components avoid interfering with one another any number of ways, "
-        "whether on a per component basis or using the entire app layout.\n"
-        "On a component level, components can move or be removed before they cause interference. "
-        "For example, a floating action button (FAB) can disappear or move off screen before a "
-        "user picks up a card, or it can move if a snackbar appears.\n"
-        "On the layout level, design your app layout to minimize opportunities for interference. "
-        "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
-        "when a user tries to pick up one of cards.\n\n"
-    </string>
 
 </resources>
+
+

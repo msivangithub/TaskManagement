@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.mytask.taskmanager.activity.AttendanceActivity">
+    tools:context="com.office.taskmanager.activity.AttendanceActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -21,6 +21,7 @@
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleTextAppearance="@style/HeaderTitleStyle"
+            app:collapsedTitleTextAppearance="@style/HeaderTitleStyle"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 <!--app:layout_scrollFlags="scroll|exitUntilCollapsed"-->
 
@@ -59,6 +60,7 @@
         android:layout_margin="@dimen/fab_margin"
         android:src="@android:drawable/stat_sys_upload"
         app:layout_anchor="@id/app_bar"
+        android:visibility="invisible"
         app:layout_anchorGravity="bottom|end" />
 
 </android.support.design.widget.CoordinatorLayout>

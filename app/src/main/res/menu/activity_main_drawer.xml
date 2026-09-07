@@ -23,6 +23,34 @@
             android:id="@+id/nav_allReports"
             android:icon="@drawable/task_details"
             android:title="Reports" />
+        <item
+            android:id="@+id/nav_sectionIncharge"
+            android:icon="@drawable/task_details"
+            android:visible="true"
+            android:title="Section Incharges" />
+        <item
+            android:id="@+id/nav_feeding_paper"
+            android:icon="@drawable/task_details"
+            android:visible="true"
+            android:title="Feeding Paper" />
+
+        <item
+            android:id="@+id/nav_purchaeOrder"
+            android:icon="@drawable/users"
+            android:visible="true"
+            android:title="Daily report" />
+
+        <item
+            android:id="@+id/nav_proforma"
+            android:icon="@drawable/users"
+            android:visible="true"
+            android:title="Proforma" />
+
+        <item
+            android:icon="@drawable/task_details"
+            android:visible="false"
+            android:title="Recruitment Indent" />
+
 
     </group>
 

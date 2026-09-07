@@ -39,7 +39,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:layout_gravity="bottom|center_horizontal"
-                    android:background="@color/pink_900"
+                    android:background="@color/colorPrimary"
                     android:orientation="vertical"
                     app:layout_collapseMode="parallax"
                     app:layout_collapseParallaxMultiplier="0.3">
@@ -93,7 +93,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/pink_900"
+            android:background="@color/colorPrimary"
             app:layout_anchor="@id/framelayout_title"
             app:theme="@style/ThemeOverlay.AppCompat.Dark"
             app:title="">
@@ -126,7 +126,7 @@
             android:layout_width="@dimen/image_width"
             android:layout_height="@dimen/image_width"
             android:layout_gravity="center"
-            app:layout_behavior="com.mytask.taskmanager.activity.ImageBehaviors"
+            app:layout_behavior="com.office.taskmanager.activity.ImageBehaviors"
             fresco:roundAsCircle="true"
             fresco:actualImageScaleType="fitXY"
             fresco:roundedCornerRadius="15dp"

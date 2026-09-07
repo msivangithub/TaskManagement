@@ -1,97 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="#fff"
-    android:padding="5sp">
+    android:orientation="vertical"
+    android:padding="2sp">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:text="Choose the priority of this task"
-        android:textColor="#000"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/main_fragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal">
+        android:layout_height="match_parent">
 
-        <RadioGroup
-            android:id="@+id/radioGroup"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center"
             android:orientation="vertical">
 
-            <RadioButton
-                android:id="@+id/none"
-                android:layout_width="wrap_content"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:background="@color/white"
+                android:visibility="visible"
+                tools:context="com.office.taskmanager.fragmentssss" />
+
+            <Button
+                android:id="@+id/adduser"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="None "
-                android:textColor="@color/grey_600"
-                android:textSize="20sp"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/layout_marginTop"
+                android:text="Submit"
                 android:textStyle="bold" />
 
-            <RadioButton
-                android:id="@+id/low"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Low "
-                android:textColor="@color/green_800"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <RadioButton
-                android:id="@+id/Medium"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Medium "
-                android:textColor="@color/blue_900"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <RadioButton
-                android:id="@+id/High"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="High "
-                android:textColor="@color/red_900"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+        </LinearLayout>
 
 
-        </RadioGroup>
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:id="@+id/record"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Select Media" />
-    </LinearLayout>
-
-    <Button
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:id="@+id/adduser"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/layout_marginTop"
-        android:text="Submit"
-        android:textStyle="bold"/>
-
-
+    </FrameLayout>
 </LinearLayout>

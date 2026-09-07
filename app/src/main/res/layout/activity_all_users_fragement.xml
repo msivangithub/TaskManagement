@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.mytask.taskmanager.fragment.AllUsersFragement">
+    tools:context="com.office.taskmanager.fragment.AllUsersFragement">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/userdelete"
@@ -14,7 +14,7 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
-        tools:context="com.mytask.taskmanager.fragmentssss" />
+        tools:context="com.office.taskmanager.fragmentssss" />
 
 
     <com.lb.recyclerview_fast_scroller.RecyclerViewFastScroller

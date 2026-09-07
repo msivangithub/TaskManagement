@@ -190,7 +190,6 @@
         android:textColor="#fff" />
 
     <ImageView
-        android:id="@+id/imageView3"
         android:layout_width="@dimen/loginScreen_ImageView_width"
         android:layout_height="@dimen/loginScreen_ImageView_height"
         android:layout_alignParentBottom="true"

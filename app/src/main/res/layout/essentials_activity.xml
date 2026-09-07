@@ -185,7 +185,6 @@
                         android:layout_centerVertical="true"
                         android:layout_gravity="center"
                         android:background="@android:color/transparent"
-
                         android:gravity="center"
                         android:padding="10dp" />
 
@@ -281,8 +280,8 @@
             </LinearLayout>
 
             <Button
-                style="@style/Widget.AppCompat.Button.Colored"
                 android:id="@+id/submit"
+                style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"

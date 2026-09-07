@@ -22,7 +22,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:src="@android:drawable/ic_menu_help"
-        app:layout_behavior="com.mytask.taskmanager.Scrolling_Floating_Action_Button.FAB_Float_on_Scroll" />
+        app:layout_behavior="com.office.taskmanager.Scrolling_Floating_Action_Button.FAB_Float_on_Scroll" />
     <!--app:layout_behavior="com.mytask.taskmanager.Scrolling_Floating_Action_Button.FAB_Float_on_Scroll"
      app:layout_behavior="com.mytask.taskmanager.Scrolling_Floating_Action_Button.FAB_Hide_on_Scroll"-->
 

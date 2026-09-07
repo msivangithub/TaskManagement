@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:id="@+id/container"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.mytask.taskmanager.MainActivity"
+    tools:context="com.office.taskmanager.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
 </RelativeLayout>

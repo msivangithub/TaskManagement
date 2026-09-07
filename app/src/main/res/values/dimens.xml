@@ -1,7 +1,5 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="nav_header_vertical_spacing">16dp</dimen>
-    <dimen name="nav_header_height">160dp</dimen>
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">5dp</dimen>
     <dimen name="activity_vertical_margin">5dp</dimen>
@@ -12,99 +10,54 @@
     <dimen name="image_small_width">32dp</dimen>
     <!--Drawer_header-->
     <dimen name="DrawerHeader_paddin">10dp</dimen>
-    <dimen name="DrawerHeader_height">178dp</dimen>
     <dimen name="DrawerHeader_CircleImageView_width">90dp</dimen>
     <dimen name="DrawerHeader_CircleImageView_height">90dp</dimen>
     <dimen name="DrawerHeader_CircleImageView_marginTop">15dp</dimen>
     <dimen name="DrawerHeader_CircleImageView_border_width">2dp</dimen>
     <!--activity_main-->
-    <dimen name="GridView_padding">10dp</dimen>
-    <dimen name="GridView_horizontalSpacing">3dp</dimen>
-    <dimen name="GridView_verticalSpacing">3dp</dimen>
-    <dimen name="layout_height">200dp</dimen>
 
     <!--fargment_customer_registration-->
-    <dimen name="registration_textview_marginBottom">8dp</dimen>
-    <dimen name="registration_textview_marginTop">5dp</dimen>
-    <dimen name="registration_textview_size">20sp</dimen>
-    <dimen name="registration_RelativeLayout_marginLeft">15dp</dimen>
-    <dimen name="registration_RelativeLayout_marginRight">15dp</dimen>
-    <dimen name="registration_RelativeLayout_marginTop">15dp</dimen>
-    <dimen name="registration_RelativeLayout_padding">10dp</dimen>
-    <dimen name="registration_LinearLayout_paddingLeft">10dp</dimen>
-    <dimen name="registration_LinearLayout_paddingRight">10dp</dimen>
-    <dimen name="registration_LinearLayout_paddingTop">20dp</dimen>
-    <dimen name="registration_EditText_marginTop">10dp</dimen>
-    <dimen name="registration_Buttont_textSize">15sp</dimen>
-    <dimen name="registration_Buttont_layout_margin">11dp</dimen>
-    <dimen name="registration_ImageButton_layout_width">70dp</dimen>
-    <dimen name="registration_ImageButton_layout_height">70dp</dimen>
-    <dimen name="registration_ImageButton_marginTop">5dp</dimen>
-    <dimen name="appbar_padding_top">8dp</dimen>
-    <dimen name="text_margin">16dp</dimen>
     <!--activate user prifiles-->
-    <dimen name="userprofiletext">17sp</dimen>
     <!--Daily Sales Reports-->
-    <dimen name="DailySalesReports_padding">8dp</dimen>
-    <dimen name="DailySalesReports_textSizeDate">15sp</dimen>
-    <dimen name="DailySalesReports_textSizeheader">10sp</dimen>
 
     <!--Dashboard_roeitems-->
-    <dimen name="dashboardRowitems_width">65dp</dimen>
-    <dimen name="dashboardRowitems_height">65dp</dimen>
-    <dimen name="dashboardRowitems_textSize">11dp</dimen>
     <!--Activity_LoginScreen-->
     <dimen name="loginScreen_padding">20dp</dimen>
     <dimen name="loginScreen_ImageView_width">100dp</dimen>
     <dimen name="loginScreen_ImageView_height">50dp</dimen>
-    <dimen name="loginScreen_marginBottom">30dp</dimen>
     <dimen name="loginScreen_marginTop">20dp</dimen>
     <dimen name="loginScreen_EditText_padding">10dp</dimen>
     <dimen name="loginScreen_EditText_textSize">16sp</dimen>
     <dimen name="loginScreen_CheckBox_textSize">14sp</dimen>
     <!--SignUp_Activity-->
     <dimen name="signUpScreen_padding">20dp</dimen>
-    <dimen name="signUpScreen_ImageView_width">250dp</dimen>
-    <dimen name="signUpScreen_ImageView_height">100dp</dimen>
-    <dimen name="signUpScreen_marginBottom">20dp</dimen>
-    <dimen name="signUpScreen_marginTop">20dp</dimen>
     <dimen name="signUpScreen_EditText_textSize">16sp</dimen>
     <dimen name="signUpScreen_EditText_marginTop">5dp</dimen>
     <dimen name="signUpScreen_CheckBox_textSize">14sp</dimen>
     <!--daily sales Summery-->
-    <dimen name="dailysalessummery_textsize">20sp</dimen>
-    <dimen name="dailysalessummery_textviewwidth">40dp</dimen>
 
     <!--partywiseSales Reports-->
-    <dimen name="PartywiseSalesReports_textsize">11sp</dimen>
-    <dimen name="PartywiseSalesReportsfooter_textsize">10sp</dimen>
-    <dimen name="PartywiseSalesReportsfooter_rowitemtextsize">10sp</dimen>
-    <dimen name="PartywiseSalesReportsfooter_textwidth">55dp</dimen>
 
     <!--activity edit-->
-    <dimen name="activityedit_margintop">10dp</dimen>
 
     <!--Report Body Part TextSize-->
     <dimen name="Date_textsize">14sp</dimen>
-    <dimen name="ColumnHeader_textsize">10sp</dimen>
-    <dimen name="Cell_textsize">10sp</dimen>
-    <dimen name="FooterTotal_textsize">10sp</dimen>
-    <dimen name="footerspacewidth">15dp</dimen>
     <dimen name="textsize">10sp</dimen>
+
     <!--Task_Row-->
     <dimen name="taskRow_layout_width">45dp</dimen>
-    <dimen name="taskRow_layout_height">45dp</dimen>
+    <dimen name="taskRow_layout_height">55dp</dimen>
     <dimen name="taskRow_layout_margin">5dp</dimen>
-    <dimen name="taskRow_textSize">22sp</dimen>
     <dimen name="taskRow_padding">5dp</dimen>
     <dimen name="taskRow_header_textSize">12sp</dimen>
-    <dimen name="app_bar_height">200dp</dimen>
+    <dimen name="app_bar_height">290dp</dimen>
 
 
     <!--TaskCreation-->
-    <dimen name="taskCreation_padding">10dp</dimen>
+    <dimen name="taskCreation_padding">7dp</dimen>
     <dimen name="taskCreation_textSize">15dp</dimen>
-    <dimen name="layout_marginTop">20dp</dimen>
+    <dimen name="taskCreation_radiobutton_textSize">15dp</dimen>
+    <dimen name="layout_marginTop">10dp</dimen>
     <dimen name="image_layout_width">48dp</dimen>
     <dimen name="image_layout_height">48dp</dimen>
     <dimen name="profile_width">300dp</dimen>
